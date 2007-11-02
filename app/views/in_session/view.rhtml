@@ -1,0 +1,27 @@
+<h1>Viewing: <%=  params[:fileName]%></h1>
+<center>
+<table border="1">
+<tr>
+ <td colspan="3" align="center">
+  <%= link_to("Zoom (+)", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i+50, :endPos=>params[:endPos].to_i-50) %>
+ </td>
+</tr>
+<tr>
+ <td>
+  <%= link_to("<<", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i-100, :endPos=>params[:endPos].to_i-100) %>
+ </td>
+ <td>
+  <% `./bin/bin/gt view -force -start #{params[:startPos]} -end #{params[:endPos]} ./public/images/m1.png ./uploads/users/#{session[:user]}/#{params[:fileName]}` %>
+  <%= image_tag("m1.png", :border => 0) %>
+ </td>
+ <td>
+  <%= link_to(">>", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i+100, :endPos=>params[:endPos].to_i+100) %>
+ </td>
+</tr>
+<tr>
+ <td colspan="3" align="center">
+  <%= link_to("Zoom (-)", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i-50, :endPos=>params[:endPos].to_i+50) %>
+ </td>
+</tr>
+</table>
+</center>

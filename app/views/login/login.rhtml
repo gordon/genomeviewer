@@ -1,0 +1,23 @@
+<html>
+ <head>
+  <title>Login</title>
+ </head>
+ <body>
+  <h1>Login</h1>
+  <%= start_form_tag :action=>"doLogin" %>
+   <table>
+    <tr>
+     <td><p>User:</p></td>
+     <td><%= text_field_tag "user", nil, :size=>30 %></td>
+    </tr>
+    <tr>
+     <td><p>Password:</p></td>
+     <td><%= password_field_tag("pass", nil) %></td>
+    </tr>
+    <tr>
+     <td colspan="2"><%=submit_tag%></td>
+    </tr>
+   <table>
+  <%= end_form_tag %>
+ </body>
+<html>

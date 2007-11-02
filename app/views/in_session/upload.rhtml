@@ -1,0 +1,4 @@
+<%= start_form_tag ({:action => 'doUpload'}, :multipart => true) %>
+ <%= file_field_tag "gff3File" %><br/>
+ <%= submit_tag  "Save" %>
+<%= end_form_tag %>

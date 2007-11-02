@@ -1,0 +1,2 @@
+module InSessionHelper
+end
