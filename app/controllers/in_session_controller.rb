@@ -1,7 +1,6 @@
 class InSessionController < ApplicationController
 
  prepend_before_filter :check_login
- layout "in_session_frameset"
 
  def check_login
   unless session[:user]
