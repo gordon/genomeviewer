@@ -8,11 +8,11 @@
    <table>
     <tr>
      <td><p>User:</p></td>
-     <td><%= text_field_tag "user", nil, :size=>30 %></td>
+     <td><%= text_field_tag "user", nil, :maxlength=>16 %></td>
     </tr>
     <tr>
      <td><p>Password:</p></td>
-     <td><%= password_field_tag("pass", nil) %></td>
+     <td><%= password_field_tag("pass", nil, :maxlength=>16) %></td>
     </tr>
     <tr>
      <td colspan="2"><%=submit_tag%></td>
