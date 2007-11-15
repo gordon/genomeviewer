@@ -1,0 +1,24 @@
+<html>
+ <head>
+  <title>Register</title>
+ </head>
+ <body>
+ <h1>Register</h1>
+  <%= start_form_tag :action=>"checkRegister" %>
+   <table>
+    <tr>
+     <td>Login:</td><td><%= text_field_tag "login", nil, :maxlength=>16 %></td>
+    </tr>
+    <tr>
+     <td>Your Name:</td><td><%= text_field_tag "name", nil, :maxlength=>64 %></td>
+    </tr>
+    <tr>
+     <td>Your E-Mail Address:</td><td><%= text_field_tag "email", nil, :maxlength=>64 %></td>
+    </tr>
+    <tr>
+     <td colspan="2"><%= submit_tag "Register" %></td>
+    </tr>
+   </table>
+  <%= end_form_tag %>
+ </body>
+</html> 
