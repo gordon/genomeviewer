@@ -1,12 +1,13 @@
 <html>
-  <head>
-    <title>GenomeBrowser</title>
-    <meta content="">
-    <style></style>
-  </head>
-  <body>
+ <head>
+  <title>GenomeBrowser</title>
+  <%= stylesheet_link_tag "default", :media => "all" %>
+ </head>
+ <body>
+ <div id="main">
    <h1>Welcome to the GenomeViewer</h1>
-    <%= link_to  "Login", :controller => "login", :action=> "login"%>
-    <%= link_to  "Register", :controller => "register", :action=> "register"%>
-  </body>
+   <%= link_to  "Login", :controller => "login", :action=> "login"%>
+   <%= link_to  "Register", :controller => "register", :action=> "register"%>
+  </div>
+ </body>
 </html>

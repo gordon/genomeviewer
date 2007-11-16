@@ -1,16 +1,12 @@
 <html>
-
-<table height="100%" border="1" width="100%">
-<tr>
- <td width="150px" valign="top">
-  <%= render :partial => "in_session/nav/navframe" %>
- </td>
- <td width="*" valign="top">
-  <%=yield%>
- </td>
-</tr>
-
-</table>
-
+ <head>
+  <%= stylesheet_link_tag "default","menu.css","in_session", :media => "all" %>
+ </head>
+  <div id="menu">
+   <%= render :partial => "in_session/nav/navframe" %>
+  </div>
+  <div id="main">
+   <%=yield%>
+  </div>
 
 </html>

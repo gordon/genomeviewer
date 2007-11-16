@@ -1,17 +1,21 @@
-<p>Menu:</p>
+<ul>
+ <li><%= link_to("Config", :controller => "in_session", :action=> "config") %></li>
+ <li><%= link_to("Upload GFF3", :controller => "in_session", :action=> "upload") %></li>
+ <li><%= link_to  "Logout", :controller => "in_session", :action=> "doLogout"%></li>
+</ul>
+ 
 
 
-<%= link_to("Config", :controller => "in_session", :action=> "config") %><br/>
-<%= link_to("Upload GFF3", :controller => "in_session", :action=> "upload") %><br/>
-View Gff3:<br/>
-<div style="background-color:#DDDDDD">
-<%=
+ <div id="filelist">
+ <h1>Files:</h1>
+ <%=
 Dir.open("uploads/users/#{session[:user]}").entries.collect {|fileName|
  if (not fileName=="." and not fileName=="..")
-  "#{link_to (fileName, :controller => "in_session", :action=> "view", :fileName => fileName, :startPos => 4000, :endPos => 7000)}<br/>\n"
+  "#{link_to (fileName, :controller => "in_session", :action=> "view", :fileName => fileName, :startPos => 4000, :endPos => 7000)}\n"
   
  end
 }
-%></div>
+ %>
 
-<%= link_to  "Logout", :controller => "in_session", :action=> "doLogout"%>
+
+ </div>
