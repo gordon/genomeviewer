@@ -1,26 +1,26 @@
-<h1>Viewing: <%=  params[:fileName]%></h1>
+<h1>Viewing: <%=  params[:file_name]%></h1>
 <center>
 <table border="1">
 <tr>
  <td colspan="3" align="center">
-  <%= link_to("Zoom (+)", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i+50, :endPos=>params[:endPos].to_i-50) %>
+  <%= link_to("Zoom (+)", :file_name=>params[:file_name], :start_pos=>params[:start_pos].to_i+50, :end_pos=>params[:end_pos].to_i-50) %>
  </td>
 </tr>
 <tr>
  <td>
-  <%= link_to("<<", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i-100, :endPos=>params[:endPos].to_i-100) %>
+  <%= link_to("<<", :file_name=>params[:file_name], :start_pos=>params[:start_pos].to_i-100, :end_pos=>params[:end_pos].to_i-100) %>
  </td>
  <td>
-  <% `./bin/bin/gt view -force -start #{params[:startPos]} -end #{params[:endPos]} ./public/images/m1.png ./uploads/users/#{session[:user]}/#{params[:fileName]}` %>
+  <% `./bin/bin/gt view -force -start #{params[:start_pos]} -end #{params[:end_pos]} ./public/images/m1.png ./uploads/users/#{session[:user]}/#{params[:file_name]}` %>
   <%= image_tag("m1.png", :border => 0) %>
  </td>
  <td>
-  <%= link_to(">>", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i+100, :endPos=>params[:endPos].to_i+100) %>
+  <%= link_to(">>", :file_name=>params[:file_name], :start_pos=>params[:start_pos].to_i+100, :end_pos=>params[:end_pos].to_i+100) %>
  </td>
 </tr>
 <tr>
  <td colspan="3" align="center">
-  <%= link_to("Zoom (-)", :fileName=>params[:fileName], :startPos=>params[:startPos].to_i-50, :endPos=>params[:endPos].to_i+50) %>
+  <%= link_to("Zoom (-)", :file_name=>params[:file_name], :start_pos=>params[:start_pos].to_i-50, :end_pos=>params[:end_pos].to_i+50) %>
  </td>
 </tr>
 </table>

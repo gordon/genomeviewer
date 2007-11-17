@@ -9,9 +9,9 @@
  <div id="filelist">
  <h1>Files:</h1>
  <%=
-Dir.open("uploads/users/#{session[:user]}").entries.collect {|fileName|
- if (not fileName=="." and not fileName=="..")
-  "#{link_to (fileName, :controller => "in_session", :action=> "view", :fileName => fileName, :startPos => 4000, :endPos => 7000)}\n"
+Dir.open("uploads/users/#{session[:user]}").entries.collect {|file_name|
+ if (not file_name=="." and not file_name=="..")
+  "#{link_to (file_name, :controller => "in_session", :action=> "view", :file_name => file_name, :start_pos => 4000, :end_pos => 7000)}\n"
   
  end
 }

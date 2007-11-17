@@ -16,7 +16,9 @@ class InSessionController < ApplicationController
  end
 
   def do_upload
-    File.open("uploads/users/#{session[:user]}/#{params[:gff3File].original_filename()}", "wb") { |f| f.write(params[:gff3File].read) }
+    File.open("uploads/users/#{session[:user]}/#{params[:gff3_file].original_filename()}", "wb") do |f| 
+      f.write(params[:gff3_file].read)
+    end
     redirect_to :action => "upload"
   end
 
