@@ -1,5 +1,5 @@
 class RegisterController < ApplicationController
- def checkRegister
+ def check_register
   if User.find_by_login(params[:login])
    redirect_to :action => :login_not_avail
   else
@@ -7,14 +7,14 @@ class RegisterController < ApplicationController
     session[:tmp_login]=params[:login]
     session[:tmp_name]=params[:name]
     session[:tmp_email]=params[:email]
-    redirect_to :action => :doRegister
+    redirect_to :action => :do_register
    else
     redirect_to :action => :bad_data
    end
   end
  end
 
- def doRegister
+ def do_register
   password="m1"
   Dir.mkdir("uploads/users/#{session[:tmp_login]}")
   User.create(:login=>session[:tmp_login],:password=>password,:name=>session[:tmp_name],:email=>session[:tmp_email])

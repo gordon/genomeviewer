@@ -10,12 +10,12 @@ class InSessionController < ApplicationController
   return true
  end
 
- def doLogout
+ def do_logout
   session[:user]=nil
   redirect_to :controller => :default, :action => :index
  end
 
-  def doUpload
+  def do_upload
     File.open("uploads/users/#{session[:user]}/#{params[:gff3File].original_filename()}", "wb") { |f| f.write(params[:gff3File].read) }
     redirect_to :action => "upload"
   end
