@@ -1,4 +1,9 @@
 class RegisterController < ApplicationController
+ 
+ def register
+   @page_title = "Genomeviewer - Register a new user"
+ end
+ 
  def check_register
   if User.find_by_login(params[:login])
    redirect_to :action => :login_not_avail
