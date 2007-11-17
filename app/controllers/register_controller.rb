@@ -1,9 +1,5 @@
 class RegisterController < ApplicationController
  
- def register
-   @page_title = "Genomeviewer - Register a new user"
- end
- 
  def check_register
   if User.find_by_login(params[:login])
    redirect_to :action => :login_not_avail
@@ -28,4 +24,13 @@ class RegisterController < ApplicationController
   session[:tmp_email]=nil
   redirect_to :action => :register_succ
  end
+
+ private
+ 
+ def initialize
+   @page_title = "Genomeviewer - User Registration"
+   @sidemenu = "<ul><li><a href='/'>Home</a></li></ul>"
+   super
+ end
+
 end
