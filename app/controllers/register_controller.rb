@@ -28,8 +28,7 @@ class RegisterController < ApplicationController
  private
  
  def initialize
-   @page_title = "Genomeviewer - User Registration"
-   @sidemenu = "<ul><li><a href='/'>Home</a></li></ul>"
+   @title = "Genomeviewer - User Registration"
    super
  end
 

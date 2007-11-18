@@ -1,21 +1,17 @@
 <ul>
  <li><%= link_to("Config", :controller => "in_session", :action=> "config") %></li>
  <li><%= link_to("Upload GFF3", :controller => "in_session", :action=> "upload") %></li>
- <li><%= link_to  "Logout", :controller => "in_session", :action=> "do_logout"%></li>
+ <li><%= link_to("Logout", :controller => "in_session", :action=> "do_logout") %></li>
 </ul>
- 
 
-
- <div id="filelist">
+<div id="filelist">
  <h1>Files:</h1>
  <%=
 Dir.open("uploads/users/#{session[:user]}").entries.collect {|file_name|
  if (not file_name=="." and not file_name=="..")
   "#{link_to (file_name, :controller => "in_session", :action=> "view", :file_name => file_name, :start_pos => 4000, :end_pos => 7000)}\n"
-  
  end
 }
  %>
 
-
- </div>
+</div>

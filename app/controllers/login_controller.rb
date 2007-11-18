@@ -19,4 +19,10 @@ class LoginController < ApplicationController
    redirect_to :controller => :login, :action => :login_fail
   end
  end
+ 
+ private
+ def initialize
+  @title="GenomeViewer - Login"
+  super
+ end
 end

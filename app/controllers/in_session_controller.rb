@@ -22,4 +22,10 @@ class InSessionController < ApplicationController
     redirect_to :action => "upload"
   end
 
+ private
+
+  def initialize
+   @stylesheets = "in_session", "menu"
+  end
+
 end

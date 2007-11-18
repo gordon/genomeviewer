@@ -7,11 +7,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
  <head>
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />	
-  <%= stylesheet_link_tag "default","menu.css","in_session", :media => "all" %>
-  <title><%= @page_title || "Genomeviewer" %></title>
+  <title><%= @title || "GenomeViewer"%></title>
+  <%= include_stylesheets %>
  </head>
  <body>
-  <div id="menu"><%= @sidemenu %></div>
+  <div id="menu"><%= include_navbar %></div>
   <div id="main"><%= yield %></div>
  </body>
 </html>
