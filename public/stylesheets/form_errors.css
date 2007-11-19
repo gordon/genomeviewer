@@ -1,0 +1,10 @@
+.fieldWithErrors {
+  padding: 3px;
+  background-color: red;
+  display: table;
+} 
+ 
+.formError {
+  font-size: 80%;
+  color: red;
+}

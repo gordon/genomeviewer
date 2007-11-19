@@ -1,35 +1,37 @@
 class RegisterController < ApplicationController
- 
- def check_register
-  if User.find_by_login(params[:login])
-   redirect_to :action => :login_not_avail
-  else
-   if params[:email].match(/\@(.+)/)
-    session[:tmp_login]=params[:login]
-    session[:tmp_name]=params[:name]
-    session[:tmp_email]=params[:email]
-    redirect_to :action => :do_register
-   else
-    redirect_to :action => :bad_data
-   end
+
+  def register
+    # create a new user instance if here for the first time
+    # or load it from the flash if coming back because of errors
+    @user = flash[:user]||User.new
+  end   
+  
+  def do_register
+    # create an user instance using the form parameters 
+    @user = User.new(params[:user])
+    # try to save
+    if @user.save
+      # if successful:
+      # create a user directory for GFF3 files upload
+      Dir.mkdir("uploads/users/#{@user.login}")
+      # go to the login page, displaying a success message
+      flash[:notice] = "Registration successful, you can login now."
+      redirect_to :controller => :login, :action => :login
+    else
+      # back to the form if there was a problem
+      flash[:user] = @user
+      redirect_to :action => :register 
+    end
   end
- end
 
- def do_register
-  password="m1"
-  Dir.mkdir("uploads/users/#{session[:tmp_login]}")
-  User.create(:login=>session[:tmp_login],:password=>password,:name=>session[:tmp_name],:email=>session[:tmp_email])
-  session[:tmp_login]=nil
-  session[:tmp_name]=nil
-  session[:tmp_email]=nil
-  redirect_to :action => :register_succ
- end
-
- private
+  private
  
- def initialize
-   @title = "Genomeviewer - User Registration"
-   super
- end
-
+  def initialize
+    @title = "Genomeviewer - User Registration"
+    # load the stylesheet to format errors in forms
+    @stylesheets = 'form_errors'
+    super
+  end
+  
 end
+
