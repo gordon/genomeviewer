@@ -16,8 +16,15 @@ class InSessionController < ApplicationController
  end
 
   def do_upload
-    File.open("uploads/users/#{session[:user]}/#{params[:gff3_file].original_filename()}", "wb") do |f| 
-      f.write(params[:gff3_file].read)
+    filename = "uploads/users/#{session[:user]}/#{params[:gff3_file].original_filename()}"
+    File.open(filename, "wb") {|f| f.write(params[:gff3_file].read) }
+    @ann_data = AnnotationData.create(:datasource => filename,
+					   :user_id => session[:user],
+					   :description => params[:description])
+    if @ann_data
+      flash[:notice] = "Successfully uploaded"
+    else
+      flash[:notice] = "Upload impossible"
     end
     redirect_to :action => "upload"
   end

@@ -13,7 +13,7 @@ class RegisterController < ApplicationController
     if @user.save
       # if successful:
       # create a user directory for GFF3 files upload
-      Dir.mkdir("uploads/users/#{@user.login}")
+      Dir.mkdir("uploads/users/#{@user.id}")
       # go to the login page, displaying a success message
       flash[:notice] = "Registration successful, you can login now."
       redirect_to :controller => :login, :action => :login

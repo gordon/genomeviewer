@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
 
+ has_many :annotation_data
+
  validates_uniqueness_of :login, :message => "This login is already in use. Please choose another one."
 
  validates_presence_of :login, :message => "Please enter a login between 4 and 16 characters"
