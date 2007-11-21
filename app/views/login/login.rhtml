@@ -1,16 +1,16 @@
   <h1>Login</h1>
-  <%= start_form_tag :action=>"do_login" %>
+  <% start_form_tag :action=>"do_login" do %>
    <table>
     <tr>
-     <td><p>User:</p></td>
-     <td><%= text_field_tag "user", nil, :maxlength=>16 %></td>
+     <td><p>Email:</p></td>
+     <td><%= text_field_tag "email", nil, :maxlength=>16 %></td>
     </tr>
     <tr>
      <td><p>Password:</p></td>
-     <td><%= password_field_tag("pass", nil, :maxlength=>16) %></td>
+     <td><%= password_field_tag "password", nil, :maxlength=>16 %></td>
     </tr>
     <tr>
-     <td colspan="2"><%=submit_tag%></td>
+     <td colspan="2"><%=submit_tag "Login"%></td>
     </tr>
    <table>
-  <%= end_form_tag %>
+  <% end %>

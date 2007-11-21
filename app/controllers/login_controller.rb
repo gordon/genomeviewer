@@ -12,7 +12,7 @@ class LoginController < ApplicationController
  
  
  def do_login
- user = User.find_by_login_and_password(params[:user], params[:pass])
+ user = User.find_by_email_and_password(params[:email], params[:password])
   if user
    session[:user]=user.id
    redirect_to :controller => :in_session, :action => :index
