@@ -1,0 +1,29 @@
+ Creating a new controller:
+
+ 1)	The default layout (app/views/layout/application.rhtml) is loaded.
+   
+         override:   create a layout with the name of the controller in app/views/layout 
+
+ 2)	The stylesheet for the whole application is loaded (public/stylesheet/default.css)
+
+ 3)	If you use the standard layout you can automatically load a menu if you create the partial  app/views/<controllername>/_navbar.rhtml
+
+ 4)	If you want to load extra stylesheets for the controller, write in the controller initializer code:
+
+        def initialize
+          @stylesheets = <stylesheetnames>
+        end
+
+
+Creating a new view:
+
+ 1)	 The default layout for the controller is applied, if not present the application's default is applied
+
+          override: write in the controller „layout <layoutname>, :only => :<actioname>“ 
+
+ 2)	 If you use the default layout you can include a menu. This can be for the whole controller (see section „creating a new controller“) or to create an extra menu for the action do the following:
+
+          create a partial with the code of the menu
+          in the action code (controller) write:
+          @navbar = (render_to_string :partial => <partialname>)
+  

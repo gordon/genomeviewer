@@ -1,6 +1,6 @@
-class CreateAnnotationData < ActiveRecord::Migration
+class CreateAnnotations < ActiveRecord::Migration
   def self.up
-    create_table :annotation_data do |t|
+    create_table :annotations do |t|
      t.column :datasource, :string, :null => false
      t.column :user_id, :int, :null => false
      t.column :description, :text
@@ -9,6 +9,6 @@ class CreateAnnotationData < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :annotation_data
+    drop_table :annotations
   end
 end

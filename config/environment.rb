@@ -58,8 +58,3 @@ end
 # Mime::Type.register "application/x-mobile", :mobile
 
 # Include your application configuration below
-
-Inflector.inflections do |inflect|
-	inflect.irregular 'data','data'
-	inflect.irregular 'annotation_data', 'annotation_data'
-end

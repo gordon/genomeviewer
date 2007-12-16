@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class AnnotationDataTest < Test::Unit::TestCase
-  fixtures :annotation_data
+class SequenceRegionTest < Test::Unit::TestCase
+  fixtures :sequence_regions
 
   # Replace this with your real tests.
   def test_truth

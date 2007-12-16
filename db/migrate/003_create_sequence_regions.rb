@@ -1,8 +1,8 @@
-class CreateAnnotations < ActiveRecord::Migration
+class CreateSequenceRegions < ActiveRecord::Migration
   def self.up
-    create_table :annotations do |t|
+    create_table :sequence_regions do |t|
      t.column :seq_id, :string, :null => false
-     t.column :annotation_data_id, :int, :null => false
+     t.column :annotation_id, :int, :null => false
      t.column :seq_begin, :int, :null => false
      t.column :seq_end, :int, :null => false
      t.column :description, :text
@@ -10,6 +10,6 @@ class CreateAnnotations < ActiveRecord::Migration
   end
 
   def self.down
-    drop_table :annotations
+    drop_table :sequence_regions
   end
 end
