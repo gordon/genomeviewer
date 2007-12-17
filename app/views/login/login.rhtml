@@ -3,11 +3,11 @@
    <table>
     <tr>
      <td><p>Email:</p></td>
-     <td><%= text_field_tag "email", nil, :maxlength=>16 %></td>
+     <td><%= text_field_tag "email", nil, :maxlength=>64 %></td>
     </tr>
     <tr>
      <td><p>Password:</p></td>
-     <td><%= password_field_tag "password", nil, :maxlength=>16 %></td>
+     <td><%= password_field_tag "password", nil, :maxlength=>64 %></td>
     </tr>
     <tr>
      <td colspan="2"><%=submit_tag "Login"%></td>
