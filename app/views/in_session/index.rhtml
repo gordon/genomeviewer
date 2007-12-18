@@ -1,1 +1,1 @@
- <p>hallo,  <%= session[:user]%></p> 
+ <p>hallo,  <%= User.find(session[:user]).name%></p> 

@@ -13,13 +13,11 @@ class Annotation < ActiveRecord::Base
 
   def create_sequence_regions
     # these data should come from parser
-    simulated1 = {:seq_id => "seq1", :seq_begin => 100, :seq_end => 200}
-    simulated2 = {:seq_id => "seq2", :seq_begin => 10, :seq_end => 2000}
-    annotations = [simulated1, simulated2]
+    parsing_output = [{:seq_id => "NC_003070", :seq_begin => 1, :seq_end => 4294967295}]
 
-    annotations.each do |a|
-      a[:annotation_id] = self.id
-      SequenceRegion.create(a)
+    parsing_output.each do |sequence_region|
+      sequence_region[:annotation_id] = self.id
+      SequenceRegion.create(sequence_region)
     end
   end
 

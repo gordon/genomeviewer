@@ -5,13 +5,8 @@
 </ul>
 
 <div id="filelist">
- <h1>Files:</h1>
- <%=
-Dir.open("uploads/users/#{session[:user]}").entries.collect {|file_name|
- if (not file_name=="." and not file_name=="..")
-  "#{link_to (file_name, :controller => "in_session", :action=> "view", :file_name => file_name, :start_pos => 4000, :end_pos => 7000)}\n"
- end
-}
- %>
-
+ <h1>Own GFF3 files:</h1>
+ <% User.find(session[:user]).annotations.each do |gff3| %>
+   <%= link_to gff3.name, :action => "view", :annotation => gff3.id %>
+ <% end %>
 </div>

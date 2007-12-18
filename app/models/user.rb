@@ -1,6 +1,6 @@
 class User < ActiveRecord::Base
 
- has_many :annotation_data
+ has_many :annotations
 
  validates_uniqueness_of :email, :message => "This account already exists. Please choose another one."
 

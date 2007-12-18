@@ -58,3 +58,9 @@ end
 # Mime::Type.register "application/x-mobile", :mobile
 
 # Include your application configuration below
+
+# Note: the path to gtruby must be saved in the environmental variable GTRUBY!
+# add it to the ruby include path 
+$: << ENV['GTRUBY']
+# require the gtruby library 
+require 'gtruby'

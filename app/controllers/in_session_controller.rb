@@ -2,6 +2,10 @@ class InSessionController < ApplicationController
 
  prepend_before_filter :check_login
 
+ def view
+   @sequence_region = Annotation.find(params[:annotation]).sequence_regions[0]
+ end
+
  def check_login
   unless session[:user]
    redirect_to :controller => :login, :action => :login
@@ -18,7 +22,9 @@ class InSessionController < ApplicationController
   def do_upload
     filename = "uploads/users/#{session[:user]}/#{params[:gff3_file].original_filename()}"
     File.open(filename, "wb") {|f| f.write(params[:gff3_file].read) }
-    @annotation = Annotation.create(:datasource => filename,
+    @annotation = Annotation.create(\
+             :name => params[:gff3_file].original_filename().sub(/.gff3$/,''),
+             :datasource => filename,
 					   :user_id => session[:user],
 					   :description => params[:description])
     if @annotation
