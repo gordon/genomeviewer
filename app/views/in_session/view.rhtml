@@ -1,6 +1,6 @@
 <h1>Viewing: <%=  params[:file_name]%></h1>
 <center>
-<table border="1">
+<table>
 <tr>
  <td colspan="3" align="center">
   <%= link_to("Zoom (+)", :file_name=>params[:file_name], :start_pos=>params[:start_pos].to_i+50, :end_pos=>params[:end_pos].to_i-50) %>
