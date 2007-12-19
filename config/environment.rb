@@ -51,6 +51,7 @@ Rails::Initializer.run do |config|
   # end
 
   # See Rails::Configuration for more options
+  config.action_controller.session = { :session_key => "_myapp_session", :secret => "genomeviewer secret key needed by rails 2.0" }
 end
 
 # Add new mime types for use in respond_to blocks:
