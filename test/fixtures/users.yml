@@ -1,5 +1,17 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-one:
+giorgio:
   id: 1
-two:
+  name: Giorgio Gonnella
+  email: ggonnella@rubyfanclub.jp
+  password: <%=Digest::SHA1.hexdigest("railscool")%>
+  
+marvin:
   id: 2
+  name: Marvin Mundry
+  email: marvin_mundy@javaprog.de
+  password: <%=Digest::SHA1.hexdigest("phpcool")%>
+  
+gordon:
+  id: 3
+  name: Gordon Gremme
+  email: g.gremme@genometools.org  
+  password: <%=Digest::SHA1.hexdigest("gtcool")%>
