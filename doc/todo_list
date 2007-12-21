@@ -1,0 +1,49 @@
+================================================================
+Genomeviewer TODO List
+================================================================
+
+ - Interface
+	
+	- login / register unify
+	
+	- liste von sequence regions oben beim clicken 
+
+	- zoom / schieben tasten und mausschieber
+
+	- moeglichkeit files zu loeschen / updaten
+ 
+ - Allgemein :
+
+	- files "veroeffentlichen"
+
+	- route /username/filename
+	- config seite
+
+		- visualisierung
+		- email / pass aendern
+		- files loeschen / updaten
+		- user loeschen
+	
+ - Interface fuer nicht angemeldete users
+
+	- die koennen public dateien browsen
+	- suche implementieren
+
+ - Visualisierung
+  
+	- speichern unter tmp und visualisieren
+
+ - Model 
+
+	- validierung von GFF3 durch bindings
+	- lesen verschiedene seq ids durch bindings 
+
+ - Tests
+
+	- unit tests
+	- simulated sessions 
+	  (integration tests)
+
+ - Doku
+
+================================================================
