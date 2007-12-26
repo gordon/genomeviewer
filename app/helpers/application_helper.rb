@@ -4,7 +4,7 @@ module ApplicationHelper
  def include_stylesheets
    output = ""
    output << stylesheet_link_tag("default")
-   if @navbar or File.exist?("app/views/#{controller.controller_name}/_navbar.rhtml")
+   if @navbar or File.exist?("app/views/#{controller.controller_name}/_navbar.html.erb")
      output << stylesheet_link_tag("menu")
    end
    output << stylesheet_link_tag(*@stylesheets) if @stylesheets
@@ -15,7 +15,7 @@ module ApplicationHelper
   # (1) control if the variable @navbar exists
   return @navbar if @navbar 
   # (2) control if the partial _navbar exists
-  if File.exist?("app/views/#{controller.controller_name}/_navbar.rhtml")
+  if File.exist?("app/views/#{controller.controller_name}/_navbar.html.erb")
    return(render :partial => "navbar") 
   end
   # (3) if both don't exist display nothing
