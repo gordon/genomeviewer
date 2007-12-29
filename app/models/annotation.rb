@@ -6,55 +6,36 @@ class Annotation < ActiveRecord::Base
   belongs_to :user
 
   ### virtual attributes ###
+    
+  # currently the storage is in the filesystem:
+  # gff3_data is therefore implemented as virtual attribute
+  # based on gff3_data_storage, the actual column in the table
+  # which currently contains the name of the file where 
+  # the data is stored
   
-  # note: The current storage for gff3 data is in the filesystem.
-  # 
-  # Under the current implementation (filesystem storage),
-  # the position and name of the file are stored in the table
-  # entries #path and #filename. The code using this model
-  # should however avoid to use directly path and filename
-  # to allow a simple transition to other kinds of storage.
-  # (e.g. drb or database based).
-  #
-  # Therefore are here defined some virtual columns that 
-  # give higher level access to the gff3 data and can be
-  # redefined if another kind of implementation is chosen,
-  # without having to rewrite the code using them.
-  #
-  
-  # a label for this annotation
+  def gff3_data
+    File.open(gff3_data_storage).read
+  end 
+  def gff3_data=(data)
+    File.open(gff3_data_storage, "wb").write(data)
+  end
+  # see also delete_gff3_data() in the callbacks section 
+
+  # a nice label for the annotation
   def name 
     # (currently: filename without extension)
-    File.basename(filename, ".*")
+    File.basename(gff3_data_storage, ".*")
   end
-  
-  # currently the position of the file;
-  # 
-  # in the future it can contain a pointer to the storage
-  # location of the data, according to the implementation
-  #
-  def gff3_data_location
-    "#{path}/#{filename}"
-  end
-
-  # a filehandle to the file containing the gff3 data
-  #
-  # if another implementation is chosen, it can return another 
-  # kind of pointer to the data or the data itself
-  # 
-  def gff3_data
-    File.open(gff3_data_location)
-  end 
 
   ### validations ###
 
   def validate
-    gff3_data_location_exists? and \
+    gff3_data_storage_valid? and \
     gff3_data_valid?
   end
 
-  def gff3_data_location_exists?
-    File.exists?(gff3_data_location)
+  def gff3_data_storage_valid?
+    File.exists?(gff3_data_storage)
   end
   
   def gff3_data_valid?
@@ -68,7 +49,6 @@ class Annotation < ActiveRecord::Base
       return true
     end
   end
-
 
   ### callbacks ###
   
@@ -93,7 +73,7 @@ class Annotation < ActiveRecord::Base
 
   # delete the file containing the data pointed by this object
   def delete_gff3_data
-    File.delete(gff3_data_location)
+    File.delete(gff3_data_storage)
   end
 
 end

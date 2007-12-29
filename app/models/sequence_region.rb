@@ -13,7 +13,7 @@ class SequenceRegion < ActiveRecord::Base
   
   # use the genometools ruby bindings to generate the png file for the to_png method
   def generate_png(seq_begin, seq_end, output_file)
-    in_stream = GT::GFF3InStream.new(self.annotation.datasource)
+    in_stream = GT::GFF3InStream.new(self.annotation.gff3_data_storage)
     feature_index = GT::FeatureIndex.new
     feature_stream = GT::FeatureStream.new(in_stream, feature_index)
     gn = feature_stream.next_tree

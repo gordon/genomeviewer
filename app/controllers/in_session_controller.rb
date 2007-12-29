@@ -20,13 +20,12 @@ class InSessionController < ApplicationController
  end
 
   def do_upload
-    filename = "uploads/users/#{session[:user]}/#{params[:gff3_file].original_filename()}"
-    File.open(filename, "wb") {|f| f.write(params[:gff3_file].read) }
-    @annotation = Annotation.create(\
-             :name => params[:gff3_file].original_filename().sub(/.gff3$/,''),
-             :datasource => filename,
-					   :user_id => session[:user],
-					   :description => params[:description])
+    annotation_params = { :gff3_data          =>  params[:gff3_file],
+                          :gff3_data_storage  =>  {User.find(session[:user]).uploads_dir+"/"+
+                                                  params[:gff3_file].original_filename,
+					      :user_id            =>  session[:user],
+					      :description        =>  params[:description] }
+    @annotation = Annotation.create(annotation_params)
     if @annotation
       flash[:notice] = "Successfully uploaded"
     else
