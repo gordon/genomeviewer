@@ -45,7 +45,7 @@ class Annotation < ActiveRecord::Base
   ### encapsulation of the storage mechanism ###
   
   def gff3_data_storage
-    return "#{$GFF3_STORAGE_PATH}/#{public? ? 'public' : 'private'}/#{user_id}/#{name}"
+    "#{$GFF3_STORAGE_PATH}/#{public? ? 'public' : 'private'}/#{user_id}/#{name}"
   end
   private :gff3_data_storage
 
@@ -126,15 +126,35 @@ class Annotation < ActiveRecord::Base
   before_destroy :destroy_sequence_regions
   before_destroy :delete_gff3_data
   
-  def create_sequence_regions
-    # these data should come from parser
-    parsing_output = [{:seq_id => "NC_003070", :seq_begin => 1, :seq_end => 4294967295}]
-
-    parsing_output.each do |sequence_region| 
-      sequence_region[:annotation_id] = self[:id]
-      SequenceRegion.create(sequence_region)
+  def create_sequence_regions   
+    get_sequence_regions_params.each do |sequence_region_params| 
+      sequence_region_params[:annotation_id] = self[:id]
+      SequenceRegion.create(sequence_region_params)
     end
   end
+
+  def get_sequence_regions_params
+    require "gtruby"
+    # set up the feature stream
+    genome_stream = GT::GFF3InStream.new(gff3_data_storage)
+    feature_index = GT::FeatureIndex.new()
+    genome_stream = GT::FeatureStream.new(genome_stream, feature_index)
+    feature = genome_stream.next_tree()
+    while (feature) do
+      feature = genome_stream.next_tree()
+    end
+    # get sequence ids and ranges
+    seqids = feature_index.get_seqids
+    parsing_output = []
+    seqids.each do |seq_id|
+        range = feature_index.get_range_for_seqid(seq_id)
+        seq_begin = range.start
+        seq_end = range.end
+        parsing_output << ({:seq_id => seq_id, :seq_begin => seq_begin, :seq_end => seq_end} )        
+    end
+    return parsing_output
+  end
+  private :get_sequence_regions_params
   
   # delete cascade behaviour
   def destroy_sequence_regions
