@@ -13,15 +13,6 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password, :message => "You entered two different passwords!"
   validates_format_of :email, :with => /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i, :message => 'Email address invalid'
 
-  ### virtual columns ###
-  
-  # Returns the relative path (to the application main directory) 
-  # to the repository of upload files for this user.
-  # Returns nil for new users that were not yet saved
-  def uploads_dir
-    new_record? ? nil : "uploads/users/#{self[:id]}"
-  end
-
   ### callbacks ###
   
   before_save :hash_password
@@ -30,16 +21,6 @@ class User < ActiveRecord::Base
     self[:password] = Digest::SHA1.hexdigest(self[:password])
   end
   
-  # note: uploads_dir is defined after save; on other words:  
-  #       you get an #id after saving, so don't change the
-  #       callback to any before_save
-  after_save :create_uploads_dir
-  # creates a directory where the user can store own GFF3 files
-  def create_uploads_dir
-    Dir.mkdir(uploads_dir)
-    logger.info("Created directory for new user #{name} (ID:#{id})")
-  end
-
   before_destroy :delete_annotations
   # delete all annotations of an user that is being 
   # deleted to ensure db consistency
@@ -48,23 +29,9 @@ class User < ActiveRecord::Base
     p annotations
     p "**************************"
     # TODO: eventually insert here some code to save public
-    # annotations in another directory if this behaviour is desired
+    # annotations if this behaviour is desired
     annotations.destroy_all
     p annotations
-  end
-  
-  after_destroy :delete_uploads_dir
-  # delete the duploads directory of an user 
-  # 
-  # note: the directory should at this point be already empty 
-  # because of the delete_annotations method call by before_destroy
-  def delete_uploads_dir
-    # the following commented code would delete all files in it 
-    #~ main_app_dir = Dir.getwd
-    #~ Dir.chdir(uploads_dir)
-    #~ Dir["*"].each {|filename| File.delete(filename)}
-    #~ Dir.chdir(main_app_dir)
-    Dir.delete(uploads_dir)
   end
 
 end

@@ -65,3 +65,7 @@ end
 $: << ENV['GTRUBY']
 # require the gtruby library 
 require 'gtruby'
+
+# folder where to save gff3 files, as the data is not saved 
+# in the database:
+$GFF3_STORAGE_PATH = "uploads"

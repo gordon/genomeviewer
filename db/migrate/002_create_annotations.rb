@@ -1,7 +1,7 @@
 class CreateAnnotations < ActiveRecord::Migration
   def self.up
     create_table :annotations do |t|
-      t.column :gff3_data_storage, :string, :null => false
+      t.column :name, :string, :null => false
       t.column :user_id, :int, :null => false
       t.column :description, :text
       t.column :public, :boolean, :null => false, :default => false
