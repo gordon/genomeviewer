@@ -21,7 +21,7 @@ class InSessionController < ApplicationController
 
   def do_upload
     annotation_params = { :gff3_data          =>  params[:gff3_file],
-                          :gff3_data_storage  =>  {User.find(session[:user]).uploads_dir+"/"+
+                          :gff3_data_storage  =>  User.find(session[:user]).uploads_dir+"/"+
                                                   params[:gff3_file].original_filename,
 					      :user_id            =>  session[:user],
 					      :description        =>  params[:description] }
