@@ -1,0 +1,27 @@
+------------
+
+General project rules:
+
+- follow the rules in this files which will be modified as the project
+progresses
+- the ``roadmap'' is defined by the file doc/todo_list
+- the only work which ``counts'' are proper commits with meaningful
+commit messages
+- a commit either implements exactly one feature or fixes exactly one
+ bug
+- if a commit finishes a todo item, the doc/todo_list file should be
+modified with this commit accordingly
+- if a commit opens up a new todo item, the doc/todo_list file should
+be modified with this commit accordingly
+- write proper unit and functional tests for all features
+- no quick hacks, in the long run they produce more work than they save
+
+Don'ts:
+
+- no binary files in the repository (e.g., RTF files)
+- no SQL statements in the code (use the ActiveRecord ORM, thats the
+whole point of it)
+- no source line longer than 80 characters
+- no GenomeTools source code in the repository
+
+------------
