@@ -20,12 +20,12 @@ class InSessionController < ApplicationController
  end
 
   def do_upload
-    annotation_params = { :gff3_data          =>  params[:gff3_file],
-                          :name               =>  params[:gff3_file].original_filename,
-					      :user_id            =>  session[:user],
-					      :description        =>  params[:description] }
-    @annotation = Annotation.create(annotation_params)
-    if @annotation
+    @annotation = Annotation.new
+    @annotation.name = params[:gff3_file].original_filename
+    @annotation.user_id = session[:user]
+    @annotation.description = params[:description] 
+    @annotation.gff3_data = params[:gff3_file].read
+    if @annotation.save
       flash[:notice] = "Successfully uploaded"
     else
       flash[:notice] = "Upload impossible"
