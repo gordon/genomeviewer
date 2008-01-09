@@ -9,6 +9,28 @@ one or several sequence regions, described by the SequenceRegion model
 * the storage of the data in the filesystem is kept transparent to 
   the outside of this class through following two mechanisms:
 
+...
+
+ IMPORTANT: you must set the .name and .user/.user_id before you can user the .gff3_data=() method.
+ Therefore you should not (currently) use the Annotation.create({... }) method with an hash of options
+ as the order of the elements of an hash is not always the same. 
+ 
+ TODO: this can be avoided saving in an temp file that is then moved when user and name are present
+
+...
+
+ Example usage:
+
+    a = Annotation.new
+    a.name = params[:gff3_file].original_filename
+    a.user_id = session[:user]
+    # now that the filename is saved...
+    a.gff3_data = params[:gff3_file] # note: this can be any string
+    
+  --> the data params[:gff3_file] will be saved in a file with the given name
+      the rest of the information is saved in the db table  
+            
+
 (1) filename automatically calculated as:
   
   $GFF3_STORAGE_PATH/"public_or_private"/user_id/name
@@ -85,6 +107,12 @@ class Annotation < ActiveRecord::Base
     File.open(gff3_data_storage).read
   end
   def gff3_data=(data)
+    raise NameError, \
+      "Please first set a filename: <thisobject>.name='<filename>' " \
+      if name.blank?
+    raise NameError, \
+      "Please first assign to an user: e.g. <thisobject>.user=User.find(session[:user])"\
+      unless user.valid?
     user_dir = File.dirname(gff3_data_storage)
     Dir.mkdir(user_dir) unless File.exists?(user_dir)
     File.open(gff3_data_storage, "wb") {|f| f.write(data)}
