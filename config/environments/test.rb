@@ -17,3 +17,7 @@ config.action_controller.perform_caching             = false
 # The :test delivery method accumulates sent emails in the
 # ActionMailer::Base.deliveries array.
 config.action_mailer.delivery_method = :test
+
+# folder where to save gff3 files, as the data is not saved 
+# in the database:
+$GFF3_STORAGE_PATH = "test/uploads"

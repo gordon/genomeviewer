@@ -16,3 +16,7 @@ config.action_controller.perform_caching             = true
 
 # Disable delivery errors, bad email addresses will be ignored
 # config.action_mailer.raise_delivery_errors = false
+
+# folder where to save gff3 files, as the data is not saved 
+# in the database:
+$GFF3_STORAGE_PATH = "uploads"
