@@ -1,0 +1,5 @@
+This directory contains some test gff3 files 
+that are loaded by the fixture file ../annotations.yml
+
+The files are from the genometools repository 
+(directory testdata)
