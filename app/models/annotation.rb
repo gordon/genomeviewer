@@ -69,7 +69,6 @@ class Annotation < ActiveRecord::Base
   def gff3_data_storage
     "#{$GFF3_STORAGE_PATH}/#{public? ? 'public' : 'private'}/#{user_id}/#{name}"
   end
-  private :gff3_data_storage
 
   def name=(value)
     if new_record?
