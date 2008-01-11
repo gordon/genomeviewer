@@ -9,22 +9,11 @@ one or several sequence regions, described by the SequenceRegion model
 * the storage of the data in the filesystem is kept transparent to 
   the outside of this class through following two mechanisms:
 
-...
-
- IMPORTANT: you must set the .name and .user/.user_id before you can user the .gff3_data=() method.
- Therefore you should not (currently) use the Annotation.create({... }) method with an hash of options
- as the order of the elements of an hash is not always the same. 
- 
- TODO: this can be avoided saving in an temp file that is then moved when user and name are present
-
-...
-
  Example usage:
 
     a = Annotation.new
     a.name = params[:gff3_file].original_filename
     a.user_id = session[:user]
-    # now that the filename is saved...
     a.gff3_data = params[:gff3_file] # note: this can be any string
     
   --> the data params[:gff3_file] will be saved in a file with the given name
@@ -63,42 +52,67 @@ class Annotation < ActiveRecord::Base
 
   has_many :sequence_regions
   belongs_to :user
-
+  
   ### encapsulation of the storage mechanism ###
   
+  def gff3_data_storage_permanent?
+    return false if user.nil? or name.nil?
+    user.valid? and not name.blank?
+  end
+  
   def gff3_data_storage
-    "#{$GFF3_STORAGE_PATH}/#{public? ? 'public' : 'private'}/#{user_id}/#{name}"
+    if gff3_data_storage_permanent?
+      return "#{$GFF3_STORAGE_PATH}/#{public? ? 'public' : 'private'}/#{user_id}/#{name}"
+    else
+      Dir.mkdir("tmp/gff3_data") unless File.exists?("tmp/gff3_data")
+      @tmp ||= "tmp/gff3_data/"+Time.now.to_i.to_s+"_"+rand(10**20).to_s
+      return @tmp
+    end
+  end
+
+  def save_gff3_file_position
+    @old_filename = gff3_data_storage
+  end
+
+  def correct_gff3_file_position     
+    if gff3_data_storage_permanent? and File.exists?(@old_filename)
+      # create user directory if necessary
+      user_dir = File.dirname(gff3_data_storage)
+      Dir.mkdir(user_dir) unless File.exists?(user_dir)
+      
+      # move file
+      File.rename(@old_filename, gff3_data_storage) 
+
+      # delete old directory if empty 
+      # (if not empty it will only raise an error which is ignored -> rescue nil)
+      Dir.delete(File.dirname(oldname)) rescue nil   
+    end
+  end
+  
+  def user=(value)
+    save_gff3_file_position
+    self[:user_id]=value.id
+    correct_gff3_file_position
+  end
+  
+  def user_id=(value)
+    save_gff3_file_position
+    self[:user_id]=value
+    correct_gff3_file_position
   end
 
   def name=(value)
-    if new_record?
-      self[:name]=value
-    else
-      oldname = gff3_data_storage
-      self[:name]=value
-      newname = gff3_data_storage
-      File.rename(oldname, newname)      
-    end
+    save_gff3_file_position
+    self[:name]=value
+    correct_gff3_file_position
   end
   
   def public=(value)
-    if new_record?
-      self[:public]=value
-    else
-      oldname = gff3_data_storage
-      self[:public]=value
-      newname = gff3_data_storage
-      # create directory if necessary
-      user_dir = File.dirname(newname)
-      Dir.mkdir(user_dir) unless File.exists?(user_dir)
-      # move file
-      File.rename(oldname, newname)  
-      # delete old directory if empty 
-      # (if not empty it will only raise an error which is ignored -> rescue nil)
-      Dir.delete(File.dirname(oldname)) rescue nil      
-    end
+    save_gff3_file_position
+    self[:public]=value
+    correct_gff3_file_position   
   end
-  
+
   ### virtual attributes ###
         
   def gff3_data
@@ -106,15 +120,9 @@ class Annotation < ActiveRecord::Base
     File.open(gff3_data_storage).read
   end
   def gff3_data=(data)
-    raise NameError, \
-      "Please first set a filename: <thisobject>.name='<filename>' " \
-      if name.blank?
-    raise NameError, \
-      "Please first assign to an user: e.g. <thisobject>.user=User.find(session[:user])"\
-      unless user.valid?
-    user_dir = File.dirname(gff3_data_storage)
-    Dir.mkdir(user_dir) unless File.exists?(user_dir)
-    File.open(gff3_data_storage, "wb") {|f| f.write(data)}
+    storage_dir = File.dirname(gff3_data_storage)
+    Dir.mkdir(storage_dir) unless File.exists?(storage_dir)
+    File.open(gff3_data_storage, "w") {|f| f.write(data)}
   end
   # see also delete_gff3_data() in the callbacks section 
 
@@ -125,6 +133,8 @@ class Annotation < ActiveRecord::Base
   end
 
   ### validations ###
+
+  validates_presence_of :user
 
   def validate
     gff3_data_storage_valid? and \

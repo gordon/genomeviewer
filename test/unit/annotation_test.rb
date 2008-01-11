@@ -37,6 +37,13 @@ end
 class AnnotationTest < Test::Unit::TestCase
     
   include ExampleAnnotations
+  
+  def test_annotation_create
+    @a = Annotation.create(:name => "test1", :user_id => 1, :gff3_data=>"testtesttest")
+    @b = Annotation.create(:gff3_data=>"another test",:name => "test2", :user_id => 1)
+    assert @a
+    assert @b
+  end
 
   def test_filesystem_upload_1
     uploaded_encode_known_genes = $GFF3_STORAGE_PATH+"/"+\
@@ -80,6 +87,9 @@ class AnnotationTest < Test::Unit::TestCase
     new_location = $GFF3_STORAGE_PATH+"/"+\
                          "public/"+User.find_by_name("Jane Doe").id.to_s+\
                          "/standard_gene_with_introns_as_tree.gff3"    
+    p new_location
+    p standard_gene_1.gff3_data_storage
+    p standard_gene_1.gff3_data.size
     assert File.exists?(new_location)
     standard_gene_1.public = false
     assert File.exists?(old_location)
