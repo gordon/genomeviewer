@@ -24,7 +24,7 @@ class InSessionController < ApplicationController
     if @annotation.save
       flash[:notice] = "Successfully uploaded"
     else
-      flash[:notice] = "Upload impossible"
+      flash[:errors] = @annotation.errors.on_base
     end
     redirect_to :action => "upload"
   end

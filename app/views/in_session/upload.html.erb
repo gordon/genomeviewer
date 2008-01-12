@@ -3,4 +3,6 @@
  <%= file_field_tag "gff3_file" %><br/>
  <%= text_area_tag "description" %>
  <%= submit_tag  "Save" %>
+ <p style="color:red"><%= flash[:errors] %></p>
+ <p style="color:green"><%= flash[:notice] %></p>
 <% end %>

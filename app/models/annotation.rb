@@ -146,14 +146,17 @@ class Annotation < ActiveRecord::Base
   end
   
   def gff3_data_valid?
-    error = 0
-    # code for the validation of the GFF3 data, 
-    # returns a error number > 0 if the data is invalid
-    if error != 0 
-      errors.add("GFF3 file","has an invalid format (error #{error})")
-      return false
-    else
+    begin 
+      require 'gtruby'
+      in_stream = GT::GFF3InStream.new(gff3_data_storage)
+      gn = in_stream.next_tree()
+      while (gn) do
+        gn = in_stream.next_tree()
+      end
       return true
+    rescue => error
+      errors.add_to_base error.to_s
+      return false
     end
   end
 
