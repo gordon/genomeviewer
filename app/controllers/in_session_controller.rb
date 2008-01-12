@@ -2,10 +2,6 @@ class InSessionController < ApplicationController
 
  prepend_before_filter :check_login
 
- def view
-   @sequence_region = Annotation.find(params[:annotation]).sequence_regions[0]
- end
-
  def check_login
   unless session[:user]
    redirect_to :controller => :login, :action => :login
