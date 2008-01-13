@@ -1,0 +1,12 @@
+<h1>Users:</h1>
+ <%
+  User.find(:all).entries.collect { |user|
+   if user.annotations.find_by_public(false) #this must of cause be true
+ %>
+  <%= link_to (user.name, :action=> "showuserfiles", :user_id => user.id) %>
+  <%= "<br>" %>
+
+ <%
+   end
+  }
+ %>

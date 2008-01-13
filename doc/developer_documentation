@@ -1,6 +1,6 @@
  Creating a new controller:
 
- 1)	The default layout (app/views/layout/application.rhtml) is loaded.
+ 1)	The default layout (app/views/layout/application.html.erb) is loaded.
    
          override:   create a layout with the name of the controller in app/views/layout 
 
@@ -19,9 +19,9 @@ Creating a new view:
 
  1)	 The default layout for the controller is applied, if not present the application's default is applied
 
-          override: write in the controller „layout <layoutname>, :only => :<actioname>“ 
+          override: write in the controller ï¿½layout <layoutname>, :only => :<actioname>ï¿½ 
 
- 2)	 If you use the default layout you can include a menu. This can be for the whole controller (see section „creating a new controller“) or to create an extra menu for the action do the following:
+ 2)	 If you use the default layout you can include a menu. This can be for the whole controller (see section ï¿½creating a new controllerï¿½) or to create an extra menu for the action do the following:
 
           create a partial with the code of the menu
           in the action code (controller) write:

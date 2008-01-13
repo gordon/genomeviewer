@@ -1,7 +1,11 @@
 class BrowserController < ApplicationController
 
  def sidselect
-  @navbar = (render_to_string :partial => "/in_session/navbar")
+  if session[:user]
+   @navbar = (render_to_string :partial => "/in_session/navbar")
+  else
+   @navbar = (render_to_string :partial => "/public/navbar")
+  end
  end
 
  def browser
