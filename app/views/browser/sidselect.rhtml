@@ -1,0 +1,17 @@
+<h1>Browser</h1>
+
+ <%
+  Annotation.find(params[:annotation]).sequence_regions.entries.collect { |sequenceregion|
+ %>
+  <%= link_to  sequenceregion.seq_id, {:action=> "browser",
+                                       :annotation =>  params[:annotation],
+                                       :seq_id => sequenceregion.id.to_s},
+                                      {:target => "browser"}
+  %>
+ <%
+  }
+ %>
+
+<hr>
+
+<iframe name="browser" id="browser" src="browserdummy" width="800" height="480"></iframe>

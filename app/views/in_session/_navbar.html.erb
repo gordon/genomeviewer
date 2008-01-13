@@ -7,14 +7,9 @@
 <div id="filelist">
  <h1>Own GFF3 files:</h1>
  <% User.find(session[:user]).annotations.each do |gff3| %>
-   <%# note: at the moment points ALWAYS to the FIRST sequence region of the annotation %>  
-   <% sequence_region = Annotation.find(gff3.id).sequence_regions[0] %>
-   
-   <%= link_to gff3.name, :action => "view", 
-                          :annotation => gff3.id,
-                          :sequence_region => sequence_region,
-                          :seq_begin => sequence_region.seq_begin,
-                          :seq_end => sequence_region.seq_end
-    %>
+   <%= link_to gff3.name, :controller => "browser",
+                          :action => "sidselect",
+                          :annotation => gff3.id 
+   %>
  <% end %>
 </div>
