@@ -1,0 +1,4 @@
+##gff-version   3
+##sequence-region   test1 1000 10000
+test1	.	gene	1000	9000	0.500000	+	.	ID=gene1
+###
