@@ -1,0 +1,41 @@
+<h1>File Manager</h1>
+ <% User.find(session[:user]).annotations.each do |annotation| %>
+ <table border="1" width="100%">
+  <tr>
+   <td colspan="2" bgcolor="rgb(60%, 60%, 90%)"><%=
+    annotation.name
+   %></td>
+  </tr>
+  <tr>
+   <td colspan="2">Contains:<br/><%
+      annotation.sequence_regions.find(:all).each do |seq_id| %>
+     <%= seq_id.seq_id %>
+    <%
+    end
+   %></td>
+  </tr>
+  <tr>
+   <td colspan="2">Description:<br/>
+     <% form_tag({:action => 'change_annotation_description'},
+                  :multipart => true) do %>
+     <%= hidden_field_tag 'annotation', annotation.id %>
+     <%= text_area_tag "description",
+                   annotation.description,
+                   :size => "50x5"
+     %><br/>
+       <%= submit_tag  "Save description" %>
+      <% end %>
+   </td>
+  </tr>
+  <tr>
+   <td>Accessibility:<br/>
+    <input type="radio" name="pub" value="Private" <%= "checked" if not annotation.public %> onclick="location.href='<%= url_for :action => "file_accessibility", :scope => true, :annotation => annotation.id %>'" >Private
+    <input type="radio" name="pub" value="Public" <%= "checked" if annotation.public %>      onclick="location.href='<%= url_for :action => "file_accessibility", :scope => false, :annotation => annotation.id %>'" >Public
+   </td>
+   <td align="center"><input type="button" name="del" value="Delete File" onclick="location.href='<%=
+   url_for :action => "file_delete", :annotation=> annotation.id
+    %>'"/></td>
+  </tr>
+  </table>
+  <br/>
+ <% end %>
