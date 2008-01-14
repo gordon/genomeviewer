@@ -8,8 +8,8 @@
   </tr>
   <tr>
    <td colspan="2">Contains:<br/><%
-      annotation.sequence_regions.find(:all).each do |seq_id| %>
-     <%= seq_id.seq_id %>
+      annotation.sequence_regions.find(:all).each do |seq_region| %>
+     <%= seq_region.seq_id %>
     <%
     end
    %></td>
@@ -33,14 +33,14 @@
      "checked" if not annotation.public 
      %> onclick="location.href='<%=
       url_for :action => "file_accessibility",
-              :scope => true,
+              :public => true,
               :annotation => annotation.id 
      %>'" >Private
     <input type="radio" name="pub" value="Public"<%=
      "checked" if annotation.public 
     %> onclick="location.href='<%=
       url_for :action => "file_accessibility",
-              :scope => false,
+              :public => false,
               :annotation => annotation.id 
     %>'" >Public
    </td>

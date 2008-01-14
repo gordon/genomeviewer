@@ -50,10 +50,10 @@ class InSessionController < ApplicationController
 
  def file_accessibility
   annotation=Annotation.find(params[:annotation].to_i)
-  if params[:scope] then scope=false else scope=true end
+  if params[:public] then public=true else public=false end
   # prevent others from mofifiing our data
   if annotation.user.id == session[:user]
-   annotation.public=scope
+   annotation.public=public
    annotation.save
   end
   redirect_to :action => "file_manager"
