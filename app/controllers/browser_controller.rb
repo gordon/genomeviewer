@@ -58,6 +58,7 @@ class BrowserController < ApplicationController
   end
   #end checking params start_pos and end_pos
 
+  render  :layout => false
  end
 
  def browser_image
