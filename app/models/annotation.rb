@@ -16,103 +16,60 @@ one or several sequence regions, described by the SequenceRegion model
     a.user_id = session[:user]
     a.gff3_data = params[:gff3_file] # note: this can be any string
     
-  --> the data params[:gff3_file] will be saved in a file with the given name
+  --> the data params[:gff3_file] will be saved in a file 
       the rest of the information is saved in the db table  
             
-
-(1) filename automatically calculated as:
-  
-  $GFF3_STORAGE_PATH/"public_or_private"/user_id/name
-  
+ The filename is automatically calculated as $GFF3_STORAGE_PATH/userid_name
+ 
   where:
   
-  * $GFF3_STORAGE_PATH: gives the basis path, set up in environment.rb
-    [note: it can be anywhere in the filesystem]
-  * - public annotations are kept under /public/user_id
-    - private annotations are kept under /private/user_id
-    - if the user_id directory does not exist, it is created
+  * $GFF3_STORAGE_PATH: gives the basis path, 
+    specified in the config/enviroments files.
+    It can be any folder in the filesystem.
   * name is a metadata saved in a column in the database
 
-  --> if the column name is changed, the file is renamed; see method name=()
-  --> if the public flag is set/unset, the file is moved; see method public=()
+  --> if the column name is changed, the file is automatically 
+      renamed after saving the object
   
-  (the filename is calculated in the private method "gff3_data_storage")
-
-(2) virtual attributes to access the data: 
+  the current filename is given by the method "gff3_data_storage"
+  however you should when possible use the following get/set methods 
+  to access the data: 
 
   * gff3_data 
   * gff3_data=() 
         
-        provide I/O access to the data in the file
-
 =end 
 class Annotation < ActiveRecord::Base
 
   ### associations ###
 
-  has_many :sequence_regions
+  has_many :sequence_regions, :dependent => :destroy
   belongs_to :user
   
   ### encapsulation of the storage mechanism ###
   
-  def gff3_data_storage_permanent?
-    return false if user.nil? or name.nil?
-    user.valid? and not name.blank?
+  # the filename where the data is found (or should be saved, by new records) is returned by this method
+  # if the flag is set or no filename existed before, the filename is recalculated and stored in the class variable
+  def gff3_data_storage(recalculate = false)
+    if recalculate or not @gff3_data_storage
+     @gff3_data_storage=(permanent_location || temporary_location)
+   else
+     @gff3_data_storage
+   end
   end
   
-  def gff3_data_storage
-    if gff3_data_storage_permanent?
-      return "#{$GFF3_STORAGE_PATH}/#{public? ? 'public' : 'private'}/#{user_id}/#{name}"
-    else
-      Dir.mkdir("tmp/gff3_data") unless File.exists?("tmp/gff3_data")
-      @tmp ||= "tmp/gff3_data/"+Time.now.to_i.to_s+"_"+rand(10**20).to_s
-      return @tmp
-    end
+  def permanent_location
+    return nil if user.nil? or name.nil?
+    return nil unless user.valid? and not name.blank?
+    "#{$GFF3_STORAGE_PATH}/#{user_id}_#{name}"
   end
-
-  def save_gff3_file_position
-    @old_filename = gff3_data_storage
-  end
-
-  def correct_gff3_file_position     
-    if gff3_data_storage_permanent? and File.exists?(@old_filename)
-      # create user directory if necessary
-      user_dir = File.dirname(gff3_data_storage)
-      Dir.mkdir(user_dir) unless File.exists?(user_dir)
-      
-      # move file
-      File.rename(@old_filename, gff3_data_storage) 
-
-      # delete old directory if empty 
-      # (if not empty it will only raise an error which is ignored -> rescue nil)
-      Dir.delete(File.dirname(oldname)) rescue nil   
-    end
-  end
+  private :permanent_location
   
-  def user=(value)
-    save_gff3_file_position
-    self[:user_id]=value.id
-    correct_gff3_file_position
+  def temporary_location
+    @gff3_data_storage ||= "tmp/gff3_data/"+Time.now.to_i.to_s+"_"+rand(10**20).to_s
   end
-  
-  def user_id=(value)
-    save_gff3_file_position
-    self[:user_id]=value
-    correct_gff3_file_position
-  end
-
-  def name=(value)
-    save_gff3_file_position
-    self[:name]=value
-    correct_gff3_file_position
-  end
-  
-  def public=(value)
-    save_gff3_file_position
-    self[:public]=value
-    correct_gff3_file_position   
-  end
-
+  private :temporary_location
+    
   ### virtual attributes ###
         
   def gff3_data
@@ -120,29 +77,17 @@ class Annotation < ActiveRecord::Base
     File.open(gff3_data_storage).read
   end
   def gff3_data=(data)
-    storage_dir = File.dirname(gff3_data_storage)
-    Dir.mkdir(storage_dir) unless File.exists?(storage_dir)
     File.open(gff3_data_storage, "w") {|f| f.write(data)}
-  end
-  # see also delete_gff3_data() in the callbacks section 
-
-  # a nice label for the annotation
-  def label 
-    # (currently: filename without extension)
-    File.basename(name, ".*")
   end
 
   ### validations ###
 
+ #validates_uniqueness_of :name, :scope => :user_id
   validates_presence_of :user
 
   def validate
-    gff3_data_storage_valid? and \
+    File.exists?(gff3_data_storage) and \
     gff3_data_valid?
-  end
-
-  def gff3_data_storage_valid?
-    File.exists?(gff3_data_storage)
   end
   
   def gff3_data_valid?
@@ -162,10 +107,14 @@ class Annotation < ActiveRecord::Base
 
   ### callbacks ###
   
-  after_save     :create_sequence_regions
-  before_destroy :destroy_sequence_regions
-  before_destroy :delete_gff3_data
+  after_save            :correct_gff3_file_position
+  after_create         :create_sequence_regions
+  before_destroy   :delete_gff3_data
   
+  def correct_gff3_file_position
+    File.rename gff3_data_storage, gff3_data_storage(:new_name)
+  end
+
   def create_sequence_regions   
     get_sequence_regions_params.each do |sequence_region_params| 
       sequence_region_params[:annotation_id] = self[:id]
@@ -177,11 +126,11 @@ class Annotation < ActiveRecord::Base
     require "gtruby"
     # set up the feature stream
     genome_stream = GT::GFF3InStream.new(gff3_data_storage)
-    feature_index = GT::FeatureIndex.new()
+    feature_index = GT::FeatureIndex.new
     genome_stream = GT::FeatureStream.new(genome_stream, feature_index)
-    feature = genome_stream.next_tree()
+    feature = genome_stream.next_tree
     while (feature) do
-      feature = genome_stream.next_tree()
+      feature = genome_stream.next_tree
     end
     # get sequence ids and ranges
     seqids = feature_index.get_seqids
@@ -195,18 +144,10 @@ class Annotation < ActiveRecord::Base
     return parsing_output
   end
   private :get_sequence_regions_params
-  
-  # delete cascade behaviour
-  def destroy_sequence_regions
-     sequence_regions.destroy_all
-  end
 
   # delete the file containing the data pointed by this object
   def delete_gff3_data
     File.delete(gff3_data_storage)
-    # delete also directory if empty 
-    # (if not empty it will only raise an error which is ignored -> rescue nil)
-    Dir.delete(File.dirname(gff3_data_storage)) rescue nil
   end
 
 end
