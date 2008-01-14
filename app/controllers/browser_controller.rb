@@ -1,94 +1,74 @@
 class BrowserController < ApplicationController
 
  def sidselect
-  if session[:user]
-   @navbar = (render_to_string :partial => "/in_session/navbar")
-  else
-   @navbar = (render_to_string :partial => "/public/navbar")
-  end
+  partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
+  @navbar = (render_to_string :partial => partial)
  end
 
  def browser
   # check params
-
+  
   #begin checking params annotation and seq_id
-  if not params[:annotation] or not params[:seq_id]
-   redirect_to :action => :browserdummy
-   return
-  end
-
-  begin
-  Annotation.find(params[:annotation].to_i)
-  rescue
-   redirect_to :action => :browserdummy
-   return
-  end
-
-  if not Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i)
+  unless params[:annotation] and
+             params[:seq_id] and
+	     Annotation.exists?(params[:annotation].to_i) and
+	     SequenceRegion.exists?(params[:seq_id].to_i)
    redirect_to :action => :browserdummy
    return
   end
   #end checking params annotation and seq_id
 
+  sequence_region = SequenceRegion.find(params[:seq_id].to_i)
+
   #begin checking params start_pos and end_pos
-  seqStartPos= Annotation.find(params[:annotation]).sequence_regions.find(params[:seq_id].to_i).seq_begin
-  seqEndPos  = Annotation.find(params[:annotation]).sequence_regions.find(params[:seq_id].to_i).seq_end
+  seq_begin = sequence_region.seq_begin
+  seq_end  = sequence_region.seq_end
 
-  if not params[:start_pos] or not params[:end_pos]
-   redirect_to :action => :browser, :annotation => params[:annotation], :seq_id => params[:seq_id],\
-    :start_pos => seqStartPos,\
-    :end_pos => seqEndPos
+  redirect_params = params.clone 
+  
+  unless params[:start_pos] and params[:end_pos]
+   redirect_params[:start_pos] = seq_begin
+   redirect_params[:end_pos] = seq_end
+   redirect_to redirect_params
    return
   end
 
-
-  if params[:start_pos].to_i < seqStartPos then
-   redirect_to :action => :browser,
-               :annotation => params[:annotation],\
-               :seq_id => params[:seq_id],\
-               :start_pos => seqStartPos,\
-               :end_pos => params[:end_pos]
+  if params[:start_pos].to_i < seq_begin then
+   redirect_params[:start_pos] = seq_begin
+   redirect_to redirect_params
    return
   end
 
-  if params[:start_pos].to_i > seqEndPos then
-   redirect_to :action => :browser, :annotation => params[:annotation], :seq_id => params[:seq_id],\
-    :start_pos => seqEndPos-1,\
-    :end_pos => params[:end_pos]
+  if params[:start_pos].to_i > seq_end then
+   redirect_params[:start_pos] = seq_end-1
+   redirect_to redirect_params
    return
   end
 
-  if params[:end_pos].to_i > seqEndPos then
-   redirect_to :action => :browser, :annotation => params[:annotation], :seq_id => params[:seq_id],\
-    :start_pos => params[:start_pos],\
-    :end_pos => seqEndPos
+  if params[:end_pos].to_i > seq_end then
+   redirect_params[:end_pos] = seq_end
+   redirect_to redirect_params
    return
   end
 
-  if params[:end_pos].to_i < seqStartPos then
-   redirect_to :action => :browser, :annotation => params[:annotation], :seq_id => params[:seq_id],\
-    :start_pos => params[:start_pos],\
-    :end_pos => seqStartPos+1
+  if params[:end_pos].to_i < seq_begin then
+   redirect_params[:end_pos] = seq_begin+1
+   redirect_to redirect_params
    return
   end
   #end checking params start_pos and end_pos
 
-
  end
-
-
 
  def browser_image
   annotation=Annotation.find(params[:annotation])
   sequence_region=SequenceRegion.find(params[:seq_id])
-  png_data = 
-  sequence_region.to_png(params[:start_pos].to_i,params[:end_pos].to_i)
-  send_data(png_data,
-            :type => "image/png",
-            :disposition => "inline",
-            :filename => "#{annotation.name}_#{sequence_region.seq_id}.png"
-           )
+  png_data = sequence_region.to_png(params[:start_pos].to_i,
+                                                        params[:end_pos].to_i)
+  send_data png_data,
+		  :type => "image/png",
+                  :disposition => "inline",
+		  :filename => "#{annotation.name}_#{sequence_region.seq_id}.png"
  end
-
 
 end
