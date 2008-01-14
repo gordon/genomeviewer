@@ -33,14 +33,14 @@
      "checked" if not annotation.public 
      %> onclick="location.href='<%=
       url_for :action => "file_accessibility",
-              :public => true,
+              :public => false,
               :annotation => annotation.id 
      %>'" >Private
     <input type="radio" name="pub" value="Public"<%=
      "checked" if annotation.public 
     %> onclick="location.href='<%=
       url_for :action => "file_accessibility",
-              :public => false,
+              :public => true,
               :annotation => annotation.id 
     %>'" >Public
    </td>
