@@ -29,8 +29,20 @@
   </tr>
   <tr>
    <td>Accessibility:<br/>
-    <input type="radio" name="pub" value="Private" <%= "checked" if not annotation.public %> onclick="location.href='<%= url_for :action => "file_accessibility", :scope => true, :annotation => annotation.id %>'" >Private
-    <input type="radio" name="pub" value="Public" <%= "checked" if annotation.public %>      onclick="location.href='<%= url_for :action => "file_accessibility", :scope => false, :annotation => annotation.id %>'" >Public
+    <input type="radio" name="pub" value="Private"<%=
+     "checked" if not annotation.public 
+     %> onclick="location.href='<%=
+      url_for :action => "file_accessibility",
+              :scope => true,
+              :annotation => annotation.id 
+     %>'" >Private
+    <input type="radio" name="pub" value="Public"<%=
+     "checked" if annotation.public 
+    %> onclick="location.href='<%=
+      url_for :action => "file_accessibility",
+              :scope => false,
+              :annotation => annotation.id 
+    %>'" >Public
    </td>
    <td align="center"><input type="button" name="del" value="Delete File" onclick="location.href='<%=
    url_for :action => "file_delete", :annotation=> annotation.id
