@@ -1,3 +1,6 @@
 development.sqlite3
+development_structure.sql
 test.sqlite3
+test_structure.sql
 production.sqlite3
+production_structure.sql
