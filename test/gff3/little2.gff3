@@ -1,0 +1,8 @@
+##gff-version   3
+##sequence-region   test1 1000 10000
+##sequence-region   test2 10000 20000
+test1	.	gene	2000	4000	0.500000	+	.	ID=gene1
+test1	.	gene	6000	8000	0.500000	+	.	ID=gene2
+test2	.	gene	13000	15000	0.500000	+	.	ID=gene3
+test2	.	gene	14000	18000	0.500000	+	.	ID=gene4
+###
