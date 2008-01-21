@@ -1,20 +1,14 @@
-<% span=params[:end_pos].to_i-params[:start_pos].to_i%>
-<html>
+<% span=params[:end_pos].to_i-params[:start_pos].to_i%><html>
 <%=  javascript_include_tag "browserhelper" %>
 <body style="margin:0;">
 
 <div style="background-color: silver; text-align: center">
-
 <% form_tag('browser', :style=>"display:inline;", :method => :get) do %>
-
 <%= hidden_field_tag 'annotation', params[:annotation] %>
 <%= hidden_field_tag 'seq_id', params[:seq_id] %>
-
 Start:<%= text_field_tag 'start_pos', params[:start_pos], :size => 10 %>
 End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
-
 <%= submit_tag  "Go" %>
-
 <% end %>
 
 <%= 
@@ -49,18 +43,23 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
            :start_pos => params[:start_pos].to_i-span/4,
            :end_pos => params[:end_pos].to_i+span/4
 %>
+
+<%= 
+   link_to "Full",
+           :action=>"browser",
+           :annotation => params[:annotation].to_i,
+           :seq_id => params[:seq_id].to_i,
+           :start_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i).seq_begin,
+           :end_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i).seq_end
+%>
 </div>
 
-<div id="annoimg" onmousedown="javascript:down()" onmouseup="javascript:up()" style="position:absolute; top:100px; width:800px; height:500px; cursor: move; background-image:url(<%=
+<div id="annoimg" onmousedown="javascript:down()" onmouseup="javascript:up()" style="position:absolute; top:50px; width:800px; height:500px; cursor: move; background-image:url(<%=
  url_for(:action => "browser_image",
          :annotation => params[:annotation],
          :seq_id => params[:seq_id],
          :start_pos => params[:start_pos],
-         :end_pos => params[:end_pos])          %>); background-repeat:no-repeat; ">
-
-</div>
-
-
+         :end_pos => params[:end_pos])          %>); background-repeat:no-repeat; "></div>
 
 </body>
 </html>
