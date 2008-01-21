@@ -1,6 +1,7 @@
 /* register event handlers */
 document.onmousemove = move;
-
+document.getElementById("annoimg").onmousedown=down;
+document.getElementById("annoimg").onmouseup=up;
 
 /* initialize global variables */
 var isMousePressed = false;

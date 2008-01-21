@@ -1,5 +1,4 @@
 <% span=params[:end_pos].to_i-params[:start_pos].to_i%><html>
-<%=  javascript_include_tag "browserhelper" %>
 <body style="margin:0;">
 
 <div style="background-color: silver; text-align: center">
@@ -54,12 +53,12 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
 %>
 </div>
 
-<div id="annoimg" onmousedown="javascript:down()" onmouseup="javascript:up()" style="position:absolute; top:50px; width:800px; height:500px; cursor: move; background-image:url(<%=
+<div id="annoimg" style="position:absolute; top:50px; width:800px; height:500px; cursor: move; background-image:url(<%=
  url_for(:action => "browser_image",
          :annotation => params[:annotation],
          :seq_id => params[:seq_id],
          :start_pos => params[:start_pos],
          :end_pos => params[:end_pos])          %>); background-repeat:no-repeat; "></div>
-
+<%=  javascript_include_tag "browserhelper" %>
 </body>
 </html>
