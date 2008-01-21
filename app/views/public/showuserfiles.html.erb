@@ -1,10 +1,9 @@
 <h1>Files of: <%= User.find(params[:user_id]).name %></h1>
  <%
-   User.find(params[:user_id]).annotations.find_all_by_public(false).entries.collect { |annotation|
+   User.find(params[:user_id]).annotations.find_all_by_public(true).entries.collect { |annotation|
  %>
   <%= link_to (annotation.name, :controller => "browser", :action=> "sidselect", :annotation => annotation.id) %>
-  <%= "<br>" %>
-
+  <%= "<br/>" %>
  <%
   }
  %>
