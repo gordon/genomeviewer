@@ -62,7 +62,7 @@ class InSessionController < ApplicationController
  private
 
  def initialize
-  @stylesheets = "in_session", "menu"
+  @stylesheets = "in_session"
  end
 
 end

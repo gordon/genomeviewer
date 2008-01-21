@@ -67,9 +67,15 @@ class BrowserController < ApplicationController
   png_data = sequence_region.to_png(params[:start_pos].to_i,
                                                         params[:end_pos].to_i)
   send_data png_data,
-		  :type => "image/png",
+                  :type => "image/png",
                   :disposition => "inline",
-		  :filename => "#{annotation.name}_#{sequence_region.seq_id}.png"
+                  :filename => "#{annotation.name}_#{sequence_region.seq_id}.png"
+ end
+
+ private
+
+ def initialize
+  @stylesheets = "in_session"
  end
 
 end
