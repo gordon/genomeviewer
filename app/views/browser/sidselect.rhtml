@@ -14,4 +14,8 @@
 
 <hr>
 
-<iframe name="browser" id="browser" src="browserdummy" width="800" height="480"></iframe>
+<iframe name="browser" id="browser" src="<%=
+url_for :action => "browser",
+        :annotation => params[:annotation],
+        :seq_id => Annotation.find(params[:annotation]).sequence_region_ids[0]
+%>" width="800" height="480"></iframe>
