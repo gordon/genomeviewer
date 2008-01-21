@@ -1,11 +1,11 @@
 /* register event handlers */
-document.onmouseup = up;
-document.onmousedown = down;
 document.onmousemove = move;
+
 
 /* initialize global variables */
 var isMousePressed = false;
 var offset = 0;
+var mousexpos = 0;
 
 /*  parses the URI and returns the value of a parameter of the GET request */
 function getParamValue(param) {
@@ -28,14 +28,22 @@ function getXPosition(mp) {
 }
 
 
-function down(mp) {
+function down() {
  isMousePressed = true;
- offset = getXPosition(mp) - parseInt(document.body.style.backgroundPosition.split(' ')[0]);
+ offset = mousexpos - parseInt(document.getElementById("annoimg").offsetLeft);
+}
+
+function move(mp) {
+ mousexpos=document.all ? window.event.clientX : mp.pageX;
+ if(isMousePressed) {
+  var _x = getXPosition(mp);
+  document.getElementById("annoimg").style.left=_x-offset;
+ }
 }
 
 function up() {
  isMousePressed=false;
- var imgOffset = parseInt(document.body.style.backgroundPosition.split(' ')[0]);
+ var imgOffset = parseInt(document.getElementById("annoimg").offsetLeft);
  if (imgOffset != 0) {
   var startPos     = getParamValue('start_pos');
   var endPos       = getParamValue('end_pos');
@@ -44,54 +52,6 @@ function up() {
   var shift        = Math.round(imgOffset*bp_per_pixel);
   var newEndPos    = Number(endPos)-shift;
   var newStartPos  = Number(startPos)-shift;
-  /* alert("m2.html?endPos="+newEndPos+"&fileName=annotation.gff3&startPos="+newStartPos); */
   window.location.href = "browser?end_pos="+newEndPos+"&file_name=annotation.gff3&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_id="+getParamValue('seq_id');
  }
-}
-
-function move(mp) {
- if(isMousePressed) {
-  var _x = getXPosition(mp);
-  document.body.style.backgroundPosition=_x-offset+"px 0px";
- }
-}
-
-function go_left() {
- var startPos     = parseInt(getParamValue('startPos'));
- var endPos       = parseInt(getParamValue('endPos'));
- quarter          = Math.round( (endPos-startPos) / 4 );
- var newStartPos  = startPos-quarter;
- var newEndPos    = endPos-quarter;
-
- window.location.href = "browser?end_pos="+newEndPos+"&file_name=annotation.gff3&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_id="+getParamValue('seq_id');
-}
-
-function go_right() {
- var startPos     = parseInt(getParamValue('start_pos'));
- var endPos       = parseInt(getParamValue('end_pos'));
- quarter          = Math.round( (endPos-startPos) / 4 );
- var newStartPos  = startPos+quarter;
- var newEndPos    = endPos+quarter;
-
- window.location.href = "browser?end_pos="+newEndPos+"&file_name=annotation.gff3&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_id="+getParamValue('seq_id');
-}
-
-function zoom_in() {
- var startPos     = parseInt(getParamValue('start_pos'));
- var endPos       = parseInt(getParamValue('end_pos'));
- quarter          = Math.round( (endPos-startPos) / 4 );
- var newStartPos  = startPos+quarter;
- var newEndPos    = endPos-quarter;
-
- window.location.href = "browser?end_pos="+newEndPos+"&file_name=annotation.gff3&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_id="+getParamValue('seq_id');
-}
-
-function zoom_out() {
- var startPos     = parseInt(getParamValue('start_pos'));
- var endPos       = parseInt(getParamValue('end_pos'));
- quarter          = Math.round( (endPos-startPos) / 4 );
- var newStartPos  = startPos-quarter;
- var newEndPos    = endPos+quarter;
-
- window.location.href = "browser?end_pos="+newEndPos+"&file_name=annotation.gff3&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_id="+getParamValue('seq_id');
 }

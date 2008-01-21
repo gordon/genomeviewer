@@ -1,54 +1,66 @@
 <% span=params[:end_pos].to_i-params[:start_pos].to_i%>
 <html>
 <%=  javascript_include_tag "browserhelper" %>
-<body style="cursor: move; background-image:url(<%=
- url_for(:action => "browser_image",
-         :annotation => params[:annotation],
-         :seq_id => params[:seq_id],
-         :start_pos => params[:start_pos],
-         :end_pos => params[:end_pos])          %>); background-repeat:no-repeat; background-position:0px 0px; margin: 0 0 0 0">
+<body style="margin:0;">
 
-<table width="100%" height="100%">
- <tr>
-  <td align="center" valign="top" colspan="3"><%= 
-    link_to "Zoom(+)",
+<div style="background-color: silver; text-align: center">
+
+<% form_tag('browser', :style=>"display:inline;", :method => :get) do %>
+
+<%= hidden_field_tag 'annotation', params[:annotation] %>
+<%= hidden_field_tag 'seq_id', params[:seq_id] %>
+
+Start:<%= text_field_tag 'start_pos', params[:start_pos], :size => 10 %>
+End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
+
+<%= submit_tag  "Go" %>
+
+<% end %>
+
+<%= 
+    link_to image_tag("zoomin.gif", :border=>0),
             :action => "browser",
             :annotation => params[:annotation].to_i,
             :seq_id => params[:seq_id].to_i,
             :start_pos => (params[:start_pos].to_i+span/4),
             :end_pos => params[:end_pos].to_i-span/4
-                                              %></td>
- </tr>
- <tr>
-  <td align="left"><%=
+%>
+<%=
     link_to "<<",
             :action => "browser",
             :annotation => params[:annotation].to_i,
             :seq_id => params[:seq_id].to_i,
             :start_pos => params[:start_pos].to_i-span/2,
             :end_pos => params[:end_pos].to_i-span/2
-                   %></td>
-  <td align="center"></td>
-  <td align="right"><%= 
+%>
+<%= 
    link_to ">>",
            :action=>"browser",
            :annotation => params[:annotation].to_i,
            :seq_id => params[:seq_id].to_i,
            :start_pos => params[:start_pos].to_i+span/2,
            :end_pos => params[:end_pos].to_i+span/2
-                    %></td>
- </tr>
- <tr>
-  <td align="center" valign="bottom" colspan="3"><%=
-   link_to "Zoom(-)",
+%>
+<%=
+   link_to image_tag("zoomout.gif", :border=>0),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
            :seq_id => params[:seq_id].to_i,
            :start_pos => params[:start_pos].to_i-span/4,
            :end_pos => params[:end_pos].to_i+span/4
-                                                 %></td>
- </tr>
-</table>
+%>
+</div>
+
+<div id="annoimg" onmousedown="javascript:down()" onmouseup="javascript:up()" style="position:absolute; top:100px; width:800px; height:500px; cursor: move; background-image:url(<%=
+ url_for(:action => "browser_image",
+         :annotation => params[:annotation],
+         :seq_id => params[:seq_id],
+         :start_pos => params[:start_pos],
+         :end_pos => params[:end_pos])          %>); background-repeat:no-repeat; ">
+
+</div>
+
+
 
 </body>
 </html>
