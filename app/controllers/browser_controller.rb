@@ -1,5 +1,15 @@
 class BrowserController < ApplicationController
 
+ prepend_before_filter :check_permissions
+
+ def check_permissions
+   if Annotation.find(params[:annotation]).public == false and
+      Annotation.find(params[:annotation]).user.id != session[:user].to_i then
+    render :text => "<html><h1>NOT AUTHORIZED</h1></html>";
+   end
+
+ end
+
  def sidselect
   partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
   @navbar = (render_to_string :partial => partial)
