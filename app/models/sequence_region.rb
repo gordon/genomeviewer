@@ -3,8 +3,6 @@ class SequenceRegion < ActiveRecord::Base
   
   # returns the png image representing the sequence region using the gt-ruby bindings
   def to_png(seq_begin = self.seq_begin, seq_end = self.seq_end)
-	p '====================='
-	p self[:seq_id]
     in_stream = GT::GFF3InStream.new(self.annotation.gff3_data_storage)
     feature_index = GT::FeatureIndex.new
     feature_stream = GT::FeatureStream.new(in_stream, feature_index)
