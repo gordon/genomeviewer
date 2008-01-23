@@ -2,8 +2,8 @@ class CreateDominationConfigurations < ActiveRecord::Migration
   def self.up
     create_table :domination_configurations do |t|
       t.belongs_to :user
-      t.text :collapse
-      t.text :dominate
+      t.references :dominating
+      t.references :dominated
     end 
   end 
 
