@@ -4,8 +4,9 @@ class User < ActiveRecord::Base
   has_many :annotations, :dependent => :destroy
   has_many :color_configurations, :dependent => :destroy
   has_many :feature_style_configurations, :dependent => :destroy
-  has_one :drawing_format_configurations, :dependent => :destroy
-  has_one :domination_configuration, :dependent => :destroy
+  has_one :drawing_format_configuration, :dependent => :destroy
+  has_many :domination_configurations, :dependent => :destroy
+  has_one :collapsing_configuration, :dependent => :destroy
 
   ### validations ###
   validates_uniqueness_of :email, :message => "This account already exists. Please choose another one."
