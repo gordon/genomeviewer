@@ -1,12 +1,12 @@
 class CreateGraphicalElements < ActiveRecord::Migration
   def self.up
     create_table :graphical_elements do |t|
-      :name
+      t.string :name
     end
     
-    GraphicalElement.create("stroke")
-    GraphicalElement.create("stroke_marked")
-    GraphicalElement.create("track_title")
+    GraphicalElement.create(:name => "stroke")
+    GraphicalElement.create(:name => "stroke_marked")
+    GraphicalElement.create(:name => "track_title")
     
   end
 
