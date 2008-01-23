@@ -1,5 +1,5 @@
 class CollapsingConfiguration < ActiveRecord::Base
   
-  belongs_to :user
+  serialize :to_parent, Array
   
 end
