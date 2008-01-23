@@ -24,57 +24,5 @@ class User < ActiveRecord::Base
   def hash_password
     self[:password] = Digest::SHA1.hexdigest(self[:password])
   end
-  
-  after_create :create_default_colors
-  
-  def create_default_colors
     
-    default_colors = 
-    {:stroke               => {:red=> 0.0, :green=>0.0, :blue=>0.0},
-    :stroke_marked        => {:red=> 1.0, :green=>0.0, :blue=>0.0},
-    :track_title          => {:red=>0.6, :green=>0.6, :blue=>0.7},
-    :exon                 => {:red=>0.6, :green=>0.6, :blue=>0.9},
-    :CDS                  => {:red=>0.9, :green=>0.9, :blue=>0.2},
-    :mRNA                 => {:red=>0.4, :green=>0.5, :blue=>0.6},
-    :TF_binding_site      => {:red=>0.8, :green=>0.6, :blue=>0.6},
-    :gene                 => {:red=>0.9, :green=>0.9, :blue=>1.0},
-    :intron               => {:red=>0.2, :green=>0.2, :blue=>0.6},
-    :repeat_region        => {:red=>0.8, :green=>0.3, :blue=>0.3},
-    :long_terminal_repeat => {:red=>0.9, :green=>0.9, :blue=>0.4},
-    :LTR_retrotransposon  => {:red=>0.8, :green=>0.5, :blue=>0.5}}
-    
-    default_colors.each do |feature|
-      ColorConfiguration.new do |cc|
-        cc.user = self
-        cc.feature = feature.key
-        cc.red = feature.value[:red]
-        cc.green = feature.value[:green]
-        cc.blue = feature.value[:blue]
-        cc.save
-      end
-    end
-    
-  end
-  
-  after_create :create_default_feature_styles
-  
-  def create_default_feature_styles
-      default_styles =
-      {:exon            => :box,
-        :CDS             => :box,
-        :TF_binding_site => :box,
-        :mRNA            => :box,
-        :gene            => :box,
-        :intron          => :caret}
-        
-      default_styles.each_pair do |feature, style|
-        FeatureStyleConfiguration.new do |fs|
-          fs.user = self
-          fs.feature = feature
-          fs.style = style
-        end
-      end
-      
-  end
-  
 end
