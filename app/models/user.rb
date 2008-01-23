@@ -15,7 +15,7 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :message => "Please choose a password"
   validates_length_of :name, :in => 4..64, :too_short => "Your name should be at least %d characters long", :too_long => "Please enter a name shorter than %d characters"
   validates_length_of :email, :maximum => 64, :too_long => "The ente:red email address is too long (max 64 chars)"
-  validates_confirmation_of :password, :message => "You ente:red two different passwords!"
+  validates_confirmation_of :password, :message => "You entered two different passwords!"
   validates_format_of :email, :with => /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i, :message => 'Email address invalid'
 
   ### callbacks ###
@@ -24,6 +24,14 @@ class User < ActiveRecord::Base
   # avoids privacy problems involved in storing user passwords as plain text
   def hash_password
     self[:password] = Digest::SHA1.hexdigest(self[:password])
+  end
+  
+  # returns a GT::Config object with the personalisations for this user
+  def config
+    c = GT::Config.new
+    # load default configuration
+    c.load_file("config/view.lua")
+    return c
   end
     
 end
