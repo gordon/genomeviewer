@@ -2,8 +2,8 @@ class CreateFeatureStyleConfigurations < ActiveRecord::Migration
   def self.up
     create_table :feature_style_configurations do |t|
       t.belongs_to :user
-      t.string :feature
-      t.string :style
+      t.references :feature
+      t.references :style
     end
   end
 
