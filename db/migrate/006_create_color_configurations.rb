@@ -2,7 +2,7 @@ class CreateColorConfigurations < ActiveRecord::Migration
   def self.up
     create_table :color_configurations do |t|
       t.belongs_to :user
-      t.references :feature
+      t.references :element, :polymorphic => true
       t.decimal :red
       t.decimal :green
       t.decimal :blue
