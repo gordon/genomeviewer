@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 
   ### associations ###
-  has_many :annotations
+  has_many :annotations, :dependent => :destroy
 
   ### validations ###
   validates_uniqueness_of :email, :message => "This account already exists. Please choose another one."
@@ -21,17 +21,4 @@ class User < ActiveRecord::Base
     self[:password] = Digest::SHA1.hexdigest(self[:password])
   end
   
-  before_destroy :delete_annotations
-  # delete all annotations of an user that is being 
-  # deleted to ensure db consistency
-  # (delete cascade behaviour)
-  def delete_annotations
-    p annotations
-    p "**************************"
-    # TODO: eventually insert here some code to save public
-    # annotations if this behaviour is desired
-    annotations.destroy_all
-    p annotations
-  end
-
 end
