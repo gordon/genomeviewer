@@ -16,7 +16,7 @@ class SequenceRegion < ActiveRecord::Base
     range.start = seq_begin
     range.end = seq_end
 
-    config = GT::Config.new
+    config = annotation.user.config
     diagram = GT::Diagram.new(feature_index, seq_id, range, config)
     render = GT::Render.new(config)
 
