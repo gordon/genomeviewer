@@ -1,7 +1,22 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-# one:
-#   column: value
-#
-# two:
-#   column: value
+gene:
+  name: gene
+exon:
+  name: exon
+intron:
+  name: intron
+CDS:
+  name: CDS
+mRNA:
+  name: mRNA
+TF_binding_site:
+  name: TF_binding_site
+repeat_region:
+  name: repeat_region
+long_terminal_repeat:
+  name: long_terminal_repeat
+LTR_retrotransposon:
+  name: LTR_retrotransposon
+inverted_repeat:
+  name: inverted_repeat
+target_site_duplication:
+  name: target_site_duplication
