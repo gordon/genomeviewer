@@ -1,0 +1,18 @@
+<h1>Configuration</h1>
+
+<% form_tag({:action=>"do_config_formats"}) do %>
+
+  <h2>Drawing Formats</h2>
+
+  <table>
+  <% @formats.pixel_attribute_names.each do |attr| %>
+    <tr>
+      <td><%= attr.humanize %></td>
+      <td><%= text_field_tag attr, @formats.send(attr), :size => 5 %> pixel</td>
+    </tr>
+  <% end %>
+  </table>
+  
+  <%= submit_tag %>
+  
+<% end %>
