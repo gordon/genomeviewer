@@ -59,6 +59,53 @@ class InSessionController < ApplicationController
   redirect_to :action => "file_manager"
  end
 
+  def config_formats
+    user = User.find(session[:user])
+    @formats = user.drawing_format_configuration || DrawingFormatConfiguration.new
+  end
+  
+  def config_colors
+    user = User.find(session[:user])
+    @colors = ColorConfiguration.defaults 
+    # override defaults with user specific information
+    user.color_configurations.each do |conf|
+      @colors[conf.element.name] ||= {}
+      [:red,:green,:blue].each do |color|
+        @colors[conf.element.name][color] = conf.send(color).to_f
+      end
+    end
+  end
+  
+  def config_styles
+    user = User.find(session[:user])
+    @styles = FeatureStyleConfiguration.defaults 
+    # override defaults with user specific information
+    user.feature_style_configurations.each do |conf|
+      @styles[conf.element.name] = conf.style.name
+    end
+  end
+
+  def config_dominations
+    user = User.find(session[:user])
+    @dominations = DominationConfiguration.defaults
+    # override defaults with user specific information
+    user.domination_configurations.each do |conf|
+      @dominations[conf.dominating.name] ||= []
+      @dominations[conf.dominating.name] << conf.dominated.name
+      @dominations[conf.dominating.name].uniq!
+    end
+  end
+    
+  def config_collapse
+    user = User.find(session[:user])
+    @collapse = 
+      if user.collapsing_configuration
+        user.collapsing_configuration.to_parent 
+      else 
+        CollapsingConfiguration.default
+      end
+  end
+
  private
 
  def initialize
