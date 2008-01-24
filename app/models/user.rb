@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
       # set show_grid
       c.set_num("format","show_grid", drawing_format_configuration.show_grid ? 1.0 : 0.0)
       # set all other format attributes 
-      format_attributes = (drawing_format_configuration.attribute_names - ["user_id","show_grid"])
+      format_attributes = (drawing_format_configuration.pixel_attribute_names)
       format_attributes.each do |attribute|
         c.set_num("format",attribute,drawing_format_configuration.send(attribute).to_f)
       end
