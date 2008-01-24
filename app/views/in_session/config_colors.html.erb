@@ -1,0 +1,22 @@
+<h1>Configuration</h1>
+
+<% form_tag({:action=>"do_config_colors"}) do %>
+
+  <h2>Colors</h2>
+
+  <table>
+  <% @colors.each_pair do |element, color| %>
+    <tr>
+      <td><%= element %></td>
+      <% [:red, :green, :blue].each do |rgb| %>
+        <td> <%=rgb.to_s%> <%= text_field_tag element+"_"+rgb.to_s, color[rgb], :size => 3 %></td>
+      <% end %>
+    </tr>
+  <% end %> 
+  </table>
+  
+  <br/><%= submit_tag %>
+  
+<% end %>
+
+<p><%= button_to "Add new feature class", :action => :add_feature %></p>
