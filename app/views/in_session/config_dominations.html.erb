@@ -3,19 +3,33 @@
 <h2>Dominations</h2>
 
 <table border="1">
-  <th>Dominating Feature</th><th>Dominated Features</th>
+  <th>Dominating Feature</th><th>Dominated Features</th><th></th>
   <% @dominations.each_pair do |master, slaves| %>
   <tr>
     <td><%= master %></td>
     <td>
-      <%= slaves.join("<br/>")%>
-      <br/><%= button_to "Add feature", 
-                     :action => :add_dominated, 
+      <%= slaves.join("<br/>")%></td>
+    <td><%= button_to "Manage list", 
+                     :action => :manage_dominated_list, 
                      :dominating => master %>
-    </td>
-  </tr>
+    <%= button_to "Delete list", 
+                     :action => :delete_dominated_list, 
+                     :dominating => master %>
+    </td>  </tr>
   <% end %>
 </table>
 
-<br/><%= button_to "Add dominating feature", 
-               :action => :add_dominating %>
+<% unless @not_dominating.empty? %>
+  <% form_tag({:action=>:add_dominating}) do %>
+
+    <p>Other feature classes:<br/>
+    <%= collection_select :feature_class, :id, @not_dominating, :id, :name %>
+    <%= submit_tag "Add dominating feature" %></p>
+    
+    
+  <% end %>
+<% end %>
+<%= button_to "Reset all dominations", 
+               :action => :reset_dominations %>               
+<br/><%= button_to "Create new feature class", 
+               :action => :create_feature_class %>
