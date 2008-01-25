@@ -19,4 +19,15 @@
   
 <% end %>
 
-<p><%= button_to "Add new feature class", :action => :add_feature %></p>
+<% unless @not_configured.empty? %>
+  <% form_tag({:action=>:add_style_config}) do %>
+
+    <p>Other feature classes: <br/>
+    <%= collection_select :feature_class, :id, @not_configured, :id, :name %>
+    <%= submit_tag "Configure style" %></p>
+    
+    
+  <% end %>
+<% end %>
+
+<p><%= button_to "Create new feature class", :action => :create_feature_class %></p>
