@@ -1,0 +1,12 @@
+<h1>Configuration</h1>
+
+<% form_tag({:action=>"do_config_collapse"}) do %>
+
+  <h2>Collapsing to parent</h2>
+
+  <p>The following features collapse to their parent feature:</p>
+  <p><%=@collapse.join("<br/>") %></p>
+  
+  <%= button_to "Add a feature to the collapse list", :action => :add_feature_collapse %>
+
+<% end %>
