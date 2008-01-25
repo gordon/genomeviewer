@@ -1,0 +1,21 @@
+<h1>Configuration</h1>
+
+<h2>Dominations</h2>
+
+<table border="1">
+  <th>Dominating Feature</th><th>Dominated Features</th>
+  <% @dominations.each_pair do |master, slaves| %>
+  <tr>
+    <td><%= master %></td>
+    <td>
+      <%= slaves.join("<br/>")%>
+      <br/><%= button_to "Add feature", 
+                     :action => :add_dominated, 
+                     :dominating => master %>
+    </td>
+  </tr>
+  <% end %>
+</table>
+
+<br/><%= button_to "Add dominating feature", 
+               :action => :add_dominating %>
