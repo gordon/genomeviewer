@@ -9,8 +9,9 @@
     <% @style = Style.find_by_name(style_name) %>
     <tr>
       <td><%= element %></td>
-      <td><%= collection_select :style, :id, Style.find(:all), :id, :name%></td>
-    </tr>
+      <td><%= collection_select :style, :id, Style.find(:all), :id, :name, {}, {:name => "styles[#{element}]"}%></td>
+      <td><%= link_to "default", :action => :reset_style, :element => element%></td>
+     </tr>
   <% end %> 
   </table>
   

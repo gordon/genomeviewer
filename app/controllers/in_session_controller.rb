@@ -98,11 +98,14 @@ class InSessionController < ApplicationController
     params[:colors].each_pair do |element_name, colors|
       element = FeatureClass.find_by_name(element_name) \
                     || GraphicalElement.find_by_name(element_name)
-      color_conf = ColorConfiguration.new(:element => element,
+      new_color_conf = ColorConfiguration.new(:element => element,
                                                         :red => colors[:red], 
                                                         :green => colors[:green], 
                                                         :blue => colors[:blue])
-      user.color_configurations << color_conf
+      old_color_conf = 
+        user.color_configurations.find_by_element_id_and_element_type(element.id, element.class.to_s)
+      user.color_configurations.delete(old_color_conf) unless old_color_conf.nil?
+      user.color_configurations << new_color_conf
     end
     redirect_to :action => :config_colors
   end
@@ -113,9 +116,7 @@ class InSessionController < ApplicationController
                     || GraphicalElement.find_by_name(params[:element])
     user_conf = 
       user.color_configurations.find_by_element_id_and_element_type(element.id, element.class.to_s)
-      p user_conf
-    user.color_configurations.delete(user_conf) if user_conf
-      p user_conf
+    user.color_configurations.delete(user_conf) unless user_conf.nil?
     redirect_to :action => :config_colors
   end
   
@@ -124,12 +125,28 @@ class InSessionController < ApplicationController
     @styles = FeatureStyleConfiguration.defaults 
     # override defaults with user specific information
     user.feature_style_configurations.each do |conf|
-      @styles[conf.element.name] = conf.style.name
+      @styles[conf.feature_class.name] = conf.style.name
     end
   end
   
   def do_config_styles
     user = User.find(session[:user])
+    p params[:styles]
+    params[:styles].each_pair do |element_name, style_id|
+      element = FeatureClass.find_by_name(element_name) 
+      old_conf = user.feature_style_configurations.find_by_feature_class_id(element.id)
+      user.feature_style_configurations.delete(old_conf) if old_conf
+      new_conf = FeatureStyleConfiguration.new(:feature_class => element, :style_id => style_id)
+      user.feature_style_configurations << new_conf
+    end
+    redirect_to :action => :config_styles
+  end
+  
+  def reset_style
+    user = User.find(session[:user])
+    element = FeatureClass.find_by_name(params[:element])
+    user_conf = user.feature_style_configurations.find_by_feature_class_id(element.id)
+    user.feature_style_configurations.delete(user_conf) if user_conf
     redirect_to :action => :config_styles
   end
 
