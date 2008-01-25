@@ -96,7 +96,10 @@ class InSessionController < ApplicationController
                   color[:green] == 0.8 and 
                   color[:blue] == 0.8 and 
                   FeatureClass.find_by_name(element_name))
-      @not_configured << @colors.delete(element_name) if gray_feature
+      if gray_feature
+        @not_configured << FeatureClass.find_by_name(element_name)
+        @colors.delete(element_name) if gray_feature
+      end
     end
   end
   
