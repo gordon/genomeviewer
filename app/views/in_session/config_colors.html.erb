@@ -4,6 +4,8 @@
 
   <h2>Colors</h2>
 
+  <p style="color: green"/><%=flash[:notice]%></p>
+
   <table>
   <% @colors.each_pair do |element, color| %>
     <tr>
@@ -21,12 +23,12 @@
 <% end %>
 
 <% unless @not_configured.empty? %>
-  <% form_tag({:action=>:add_feature_class, :to => :config_colors_list}) do %>
+  <% form_tag({:action=>:add_color_config}) do %>
 
-    <p>Other feature classes:<br/>
-    <%= collection_select :feature_class, :name, @not_configured, :id, :name %></p>
-
-    <%= submit_tag "Configure colors" %>
+    <p>Other feature classes: (default value: 0.8 for red, green and blue) <br/>
+    <%= collection_select :feature_class, :id, @not_configured, :id, :name %>
+    <%= submit_tag "Configure colors" %></p>
+    
     
   <% end %>
 <% end %>

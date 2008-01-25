@@ -103,6 +103,22 @@ class InSessionController < ApplicationController
     end
   end
   
+  def add_color_config
+    user = User.find(session[:user])
+    element = FeatureClass.find(params[:feature_class][:id])
+    new_color_conf = ColorConfiguration.new(:element => element,
+                                                        :red => 0.0, 
+                                                        :green => 0.0, 
+                                                        :blue => 0.0)
+      old_color_conf = 
+        user.color_configurations.find_by_element_id_and_element_type(element.id, element.class.to_s)
+      user.color_configurations.delete(old_color_conf) unless old_color_conf.nil?
+      user.color_configurations << new_color_conf    
+      flash[:notice] = "You can now configure #{element.name}.<br/>"+\
+                          "It was added to the list with values 0.0, 0.0, 0.0 (black)."
+    redirect_to :action => :config_colors
+  end
+  
   def do_config_colors
     user = User.find(session[:user])
     defaults = ColorConfiguration.defaults
