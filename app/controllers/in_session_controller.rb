@@ -90,6 +90,14 @@ class InSessionController < ApplicationController
         @colors[conf.element.name][color] = conf.send(color).to_f
       end
     end
+    @not_configured = []
+    @colors.each_pair do |element_name, color|
+      gray_feature = (color[:red] == 0.8 and 
+                  color[:green] == 0.8 and 
+                  color[:blue] == 0.8 and 
+                  FeatureClass.find_by_name(element_name))
+      @not_configured << @colors.delete(element_name) if gray_feature
+    end
   end
   
   def do_config_colors
