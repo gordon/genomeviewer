@@ -3,6 +3,27 @@
 <h2>Collapsing to parent</h2>
 
 <p>The following features collapse to their parent feature:</p>
-<p><%=@collapse.join("<br/>") %></p>
-  
-<%= button_to "Add a feature to the collapse list", :action => :add_feature_collapse %>
+<table>
+  <% @collapse.each do |feature_class_name| %>
+  <tr>
+    <td><%= feature_class_name %></td>
+    <td><%= link_to "(remove)", :action => :collapse_remove, 
+                      :feature_class_name => feature_class_name%></td>
+    </tr>
+  <% end %>
+</table>
+
+<% unless @not_collapsing.empty? %>
+  <% form_tag({:action=>:collapse_add}) do %>
+
+    <p>Other feature classes:<br/>
+    <%= collection_select :feature_class, :id, @not_collapsing, :id, :name %>
+    <%= submit_tag "Add to collapse list" %></p>
+    
+    
+  <% end %>
+<% end %>
+
+<%= button_to "Reset collapse list", :action => :reset_collapse_list %>
+<br/>
+<%= button_to "Create new feature class", :action => :create_feature_class %>
