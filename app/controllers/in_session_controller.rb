@@ -64,6 +64,22 @@ class InSessionController < ApplicationController
     @formats = user.drawing_format_configuration || DrawingFormatConfiguration.new
   end
   
+  def do_config_formats
+    params[:format]["show_grid"] ||= false 
+    user = User.find(session[:user])
+    dfc = DrawingFormatConfiguration.new(params[:format])
+    user.drawing_format_configuration = dfc
+    user.save
+    redirect_to :action => :config_formats
+  end
+  
+  def do_reset_formats
+    user = User.find(session[:user])
+    user.drawing_format_configuration = nil
+    user.save
+    redirect_to :action => :config_formats
+  end
+  
   def config_colors
     user = User.find(session[:user])
     @colors = ColorConfiguration.defaults 
@@ -76,6 +92,12 @@ class InSessionController < ApplicationController
     end
   end
   
+  def do_config_colors
+    user = User.find(session[:user])
+    
+    redirect_to :action => :config_colors
+  end
+  
   def config_styles
     user = User.find(session[:user])
     @styles = FeatureStyleConfiguration.defaults 
@@ -83,6 +105,11 @@ class InSessionController < ApplicationController
     user.feature_style_configurations.each do |conf|
       @styles[conf.element.name] = conf.style.name
     end
+  end
+  
+  def do_config_styles
+    user = User.find(session[:user])
+    redirect_to :action => :config_styles
   end
 
   def config_dominations

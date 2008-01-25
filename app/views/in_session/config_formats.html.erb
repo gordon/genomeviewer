@@ -8,11 +8,17 @@
   <% @formats.pixel_attribute_names.each do |attr| %>
     <tr>
       <td><%= attr.humanize %></td>
-      <td><%= text_field_tag attr, @formats.send(attr), :size => 5 %> pixel</td>
+      <td><%= text_field_tag "format[#{attr}]", @formats.send(attr), :size => 5 %> pixel</td>
     </tr>
   <% end %>
+    <tr>
+      <td>Show grid</td>
+      <td><%=check_box_tag "format[show_grid]", true, @formats.show_grid %></td>
+    </tr>
   </table>
   
   <%= submit_tag %>
   
 <% end %>
+
+  <br/><%= button_to "Reset to default", :action => :do_reset_formats%>
