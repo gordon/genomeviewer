@@ -4,7 +4,7 @@ class DrawingFormatConfiguration < ActiveRecord::Base
   
   # list of attribute names that have a value expressed in pixel 
   def pixel_attribute_names
-    attribute_names - ["user_id","show_grid"]
+    attribute_names - ["id","user_id","show_grid"]
   end
   
 end
