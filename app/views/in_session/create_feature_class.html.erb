@@ -8,6 +8,9 @@ class will be available for configuration for all users of this website.</p>
 
 <h3>Feature classes</h3>
 
+<p style="color:green"><%=flash[:notice]%></p>
+<p style="color:red"><%=flash[:errors]%></p>
+
 <p><%= FeatureClass.find(:all).map(&:name).join("<br/>") %></p><br/>
 
 <% form_tag({:action=>"do_create_feature_class"}) do %>
