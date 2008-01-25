@@ -6,18 +6,8 @@ class User < ActiveRecord::Base
   has_many :feature_style_configurations, :dependent => :destroy
   has_one :drawing_format_configuration, :dependent => :destroy
   has_one :collapsing_configuration, :dependent => :destroy
-  has_many :domination_configurations, :dependent => :destroy do 
-      # e.g. user.domination_configurations.for("exon")
-      # returns an array of strings
-      def for(dominating_name)
-        return [] unless fc = FeatureClass.find_by_name(dominating_name)
-        dominating_id = fc.id
-        find(:all, :conditions => {:dominating_id => dominating_id}).map do |domination|
-          domination.dominated.name
-        end
-      end
-    end
-
+  has_many :domination_configurations, :dependent => :destroy 
+  
   ### validations ###
   validates_uniqueness_of :email, :message => "This account already exists. Please choose another one."
   validates_presence_of :name, :message => "Please enter your full name"
@@ -30,7 +20,7 @@ class User < ActiveRecord::Base
 
   ### callbacks ###
   
-  before_save :hash_password
+  before_save :hash_password 
   # avoids privacy problems involved in storing user passwords as plain text
   def hash_password
     self[:password] = Digest::SHA1.hexdigest(self[:password])
@@ -64,8 +54,8 @@ class User < ActiveRecord::Base
       end
     end
     # load user specific domination data
-    domination_configurations.each do |dominator|
-      c.set_cstr_list("dominate", dominator.name, dominator.dominated.map(&:name))
+    domination_configurations.each do |conf|
+      c.set_cstr_list("dominate", conf.dominator.name, conf.dominated_features.map(&:name))
     end
     # load collapsing configuration
     if collapsing_configuration
