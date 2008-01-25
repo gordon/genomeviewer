@@ -9,8 +9,9 @@
     <tr>
       <td><%= element %></td>
       <% [:red, :green, :blue].each do |rgb| %>
-        <td> <%=rgb.to_s%> <%= text_field_tag element+"_"+rgb.to_s, color[rgb], :size => 3 %></td>
+        <td> <%=rgb.to_s%> <%= text_field_tag "colors[#{element}][#{rgb}]", color[rgb], :size => 3 %></td>
       <% end %>
+      <td><%= link_to "Reset", :action => :reset_color, :element => element%></td>
     </tr>
   <% end %> 
   </table>

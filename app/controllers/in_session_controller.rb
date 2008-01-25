@@ -94,7 +94,28 @@ class InSessionController < ApplicationController
   
   def do_config_colors
     user = User.find(session[:user])
-    
+    defaults = ColorConfiguration.defaults
+    params[:colors].each_pair do |element_name, colors|
+      element = FeatureClass.find_by_name(element_name) \
+                    || GraphicalElement.find_by_name(element_name)
+      color_conf = ColorConfiguration.new(:element => element,
+                                                        :red => colors[:red], 
+                                                        :green => colors[:green], 
+                                                        :blue => colors[:blue])
+      user.color_configurations << color_conf
+    end
+    redirect_to :action => :config_colors
+  end
+  
+  def reset_color
+    user = User.find(session[:user])
+    element = FeatureClass.find_by_name(params[:element]) \
+                    || GraphicalElement.find_by_name(params[:element])
+    user_conf = 
+      user.color_configurations.find_by_element_id_and_element_type(element.id, element.class.to_s)
+      p user_conf
+    user.color_configurations.delete(user_conf) if user_conf
+      p user_conf
     redirect_to :action => :config_colors
   end
   
