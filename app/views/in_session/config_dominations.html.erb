@@ -11,16 +11,19 @@
       <%= slaves.join("<br/>")%></td>
     <td><%= button_to "Manage list", 
                      :action => :manage_dominated_list, 
-                     :dominating => master %>
+                     :dominator => master %>
     <%= button_to "Delete list", 
                      :action => :delete_dominated_list, 
-                     :dominating => master %>
+                     :dominator => master %>
+    <%= button_to "Reset list", 
+                     :action => :reset_dominated_list, 
+                     :dominator => master %>
     </td>  </tr>
   <% end %>
 </table>
 
 <% unless @not_dominating.empty? %>
-  <% form_tag({:action=>:add_dominating}) do %>
+  <% form_tag({:action=>:add_dominated_list}) do %>
 
     <p>Other feature classes:<br/>
     <%= collection_select :feature_class, :id, @not_dominating, :id, :name %>
