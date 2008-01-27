@@ -65,4 +65,8 @@ end
 $: << ENV['GTRUBY']
 # require the gtruby library 
 require 'gtruby'
+require 'drb'
+
+DRb.start_service
+GTSvr = DRbObject.new(nil, 'druby://localhost:7777')
 

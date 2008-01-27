@@ -28,12 +28,13 @@ class User < ActiveRecord::Base
   
   # returns a GT::Config object with the personalisations for this user
   def config
-    c = GT::Config.new
+
+    c = GTSvr.getConfigObject
     # load default configuration
-    c.load_file("config/view.lua")
+    c.load_file(File.expand_path("config/view.lua"))
     # load user specific colors
     color_configurations.each do |record|
-      color = GT::Color.malloc
+      color = GTSvr.getColorObject()
       color.red    = record.red.to_f
       color.green = record.green.to_f
       color.blue   = record.blue.to_f

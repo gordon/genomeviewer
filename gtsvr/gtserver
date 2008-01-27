@@ -1,0 +1,83 @@
+#!/usr/bin/env ruby
+$: << ENV['GTRUBY']
+
+require 'drb'
+require 'gtruby'
+
+class GTServer
+
+
+ def initialize()
+  @feature_indices=Hash.new()
+ end
+
+
+ def getSequenceRegions(pFileName)
+  feature_index=getFeatureIndexForFile(pFileName)
+  return feature_index.get_seqids
+ end
+
+ def getRangeForSequenceRegion(pFileName, pSequenceRegion)
+  feature_index=getFeatureIndexForFile(pFileName)
+  return feature_index.get_range_for_seqid(pSequenceRegion)
+ end
+
+ def getConfigObject()
+  return GT::Config.new
+ end
+
+ def getColorObject()
+  return GT::Color.malloc
+ end
+
+ def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig)
+  feature_index=getFeatureIndexForFile(pFileName)
+
+  seqid = pSequenceRegion
+  range = feature_index.get_range_for_seqid(seqid)
+  range.start = pStartPos
+  range.end = pEndPos
+
+  config = pConfig #GT::Config.new()
+  diagram = GT::Diagram.new(feature_index, seqid, range, config)
+
+  #render = GT::Render.new(config)
+  render = GT::Render.new(config)
+  return render.to_png_stream(diagram)
+ end
+
+ def validateFile(pFileName)
+  begin
+   getFeatureIndexForFile(pFileName)
+   return nil
+  rescue => error
+   return error.to_s
+  end
+ end
+
+
+ private
+ def getFeatureIndexForFile(pFileName)
+  if @feature_indices[pFileName]!=nil then
+   return @feature_indices[pFileName]
+  else
+   in_stream = GT::GFF3InStream.new(pFileName)
+
+   feature_index = GT::FeatureIndex.new()
+   feature_stream = GT::FeatureStream.new(in_stream, feature_index)
+
+   gn = feature_stream.next_tree()
+   while (gn) do
+    gn = feature_stream.next_tree()
+   end
+   return feature_index
+  end
+ end
+
+end
+
+puts "Initializing GT DRB server"
+DRb.start_service("druby://:7777", GTServer.new())
+puts "GT DRB server running"
+DRb.thread.join
+p "GT DRB server shut down"

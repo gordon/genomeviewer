@@ -91,17 +91,12 @@ class Annotation < ActiveRecord::Base
   end
   
   def gff3_data_valid?
-    begin 
-      require 'gtruby'
-      in_stream = GT::GFF3InStream.new(gff3_data_storage)
-      gn = in_stream.next_tree()
-      while (gn) do
-        gn = in_stream.next_tree()
-      end
-      return true
-    rescue => error
-      errors.add_to_base error.to_s
-      return false
+    errormsg=GTSvr.validateFile(File.expand_path(gff3_data_storage))
+    if errormsg==nil then
+     return true
+    else
+     errors.add_to_base errormsg
+     return false
     end
   end
 
@@ -123,20 +118,10 @@ class Annotation < ActiveRecord::Base
   end
 
   def get_sequence_regions_params
-    require "gtruby"
-    # set up the feature stream
-    genome_stream = GT::GFF3InStream.new(gff3_data_storage)
-    feature_index = GT::FeatureIndex.new
-    genome_stream = GT::FeatureStream.new(genome_stream, feature_index)
-    feature = genome_stream.next_tree
-    while (feature) do
-      feature = genome_stream.next_tree
-    end
-    # get sequence ids and ranges
-    seqids = feature_index.get_seqids
+    seqids=GTSvr.getSequenceRegions(File.expand_path(gff3_data_storage))
     parsing_output = []
     seqids.each do |seq_id|
-        range = feature_index.get_range_for_seqid(seq_id)
+        range = GTSvr.getRangeForSequenceRegion(File.expand_path(gff3_data_storage), seq_id)
         seq_begin = range.start
         seq_end = range.end
         parsing_output << ({:seq_id => seq_id, :seq_begin => seq_begin, :seq_end => seq_end} )        
