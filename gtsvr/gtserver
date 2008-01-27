@@ -4,32 +4,76 @@ $: << ENV['GTRUBY']
 require 'drb'
 require 'gtruby'
 
+##
+# The GTServer forwards requests from the GenomeViwer to the
+# GenomeTools. Additionally it is responsible for caching
+# feature_index structures
+#
 class GTServer
 
-
+ ##
+ # Creates a GTServer instance
+ #
  def initialize()
+  @mutex = Mutex.new
   @feature_indices=Hash.new()
  end
 
-
+ ##
+ # Returns sequence regions of a gff3 file
+ # @param pFileName Path to a gff3 file
+ # @return The sequence regions contained in pFileName
+ #
  def getSequenceRegions(pFileName)
   feature_index=getFeatureIndexForFile(pFileName)
   return feature_index.get_seqids
  end
 
+ ##
+ # Returns a range of a sequence region
+ # @param pFileName Path to a gff3 file
+ # @param pSequenceRegion A sequence region identifier
+ # @return The range that belongs to the given sequence region
+ #
  def getRangeForSequenceRegion(pFileName, pSequenceRegion)
   feature_index=getFeatureIndexForFile(pFileName)
   return feature_index.get_range_for_seqid(pSequenceRegion)
  end
 
+ ##
+ # Returns a Config object
+ # Config objects that should be used with getImageStream must be
+ # created with this function. They can not be created on the
+ # GTServer's client because Config objects can not be moved from
+ # a client to this server.
+ # @return a config Object
+ #
  def getConfigObject()
   return GT::Config.new
  end
 
+ ##
+ # Returns a Color object
+ # Color objects that should be used in Config Objects must be
+ # created with this function. They can not be created on the
+ # GTServer's client because Color objects can not be moved from
+ # a client to this server.
+ # @return a Color Object
+ #
  def getColorObject()
   return GT::Color.malloc
  end
 
+ ##
+ # This function ouputs an image as a png stream
+ # If the oputupt is written in a file the file is a valid png file.
+ # @param pFileName Path to a gff3 file
+ # @param pSequenceRegion A sequence region identifier
+ # @param pStartPos A start position
+ # @param pEndPos An end position
+ # @param pConfig A Config object created with getConfigObject
+ # @return A png stream
+ #
  def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig)
   feature_index=getFeatureIndexForFile(pFileName)
 
@@ -46,6 +90,11 @@ class GTServer
   return render.to_png_stream(diagram)
  end
 
+ ##
+ # Validates a gff3 file
+ # @param pFileName Path to a gff3 file
+ # @return nil if file is a valid gff3 file, an error describing string otherwise.
+ #
  def validateFile(pFileName)
   begin
    getFeatureIndexForFile(pFileName)
@@ -58,19 +107,24 @@ class GTServer
 
  private
  def getFeatureIndexForFile(pFileName)
-  if @feature_indices[pFileName]!=nil then
-   return @feature_indices[pFileName]
-  else
-   in_stream = GT::GFF3InStream.new(pFileName)
+  @mutex.synchronize do # avoid concurrent @feature_indices accesses
+   if @feature_indices[pFileName]!=nil then
+    # If a featureindex for the file is in memory return it
+    return @feature_indices[pFileName]
+   else
+    #If there is no featureindex in memory create one
+    in_stream = GT::GFF3InStream.new(pFileName)
 
-   feature_index = GT::FeatureIndex.new()
-   feature_stream = GT::FeatureStream.new(in_stream, feature_index)
+    feature_index = GT::FeatureIndex.new()
+    feature_stream = GT::FeatureStream.new(in_stream, feature_index)
 
-   gn = feature_stream.next_tree()
-   while (gn) do
     gn = feature_stream.next_tree()
+    while (gn) do
+     gn = feature_stream.next_tree()
+    end
+    @feature_indices[pFileName]=feature_index
+    return feature_index
    end
-   return feature_index
   end
  end
 
