@@ -5,6 +5,7 @@ class CreateAnnotations < ActiveRecord::Migration
       t.column :user_id, :int, :null => false
       t.column :description, :text
       t.column :public, :boolean, :null => false, :default => false
+      t.column, :add_introns, :boolean, :null => false, :default => true 
     end
   end
 
