@@ -74,7 +74,7 @@ class GTServer
  # @param pConfig A Config object created with getConfigObject
  # @return A png stream
  #
- def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig)
+ def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig, width)
   feature_index=getFeatureIndexForFile(pFileName)
 
   seqid = pSequenceRegion
@@ -87,7 +87,7 @@ class GTServer
 
   #render = GT::Render.new(config)
   render = GT::Render.new(config)
-  return render.to_png_stream(diagram)
+  return render.to_png_stream(diagram, width)
  end
 
  ##

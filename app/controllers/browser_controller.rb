@@ -13,6 +13,7 @@ class BrowserController < ApplicationController
  def sidselect
   partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
   @navbar = (render_to_string :partial => partial)
+  @width = session[:user] ? User.find(session[:user]).width : 800
  end
 
  def browser
@@ -68,14 +69,16 @@ class BrowserController < ApplicationController
   end
   #end checking params start_pos and end_pos
 
+  @width = User.find(session[:user]).width
   render  :layout => false
  end
 
  def browser_image
+  user = User.find(session[:user])
   annotation=Annotation.find(params[:annotation])
   sequence_region=SequenceRegion.find(params[:seq_id])
   png_data = sequence_region.to_png(params[:start_pos].to_i,
-                                                        params[:end_pos].to_i)
+                                                        params[:end_pos].to_i, user.width)
   send_data png_data,
                   :type => "image/png",
                   :disposition => "inline",

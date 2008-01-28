@@ -26,6 +26,13 @@ class User < ActiveRecord::Base
     self[:password] = Digest::SHA1.hexdigest(self[:password])
   end
   
+  # returns the desired image width 
+  def width(default = 800)
+     drawing_format_configuration ?
+	drawing_format_configuration.width :
+        default
+  end
+  
   # returns a GT::Config object with the personalisations for this user
   def config
     c = GTSvr.getConfigObject

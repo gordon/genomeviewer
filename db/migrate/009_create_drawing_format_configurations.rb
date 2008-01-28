@@ -2,6 +2,7 @@ class CreateDrawingFormatConfigurations < ActiveRecord::Migration
   def self.up
     create_table :drawing_format_configurations do |t|
       t.belongs_to :user
+      t.integer :width, :default => 800 # desired image width in pixel
       t.decimal :margins , :default => 30      # space left and right of diagram, in pixels
       t.decimal :bar_height , :default => 15   # height of a feature bar, in pixels
       t.decimal :bar_vspace , :default => 10   # space between feature bars, in pixels
