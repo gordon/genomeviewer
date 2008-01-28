@@ -92,9 +92,10 @@ class Annotation < ActiveRecord::Base
   
   def gff3_data_valid?
     errormsg=GTSvr.validateFile(File.expand_path(gff3_data_storage))
-    if errormsg==nil then
+    if errormsg.nil? 
      return true
     else
+     File.delete(File.expand_path(gff3_data_storage))
      errors.add_to_base errormsg
      return false
     end
