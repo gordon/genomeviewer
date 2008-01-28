@@ -9,11 +9,13 @@
     <tr>
       <td><%= attr.humanize %></td>
       <td><%= text_field_tag "format[#{attr}]", @formats.send(attr), :size => 5 %> pixel</td>
+      <td><%= DrawingFormatConfiguration.helptext(attr) %></td>
     </tr>
   <% end %>
     <tr>
       <td>Show grid</td>
       <td><%=check_box_tag "format[show_grid]", true, @formats.show_grid %></td>
+      <td><%= DrawingFormatConfiguration.helptext("show_grid") %></td>
     </tr>
   </table>
   

@@ -4,11 +4,7 @@ Genomeviewer TODO List
 
 # = done!
 
- - add possibility to set width of the image
-       # create a field in the drawing_format table
-       # create a method in the user model to read it
-       # allow to set it in the drawing_format configuration interface
-       - use the field to set the image width
+ # add possibility to set width of the image
  - filenames are sometimes too large for the navbar
  - Browser: put annotation name in the title
  - format seq_ids links as "CSS buttons"
