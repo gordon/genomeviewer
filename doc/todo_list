@@ -2,48 +2,31 @@
 Genomeviewer TODO List
 ================================================================
 
- - Interface
-	
-	- login / register unify
-	
-	- liste von sequence regions oben beim clicken 
-
-	- zoom / schieben tasten und mausschieber
-
-	- moeglichkeit files zu loeschen / updaten
+ - add possibility to set width of the image
+ - filenames are sometimes too large for the navbar
+ - Browser: put annotation name in the title
+ - format seq_ids links as "CSS buttons"
+ - add the add_intron functionality: 
+       - create a boolean field in the annotations table
+       - use the field in the drb server
+       - allow to set it in the interface: 
+            - uploads
+	    - file manager
+ - fix the private/public bug in file_manager
+ - check the range check 
+ - unit test domination_configuration: 
+       - adapt to changed table structure
+ - create a pseudographical position bar
+           - (eventually eliminate "zoom on end" 
+	      functionality if still not intuitive)
+ - add possibility to see public files when logged in
+ - add buttons to set start to the begin of the sequence 
+   and end to the end of the sequence
+           - icons for that already uploaded 
+	      (begin.png/end.png)
+ - add tooltips to the images 
+	(which was the HTML attribute for that?)
+ - documentation 
+           - generation with RDoc
  
- - Allgemein :
-
-	- files "veroeffentlichen"
-
-	- route /username/filename
-	- config seite
-
-		- visualisierung
-		- email / pass aendern
-		- files loeschen / updaten
-		- user loeschen
-	
- - Interface fuer nicht angemeldete users
-
-	- die koennen public dateien browsen
-	- suche implementieren
-
- - Visualisierung
-  
-	- speichern unter tmp und visualisieren
-
- - Model 
-
-	- validierung von GFF3 durch bindings
-	- lesen verschiedene seq ids durch bindings 
-
- - Tests
-
-	- unit tests
-	- simulated sessions 
-	  (integration tests)
-
- - Doku
-
 ================================================================
