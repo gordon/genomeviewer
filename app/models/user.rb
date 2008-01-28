@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
     # load user specific formats
     if drawing_format_configuration
       # set show_grid
-      c.set_cstr("format","show_grid", drawing_format_configuration.show_grid ? "no" : "yes")
+      c.set_cstr("format","show_grid", drawing_format_configuration.show_grid ? "yes" : "no")
       # set all other format attributes 
       format_attributes = (drawing_format_configuration.pixel_attribute_names)
       format_attributes.each do |attribute|
