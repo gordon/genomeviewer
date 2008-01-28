@@ -8,8 +8,8 @@
   <% @formats.pixel_attribute_names.each do |attr| %>
     <tr>
       <td><%= attr.humanize %></td>
-      <td><%= text_field_tag "format[#{attr}]", @formats.send(attr), :size => 5 %> pixel</td>
-      <td><%= DrawingFormatConfiguration.helptext(attr) %></td>
+      <td><%= text_field_tag "format[#{attr}]", @formats.send(attr), :size => 5 %></td>
+      <td>pixel <%= DrawingFormatConfiguration.helptext(attr) %></td>
     </tr>
   <% end %>
     <tr>
