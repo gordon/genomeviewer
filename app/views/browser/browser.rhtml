@@ -1,8 +1,12 @@
-<% span=params[:end_pos].to_i-params[:start_pos].to_i%><html>
-<body style="margin:0;">
+<% span=params[:end_pos].to_i-params[:start_pos].to_i
+   maxspan=SequenceRegion.find(params[:seq_id].to_i).seq_end-SequenceRegion.find(params[:seq_id].to_i).seq_begin
+   viewstart=params[:start_pos].to_i-SequenceRegion.find(params[:seq_id].to_i).seq_begin
+%><html><%=
+stylesheet_link_tag("browser")
+%><body>
 
-<div style="background-color: silver; text-align: center">
-<% form_tag('browser', :style=>"display:inline;", :method => :get) do %>
+<div id="navdiv">
+<% form_tag('browser', :id=>"regselect", :method => :get) do %>
 <%= hidden_field_tag 'annotation', params[:annotation] %>
 <%= hidden_field_tag 'seq_id', params[:seq_id] %>
 Start:<%= text_field_tag 'start_pos', params[:start_pos], :size => 10 %>
@@ -10,30 +14,6 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
 <%= submit_tag  "Go" %>
 <% end %>
 
-<%= 
-    link_to image_tag("icons/zoom_in.png", :border=>0, :size => "32x32", :alt => "(+)"),
-            :action => "browser",
-            :annotation => params[:annotation].to_i,
-            :seq_id => params[:seq_id].to_i,
-            :start_pos => (params[:start_pos].to_i+span/4),
-            :end_pos => params[:end_pos].to_i-span/4
-%>
-<%=
-    link_to image_tag("icons/back.png", :border=>0, :size => "32x32", :alt => "<<"),
-            :action => "browser",
-            :annotation => params[:annotation].to_i,
-            :seq_id => params[:seq_id].to_i,
-            :start_pos => params[:start_pos].to_i-span/2,
-            :end_pos => params[:end_pos].to_i-span/2
-%>
-<%= 
-   link_to image_tag("icons/forward.png", :border=>0, :size => "32x32", :alt => ">>"),
-           :action=>"browser",
-           :annotation => params[:annotation].to_i,
-           :seq_id => params[:seq_id].to_i,
-           :start_pos => params[:start_pos].to_i+span/2,
-           :end_pos => params[:end_pos].to_i+span/2
-%>
 <%=
    link_to image_tag("icons/zoom_out.png", :border=>0, :size => "32x32", :alt => "(-)"),
            :action=>"browser",
@@ -41,24 +21,48 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
            :seq_id => params[:seq_id].to_i,
            :start_pos => params[:start_pos].to_i-span/4,
            :end_pos => params[:end_pos].to_i+span/4
-%>
-
-<%= 
+%><%=
+    link_to image_tag("icons/back.png", :border=>0, :size => "32x32", :alt => "<<"),
+            :action => "browser",
+            :annotation => params[:annotation].to_i,
+            :seq_id => params[:seq_id].to_i,
+            :start_pos => params[:start_pos].to_i-span/2,
+            :end_pos => params[:end_pos].to_i-span/2
+%><%=
+   link_to image_tag("icons/forward.png", :border=>0, :size => "32x32", :alt => ">>"),
+           :action=>"browser",
+           :annotation => params[:annotation].to_i,
+           :seq_id => params[:seq_id].to_i,
+           :start_pos => params[:start_pos].to_i+span/2,
+           :end_pos => params[:end_pos].to_i+span/2
+%><%= 
+    link_to image_tag("icons/zoom_in.png", :border=>0, :size => "32x32", :alt => "(+)"),
+            :action => "browser",
+            :annotation => params[:annotation].to_i,
+            :seq_id => params[:seq_id].to_i,
+            :start_pos => (params[:start_pos].to_i+span/4),
+            :end_pos => params[:end_pos].to_i-span/4
+%><%= 
    link_to image_tag("icons/show_all.png", :border=>0, :size => "32x32", :alt => "Show all"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
            :seq_id => params[:seq_id].to_i,
            :start_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i).seq_begin,
            :end_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i).seq_end
-%>
-</div>
+%></div>
 
-<div id="annoimg" style="position:absolute; top:50px; width:<%=@width%>px; height:500px; cursor: move; background-image:url(<%=
+<div id="sequence"><div id="view" style="width:<%=
+ ((span.to_f/maxspan.to_f)*100.0).round
+%>%; margin-left: <%=
+((viewstart.to_f/maxspan.to_f)*100.0).round
+%>%;">view</div></div>
+
+<div id="annoimg" style="width:<%=@width%>px; background-image:url(<%=
  url_for(:action => "browser_image",
          :annotation => params[:annotation],
          :seq_id => params[:seq_id],
          :start_pos => params[:start_pos],
-         :end_pos => params[:end_pos])          %>); background-repeat:no-repeat; "></div>
+         :end_pos => params[:end_pos])          %>);"></div>
 <%=  javascript_include_tag "browserhelper" %>
 </body>
 </html>
