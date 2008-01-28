@@ -11,7 +11,7 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
 <% end %>
 
 <%= 
-    link_to image_tag("zoomin.gif", :border=>0),
+    link_to image_tag("icons/zoom_in.png", :border=>0, :size => "32x32", :alt => "(+)"),
             :action => "browser",
             :annotation => params[:annotation].to_i,
             :seq_id => params[:seq_id].to_i,
@@ -19,7 +19,7 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
             :end_pos => params[:end_pos].to_i-span/4
 %>
 <%=
-    link_to "<<",
+    link_to image_tag("icons/back.png", :border=>0, :size => "32x32", :alt => "<<"),
             :action => "browser",
             :annotation => params[:annotation].to_i,
             :seq_id => params[:seq_id].to_i,
@@ -27,7 +27,7 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
             :end_pos => params[:end_pos].to_i-span/2
 %>
 <%= 
-   link_to ">>",
+   link_to image_tag("icons/forward.png", :border=>0, :size => "32x32", :alt => ">>"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
            :seq_id => params[:seq_id].to_i,
@@ -35,7 +35,7 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
            :end_pos => params[:end_pos].to_i+span/2
 %>
 <%=
-   link_to image_tag("zoomout.gif", :border=>0),
+   link_to image_tag("icons/zoom_out.png", :border=>0, :size => "32x32", :alt => "(-)"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
            :seq_id => params[:seq_id].to_i,
@@ -44,7 +44,7 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
 %>
 
 <%= 
-   link_to "Full",
+   link_to image_tag("icons/show_all.png", :border=>0, :size => "32x32", :alt => "Show all"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
            :seq_id => params[:seq_id].to_i,

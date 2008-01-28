@@ -1,0 +1,59 @@
+The png files contained in this directory are under LGPL. From the original svg 
+a 32x32 pixel png was created. 
+
+-----------------------------------LICENSE-------------------------------------
+
+"This library is free software; you can redistribute it and/or modify it under 
+the terms of the GNU Lesser General Public License as published by the Free 
+Software Foundation; either version 2.1 of the License, or (at your option)
+any later version. This library is distributed in the hope that it will be 
+useful, but WITHOUT ANY WARRANTY; without even the implied warranty of 
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Lesser 
+General Public License for more details."
+
+License complete text: http://www.gnu.org/copyleft/lesser.html
+
+--------------------------------------------------------------------------------
+===============================================================================
+File: zoom_in.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-zoom-in.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
+File: zoom_out.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-zoom-out.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
+File: zoom_all.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-zoom-fit.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
+File: forward.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-media-forward-ltr.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
+File: back.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-media-rewind-ltr.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
+File: end.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-media-next-ltr.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
+File: begin.png
+Author: David Vignoni
+From: http://commons.wikimedia.org/wiki/Image:Gtk-media-previous-ltr.svg
+Original source: http://ftp.gnome.org/
+pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
+===============================================================================
