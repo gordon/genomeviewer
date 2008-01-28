@@ -28,7 +28,6 @@ class User < ActiveRecord::Base
   
   # returns a GT::Config object with the personalisations for this user
   def config
-
     c = GTSvr.getConfigObject
     # load default configuration
     c.load_file(File.expand_path("config/view.lua"))
@@ -47,7 +46,7 @@ class User < ActiveRecord::Base
     # load user specific formats
     if drawing_format_configuration
       # set show_grid
-      c.set_num("format","show_grid", drawing_format_configuration.show_grid ? 0.0 : 1.0)
+      c.set_cstr("format","show_grid", drawing_format_configuration.show_grid ? "no" : "yes")
       # set all other format attributes 
       format_attributes = (drawing_format_configuration.pixel_attribute_names)
       format_attributes.each do |attribute|
