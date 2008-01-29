@@ -1,4 +1,4 @@
-<h1>Browser</h1>
+<h1>Browsing: <%= Annotation.find(params[:annotation]).name %></h1>
 
  <%
   Annotation.find(params[:annotation]).sequence_regions.entries.collect { |sequenceregion|
