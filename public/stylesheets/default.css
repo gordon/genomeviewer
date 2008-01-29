@@ -64,3 +64,14 @@ div.figure div.subfigure {
   float: left;
   margin:12px;
 }
+
+/* sequence ids list over the current annotation image */
+.seq_id {
+  border : 1px solid black;
+  background: rgb(60%, 60%, 90%);
+}
+/*** TODO: this is not working (are they overwritten later?) ***/
+.seq_id a {
+  color: white;
+  text-decoration: none;
+}

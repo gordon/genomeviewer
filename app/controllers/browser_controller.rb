@@ -13,8 +13,10 @@ class BrowserController < ApplicationController
  def sidselect
   partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
   @navbar = (render_to_string :partial => partial)
-  @width = session[:user] ? User.find(session[:user]).width : 800
-  @sequence_regions = Annotation.find(params[:annotation]).sequence_regions
+  @annotation = Annotation.find(params[:annotation])
+  @sequence_regions = @annotation.sequence_regions
+  @width = session[:user] ? User.find(session[:user]).width : @annotation.user.width
+  @seq_ids_per_line = 10
  end
 
  def browser

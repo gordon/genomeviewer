@@ -7,7 +7,7 @@ Genomeviewer TODO List
  # add possibility to set width of the image
  # filenames are sometimes too large for the navbar
  # Browser: put annotation name in the title
- - format seq_ids links as "CSS buttons"
+ # format seq_ids links as "CSS buttons"
  - add the add_intron functionality: 
        # create a boolean field in the annotations table
        - use the field in the drb server

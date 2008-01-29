@@ -1,21 +1,26 @@
 <h1>Browsing: <%= Annotation.find(params[:annotation]).name %></h1>
 
- <%
-  Annotation.find(params[:annotation]).sequence_regions.entries.collect { |sequenceregion|
- %>
-  <%= link_to  sequenceregion.seq_id, {:action=> "browser",
-                                       :annotation =>  params[:annotation],
-                                       :seq_id => sequenceregion.id.to_s},
-                                      {:target => "browser"}
-  %>
- <%
-  }
- %>
-
+ <% counter = 0 %>
+ <table>
+ <% @sequence_regions.each do |region| %>
+ <%= "<tr>" if (counter % @seq_ids_per_line) == 0 -%>
+ <% counter += 1 %>
+ <td class='seq_id'>
+  <%= link_to region.seq_id, {:action=> "browser",
+                                        :annotation =>  params[:annotation],
+                                        :seq_id => region.id},
+                                       {:target => "browser",
+                                        :style => "text-decoration: none;"}  %>
+  </td>
+ <%= "</tr>" if (counter % @seq_ids_per_line) == 0 -%>
+ <% end %>
+ </table>
+ 
 <hr/>
 
-<iframe name="browser" id="browser" src="<%=
-url_for :action => "browser",
+<% iframe_source = url_for :action => "browser",
         :annotation => params[:annotation],
-        :seq_id => Annotation.find(params[:annotation]).sequence_region_ids[0]
-%>" width="<%=@width%>" height="600" scrolling="no"></iframe>
+        :seq_id => Annotation.find(params[:annotation]).sequence_region_ids[0] -%>
+        
+<iframe name="browser" id="browser" src="<%= iframe_source %>" 
+  width="<%=@width%>" height="600" scrolling="no"></iframe>
