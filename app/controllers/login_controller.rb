@@ -14,10 +14,9 @@ class LoginController < ApplicationController
       flash[:errors] = 
         "Login failed!<br/>"+
         "You have supplied invalid login information.<br/>"+
-        "Do you want to <a href="+
-        url_for(:controller => :register, :action => :register)+
-        ">register</a> a new account?"
-      redirect_to :controller => :login, :action => :login
+        "Do you want to <a href="+registration_url+">register</a> "+
+        "a new account?"
+      redirect_to login_url
     end
   end
    

@@ -8,15 +8,36 @@ ActionController::Routing::Routes.draw do |map|
   # Sample of named route:
   # map.purchase 'products/:id/purchase', :controller => 'catalog', :action => 'purchase'
   # This route can be invoked with purchase_url(:id => product.id)
+  
+  map.login 'login', 
+                :controller => "login", 
+                :action => "login"
+  
+  map.logout 'logout',
+                  :controller => "in_session",
+                  :action => "do_logout"
 
-  # You can have the root of your site routed by hooking up '' 
-  # -- just remember to delete public/index.html.
-  # map.connect '', :controller => "welcome"
-
-  # Allow downloading Web Service WSDL as a file with an extension
-  # instead of a file named 'wsdl'
-  map.connect ':controller/:action/:id' , :controller => 'default'
-  map.connect ':controller/service.wsdl', :action => 'wsdl'
+  map.registration 'registration', 
+                        :controller => "register", 
+                        :action => "register"
+  
+  map.upload 'upload',
+                    :controller => "in_session", 
+                    :action=> "upload"
+  
+  map.configuration 'configuration',
+                        :controller => "in_session",
+                        :action => "config"
+  
+  map.own_files 'files',
+                      :controller => "in_session",
+                      :action => "file_manager"
+  
+  map.public_files 'public', 
+                        :controller => "public", 
+                        :action => "show_users"
+                        
+  map.root :controller => "default"
 
   # Install the default route as the lowest priority.
   map.connect ':controller/:action/:id.:format'

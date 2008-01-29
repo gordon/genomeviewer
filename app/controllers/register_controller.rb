@@ -14,7 +14,7 @@ class RegisterController < ApplicationController
       # if successful:
       # go to the login page, displaying a success message
       flash[:notice] = "Registration successful, you can login now."
-      redirect_to :controller => :login, :action => :login
+      redirect_to login_url
     else
       # back to the form if there was a problem
       flash[:user] = @user

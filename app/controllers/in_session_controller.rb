@@ -12,7 +12,7 @@ class InSessionController < ApplicationController
 
  def check_login
   unless session[:user]
-   redirect_to :controller => :login, :action => :login
+   redirect_to login_url
    session[:location]=params.clone
   end
   return true
@@ -20,7 +20,7 @@ class InSessionController < ApplicationController
 
  def do_logout
   session[:user]=nil
-  redirect_to :controller => :default, :action => :index
+  redirect_to root_url
  end
 
  def do_create_feature_class
