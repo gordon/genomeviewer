@@ -1,6 +1,17 @@
 <ul>
- <li><%= link_to  "Login", :controller => "login", :action=> "login" %></li>
- <li><%= link_to  "Register", :controller => "register", :action=> "register" %></li>
- <li><%= link_to  "Browse Files", :controller => "public", :action=> "showusers" %></li>
- <li><%= link_to  "Browse Source", "http://genometools.org/cgi-bin/gitweb.cgi?p=genomeviewer.git;a=summary" %></li>
+  <li><%= link_to "Login", 
+                  :controller => "login", 
+                  :action=> "login" %>
+  </li>
+  <li><%= link_to "Register", 
+                  :controller => "register", 
+                  :action=> "register" %>
+  </li>
+  <li><%= link_to "Browse Files", 
+                  :controller => "public", 
+                  :action=> "showusers" %>
+  </li>
+  <li><%= link_to  "Browse Source", 
+    "http://genometools.org/cgi-bin/gitweb.cgi?p=genomeviewer.git;a=summary" %>
+  </li>
 </ul>
