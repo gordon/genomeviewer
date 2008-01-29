@@ -5,8 +5,8 @@ Genomeviewer TODO List
 # = done!
 
  # add possibility to set width of the image
- - filenames are sometimes too large for the navbar
- - Browser: put annotation name in the title
+ # filenames are sometimes too large for the navbar
+ # Browser: put annotation name in the title
  - format seq_ids links as "CSS buttons"
  - add the add_intron functionality: 
        # create a boolean field in the annotations table
@@ -18,15 +18,15 @@ Genomeviewer TODO List
  - check the range check 
  - unit test domination_configuration: 
        - adapt to changed table structure
- - create a pseudographical position bar
-           - (eventually eliminate "zoom on end" 
+ # create a pseudographical position bar
+           # (eventually eliminate "zoom on end" 
 	      functionality if still not intuitive)
- - add possibility to see public files when logged in
+ # add possibility to see public files when logged in
  - add buttons to set start to the begin of the sequence 
    and end to the end of the sequence
            # icons for that already uploaded 
 	      (begin.png/end.png)
- - add tooltips to the images 
+ # add tooltips to the images 
 	(which was the HTML attribute for that?)
  - documentation 
            - generation with RDoc
