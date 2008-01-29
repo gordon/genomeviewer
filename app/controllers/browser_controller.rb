@@ -14,6 +14,7 @@ class BrowserController < ApplicationController
   partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
   @navbar = (render_to_string :partial => partial)
   @width = session[:user] ? User.find(session[:user]).width : 800
+  @sequence_regions = Annotation.find(params[:annotation]).sequence_regions
  end
 
  def browser
@@ -69,13 +70,13 @@ class BrowserController < ApplicationController
   end
   #end checking params start_pos and end_pos
 
-  @width = User.find(session[:user]).width
+  @width = User.find(session[:user]).width rescue sequence_region.annotation.user.width
   render  :layout => false
  end
 
  def browser_image
-  user = User.find(session[:user])
   annotation=Annotation.find(params[:annotation])
+  user = User.find(session[:user]) rescue annotation.user
   sequence_region=SequenceRegion.find(params[:seq_id])
   png_data = sequence_region.to_png(params[:start_pos].to_i,
                                                         params[:end_pos].to_i, user.width)
