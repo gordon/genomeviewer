@@ -35,7 +35,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.public_files 'public', 
                         :controller => "public", 
-                        :action => "showusers"
+                        :action => "show_users"
                         
   map.root :controller => "default"
 
