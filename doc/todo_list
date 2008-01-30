@@ -10,10 +10,10 @@ Genomeviewer TODO List
  # format seq_ids links as "CSS buttons"
  - add the add_intron functionality: 
        # create a boolean field in the annotations table
-       - use the field in the drb server
+       # use the field in the drb server
        - allow to set it in the interface: 
             - uploads
-	    - file manager
+	          - file manager
  - fix the private/public bug in file_manager
  - check the range check 
  # unit test domination_configuration: 
