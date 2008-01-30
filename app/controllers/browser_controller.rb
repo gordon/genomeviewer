@@ -10,7 +10,7 @@ class BrowserController < ApplicationController
 
  end
 
- def sidselect
+ def seq_id_select
   partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
   @navbar = (render_to_string :partial => partial)
   @annotation = Annotation.find(params[:annotation])
@@ -27,7 +27,7 @@ class BrowserController < ApplicationController
              params[:seq_id] and
 	     Annotation.exists?(params[:annotation].to_i) and
 	     SequenceRegion.exists?(params[:seq_id].to_i)
-   redirect_to :action => :browserdummy
+   redirect_to :action => :empty_browser
    return
   end
   #end checking params annotation and seq_id

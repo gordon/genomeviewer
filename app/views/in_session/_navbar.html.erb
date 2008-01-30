@@ -9,8 +9,8 @@
 <div id="filelist">
  <h1>Own GFF3 files:</h1>
  <% User.find(session[:user]).annotations.each do |gff3| %>
-   <%= link_to gff3.name, :controller => "browser",
-                          :action => "sidselect",
+   <%= link_to gff3.name, :controller => :browser,
+                          :action => :seq_id_select,
                           :annotation => gff3.id 
    %>
  <% end %>
