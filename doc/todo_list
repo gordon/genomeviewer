@@ -16,8 +16,8 @@ Genomeviewer TODO List
 	    - file manager
  - fix the private/public bug in file_manager
  - check the range check 
- - unit test domination_configuration: 
-       - adapt to changed table structure
+ # unit test domination_configuration: 
+       # adapt to changed table structure
  # create a pseudographical position bar
            # (eventually eliminate "zoom on end" 
 	      functionality if still not intuitive)

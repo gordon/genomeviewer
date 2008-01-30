@@ -62,7 +62,12 @@ class User < ActiveRecord::Base
     end
     # load user specific domination data
     domination_configurations.each do |conf|
-      c.set_cstr_list("dominate", conf.dominator.name, conf.dominated_features.map(&:name))
+      unless conf.dominated_features.empty?
+        c.set_cstr_list("dominate", conf.dominator.name, 
+                          conf.dominated_features.map(&:feature_class).map(&:name))
+      else
+        c.set_cstr_list("dominate", conf.dominator.name, [])
+      end
     end
     # load collapsing configuration
     if collapsing_configuration
