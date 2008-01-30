@@ -2,16 +2,25 @@
 <% form_tag :action => "do_register" do%>
 <table>
  <tr>
-  <td>Your E-Mail Address:</td><td><%= text_field 'user', :email, :maxlength=>64, :size=>24 %></td><td><%=error_message_on :user, :email%></td>
+  <td>Your E-Mail Address:</td>
+  <td><%= text_field 'user', :email, :maxlength=>64, :size=>24 %></td>
+  <td><%=error_message_on :user, :email%></td>
  </tr>
  <tr>
-  <td>Your Name:</td><td><%= text_field 'user', 'name', :maxlength=>64, :size=>24 %></td><td><%=error_message_on :user, :name%></td>
+  <td>Your Name:</td>
+  <td><%= text_field 'user', 'name', :maxlength=>64, :size=>24 %></td>
+  <td><%=error_message_on :user, :name%></td>
  </tr>
  <tr>
-  <td>Your Password:</td><td><%= password_field 'user', :password, :maxlength=>64, :size=>24 %></td><td><%=error_message_on :user, :password%></td>
+  <td>Your Password:</td>
+  <td><%= password_field 'user', :password, :maxlength=>64, :size=>24 %></td>
+  <td><%=error_message_on :user, :password%></td>
  </tr>
  <tr>
-  <td>Retype Password:</td><td><%= password_field 'user', :password_confirmation, :maxlength=>64, :size=>24 %></td><td></td>
+  <td>Retype Password:</td>
+  <td><%= password_field 'user', :password_confirmation, 
+                                 :maxlength=>64, :size=>24 %></td>
+  <td><%# empty table cell %></td>
  </tr>
  <tr>
   <td colspan="3"><%= submit_tag "Register" %></td></tr>
