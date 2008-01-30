@@ -1,5 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
+Dir.mkdir($GFF3_STORAGE_PATH) \
+  unless File.exists?($GFF3_STORAGE_PATH)
+
 module ExampleAnnotations
      
   # some users to save the annotations:
