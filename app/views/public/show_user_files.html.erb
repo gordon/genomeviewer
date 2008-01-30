@@ -1,0 +1,8 @@
+<h1>Files of: <%= @user.name %></h1>
+
+<% @annotations.each do |annotation| %>
+  <%= link_to (annotation.name, :controller => "browser", 
+                                            :action=> "seq_id_select", 
+                                            :annotation => annotation.id) %>
+  <%= "<br/>" %>
+<% end %>
