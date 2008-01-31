@@ -25,7 +25,7 @@ class GTServer
  # @return The sequence regions contained in pFileName
  #
  def getSequenceRegions(pFileName)
-  feature_index=getFeatureIndexForFile(pFileName)
+  feature_index=getFeatureIndexForFile(pFileName, false)
   return feature_index.get_seqids
  end
 
@@ -36,7 +36,7 @@ class GTServer
  # @return The range that belongs to the given sequence region
  #
  def getRangeForSequenceRegion(pFileName, pSequenceRegion)
-  feature_index=getFeatureIndexForFile(pFileName)
+  feature_index=getFeatureIndexForFile(pFileName, false)
   return feature_index.get_range_for_seqid(pSequenceRegion)
  end
 
@@ -72,10 +72,12 @@ class GTServer
  # @param pStartPos A start position
  # @param pEndPos An end position
  # @param pConfig A Config object created with getConfigObject
+ # @param pWidth width of the output image
+ # @param pAddIntrons use add_intron genometools functionality
  # @return A png stream
  #
- def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig, width, add_introns)
-  feature_index=getFeatureIndexForFile(pFileName, add_introns)
+ def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig, pWidth, pAddIntrons)
+  feature_index=getFeatureIndexForFile(pFileName, pAddIntrons)
 
   seqid = pSequenceRegion
   range = feature_index.get_range_for_seqid(seqid)
@@ -86,7 +88,7 @@ class GTServer
   diagram = GT::Diagram.new(feature_index, seqid, range, config)
 
   render = GT::Render.new(config)
-  return render.to_png_stream(diagram, width)
+  return render.to_png_stream(diagram, pWidth)
  end
 
  ##
@@ -96,7 +98,7 @@ class GTServer
  #
  def validateFile(pFileName)
   begin
-   getFeatureIndexForFile(pFileName)
+   getFeatureIndexForFile(pFileName, false)
    return nil
   rescue => error
    return error.to_s
@@ -111,6 +113,7 @@ class GTServer
     # If a featureindex for the file is in memory return it
     return @feature_indices[pFileName]
    else
+    
     #If there is no featureindex in memory create one
     in_stream = GT::GFF3InStream.new(pFileName)
     
