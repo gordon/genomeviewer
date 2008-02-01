@@ -21,34 +21,34 @@ class GTServer
 
  ##
  # Returns sequence regions of a gff3 file
- # @param pFileName Path to a gff3 file
- # @return The sequence regions contained in pFileName
+ # @param filename Path to a gff3 file
+ # @return The sequence regions contained in filename
  #
- def getSequenceRegions(pFileName)
-  feature_index=getFeatureIndexForFile(pFileName, false)
+ def get_sequence_regions(filename)
+  feature_index=get_feature_index_for_file(filename, false)
   return feature_index.get_seqids
  end
 
  ##
  # Returns a range of a sequence region
- # @param pFileName Path to a gff3 file
- # @param pSequenceRegion A sequence region identifier
+ # @param filename Path to a gff3 file
+ # @param sequence_region A sequence region identifier
  # @return The range that belongs to the given sequence region
  #
- def getRangeForSequenceRegion(pFileName, pSequenceRegion)
-  feature_index=getFeatureIndexForFile(pFileName, false)
-  return feature_index.get_range_for_seqid(pSequenceRegion)
+ def get_range_for_sequence_region(filename, sequence_region)
+  feature_index=get_feature_index_for_file(filename, false)
+  return feature_index.get_range_for_seqid(sequence_region)
  end
 
  ##
  # Returns a Config object
- # Config objects that should be used with getImageStream must be
+ # Config objects that should be used with get_image_stream must be
  # created with this function. They can not be created on the
  # GTServer's client because Config objects can not be moved from
  # a client to this server.
  # @return a config Object
  #
- def getConfigObject()
+ def get_config_object()
   return GT::Config.new
  end
 
@@ -67,38 +67,36 @@ class GTServer
  ##
  # This function ouputs an image as a png stream
  # If the oputupt is written in a file the file is a valid png file.
- # @param pFileName Path to a gff3 file
- # @param pSequenceRegion A sequence region identifier
- # @param pStartPos A start position
- # @param pEndPos An end position
- # @param pConfig A Config object created with getConfigObject
- # @param pWidth width of the output image
- # @param pAddIntrons use add_intron genometools functionality
+ # @param filename Path to a gff3 file
+ # @param sequence_region A sequence region identifier
+ # @param start_pos A start position
+ # @param end_pos An end position
+ # @param config A Config object created with get_config_object
+ # @param width width of the output image
+ # @param add_introns switch add_introns genometools functionality
  # @return A png stream
  #
- def getImageStream (pFileName, pSequenceRegion, pStartPos, pEndPos, pConfig, pWidth, pAddIntrons)
-  feature_index=getFeatureIndexForFile(pFileName, pAddIntrons)
+ def get_image_stream (filename, sequence_region, start_pos, end_pos, config, width, add_introns)
+  feature_index=get_feature_index_for_file(filename, add_introns)
 
-  seqid = pSequenceRegion
-  range = feature_index.get_range_for_seqid(seqid)
-  range.start = pStartPos
-  range.end = pEndPos
+  range = feature_index.get_range_for_seqid(sequence_region)
+  range.start = start_pos
+  range.end = end_pos
 
-  config = pConfig #GT::Config.new()
-  diagram = GT::Diagram.new(feature_index, seqid, range, config)
+  diagram = GT::Diagram.new(feature_index, sequence_region, range, config)
 
   render = GT::Render.new(config)
-  return render.to_png_stream(diagram, pWidth)
+  return render.to_png_stream(diagram, width)
  end
 
  ##
  # Validates a gff3 file
- # @param pFileName Path to a gff3 file
+ # @param filename Path to a gff3 file
  # @return nil if file is a valid gff3 file, an error describing string otherwise.
  #
- def validateFile(pFileName)
+ def validateFile(filename)
   begin
-   getFeatureIndexForFile(pFileName, false)
+   get_feature_index_for_file(filename, false)
    return nil
   rescue => error
    return error.to_s
@@ -107,15 +105,15 @@ class GTServer
 
 
  private
- def getFeatureIndexForFile(pFileName, add_introns)
+ def get_feature_index_for_file(filename, add_introns)
   @mutex.synchronize do # avoid concurrent @feature_indices accesses
-   if @feature_indices[pFileName]!=nil then
+   if @feature_indices[filename]!=nil then
     # If a featureindex for the file is in memory return it
-    return @feature_indices[pFileName]
+    return @feature_indices[filename]
    else
     
     #If there is no featureindex in memory create one
-    in_stream = GT::GFF3InStream.new(pFileName)
+    in_stream = GT::GFF3InStream.new(filename)
     
     if add_introns then
      # add_introns_stream = GT::AddIntronsStream.new(in_stream)
@@ -131,7 +129,7 @@ class GTServer
      gn = feature_stream.next_tree()
     end
 
-    @feature_indices[pFileName]=feature_index
+    @feature_indices[filename]=feature_index
     return feature_index
    end
   end
