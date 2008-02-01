@@ -53,6 +53,6 @@ function up() {
   var shift        = Math.round(imgOffset*bp_per_pixel);
   var newEndPos    = Number(endPos)-shift;
   var newStartPos  = Number(startPos)-shift;
-  window.location.href = "browser?end_pos="+newEndPos+"&file_name=annotation.gff3&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_id="+getParamValue('seq_id');
+  window.location.href = "browser?end_pos="+newEndPos+"&start_pos="+newStartPos+"&annotation="+getParamValue('annotation')+"&seq_region="+getParamValue('seq_region');
  }
 }
