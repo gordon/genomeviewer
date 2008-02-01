@@ -5,10 +5,10 @@ class ColorConfiguration < ActiveRecord::Base
   
   # returns an hash with the default values from view.lua
   def self.defaults
-    c = GTSvr.getConfigObject
+    c = GTSvr.get_config_object
     c.load_file(File.expand_path("config/view.lua"))
     colors = {}
-    # as there is no iterator yet in gtruby 
+    # as there is no iterator yet in gtruby  
     # try all features and graphical elements
     elements = FeatureClass.find(:all) + 
                   GraphicalElement.find(:all)

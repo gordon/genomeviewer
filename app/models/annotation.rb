@@ -119,10 +119,10 @@ class Annotation < ActiveRecord::Base
   end
 
   def get_sequence_regions_params
-    seqids=GTSvr.getSequenceRegions(File.expand_path(gff3_data_storage))
+    seqids=GTSvr.get_sequence_regions(File.expand_path(gff3_data_storage))
     parsing_output = []
     seqids.each do |seq_id|
-        range = GTSvr.getRangeForSequenceRegion(File.expand_path(gff3_data_storage), seq_id)
+        range = GTSvr.get_range_for_sequence_region(File.expand_path(gff3_data_storage), seq_id)
         seq_begin = range.start
         seq_end = range.end
         parsing_output << ({:seq_id => seq_id, :seq_begin => seq_begin, :seq_end => seq_end} )        
