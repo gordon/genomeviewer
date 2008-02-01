@@ -8,7 +8,7 @@
  <td class='seq_id'>
   <%= link_to region.seq_id, {:action=> "browser",
                                         :annotation =>  params[:annotation],
-                                        :seq_id => region.id},
+                                        :seq_region => region.id},
                                        {:target => "browser",
                                         :style => "text-decoration: none;"}  %>
   </td>
@@ -20,7 +20,7 @@
 
 <% iframe_source = url_for :action => "browser",
         :annotation => params[:annotation],
-        :seq_id => Annotation.find(params[:annotation]).sequence_region_ids[0] -%>
+        :seq_region => Annotation.find(params[:annotation]).sequence_region_ids[0] -%>
         
 <iframe name="browser" id="browser" src="<%= iframe_source %>" 
   width="<%=@width%>" height="600" scrolling="no"></iframe>

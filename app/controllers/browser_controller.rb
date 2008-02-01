@@ -22,17 +22,17 @@ class BrowserController < ApplicationController
  def browser
   # check params
   
-  #begin checking params annotation and seq_id
+  #begin checking params annotation and seq_region
   unless params[:annotation] and
-             params[:seq_id] and
+             params[:seq_region] and
 	     Annotation.exists?(params[:annotation].to_i) and
-	     SequenceRegion.exists?(params[:seq_id].to_i)
+	     SequenceRegion.exists?(params[:seq_region].to_i)
    redirect_to :action => :empty_browser
    return
   end
-  #end checking params annotation and seq_id
+  #end checking params annotation and seq_region
 
-  sequence_region = SequenceRegion.find(params[:seq_id].to_i)
+  sequence_region = SequenceRegion.find(params[:seq_region].to_i)
 
   #begin checking params start_pos and end_pos
   seq_begin = sequence_region.seq_begin
@@ -79,7 +79,7 @@ class BrowserController < ApplicationController
  def browser_image
   annotation=Annotation.find(params[:annotation])
   user = User.find(session[:user]) rescue annotation.user
-  sequence_region=SequenceRegion.find(params[:seq_id])
+  sequence_region=SequenceRegion.find(params[:seq_region])
   png_data = sequence_region.to_png(params[:start_pos].to_i,
                                                         params[:end_pos].to_i, user.width)
   send_data png_data,

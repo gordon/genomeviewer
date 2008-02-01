@@ -1,6 +1,6 @@
 <% span=params[:end_pos].to_i-params[:start_pos].to_i
-   maxspan=SequenceRegion.find(params[:seq_id].to_i).seq_end-SequenceRegion.find(params[:seq_id].to_i).seq_begin
-   viewstart=params[:start_pos].to_i-SequenceRegion.find(params[:seq_id].to_i).seq_begin
+   maxspan=SequenceRegion.find(params[:seq_region].to_i).seq_end-SequenceRegion.find(params[:seq_region].to_i).seq_begin
+   viewstart=params[:start_pos].to_i-SequenceRegion.find(params[:seq_region].to_i).seq_begin
 %><html><%=
 stylesheet_link_tag("browser")
 %><body>
@@ -8,7 +8,7 @@ stylesheet_link_tag("browser")
 <div id="navdiv">
 <% form_tag('browser', :id=>"regselect", :method => :get) do %>
 <%= hidden_field_tag 'annotation', params[:annotation] %>
-<%= hidden_field_tag 'seq_id', params[:seq_id] %>
+<%= hidden_field_tag 'seq_region', params[:seq_region] %>
 Start:<%= text_field_tag 'start_pos', params[:start_pos], :size => 10 %>
 End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
 <%= submit_tag  "Go" %>
@@ -18,37 +18,37 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
    link_to image_tag("icons/zoom_out.png", :border=>0, :size => "32x32", :title => "zoom out",:alt => "(-)"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
-           :seq_id => params[:seq_id].to_i,
+           :seq_region => params[:seq_region].to_i,
            :start_pos => params[:start_pos].to_i-span/4,
            :end_pos => params[:end_pos].to_i+span/4
 %><%=
     link_to image_tag("icons/back.png", :border=>0, :size => "32x32", :title => "go left" ,:alt => "<<"),
             :action => "browser",
             :annotation => params[:annotation].to_i,
-            :seq_id => params[:seq_id].to_i,
+            :seq_region => params[:seq_region].to_i,
             :start_pos => params[:start_pos].to_i-span/2,
             :end_pos => params[:end_pos].to_i-span/2
 %><%=
    link_to image_tag("icons/forward.png", :border=>0, :size => "32x32", :title => "go right", :alt => ">>"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
-           :seq_id => params[:seq_id].to_i,
+           :seq_region => params[:seq_region].to_i,
            :start_pos => params[:start_pos].to_i+span/2,
            :end_pos => params[:end_pos].to_i+span/2
 %><%= 
     link_to image_tag("icons/zoom_in.png", :border=>0, :size => "32x32", :title => "Zoom in", :alt => "(+)"),
             :action => "browser",
             :annotation => params[:annotation].to_i,
-            :seq_id => params[:seq_id].to_i,
+            :seq_region => params[:seq_region].to_i,
             :start_pos => (params[:start_pos].to_i+span/4),
             :end_pos => params[:end_pos].to_i-span/4
 %><%= 
    link_to image_tag("icons/show_all.png", :border=>0, :size => "32x32", :title => "view full sequence", :alt => "Show all"),
            :action=>"browser",
            :annotation => params[:annotation].to_i,
-           :seq_id => params[:seq_id].to_i,
-           :start_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i).seq_begin,
-           :end_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_id].to_i).seq_end
+           :seq_region => params[:seq_region].to_i,
+           :start_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_region].to_i).seq_begin,
+           :end_pos => Annotation.find(params[:annotation].to_i).sequence_regions.find(params[:seq_region].to_i).seq_end
 %></div>
 
 <div id="sequence"><div id="view" style="width:<%=
@@ -60,7 +60,7 @@ End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
 <div id="annoimg" style="width:<%=@width%>px; background-image:url(<%=
  url_for(:action => "browser_image",
          :annotation => params[:annotation],
-         :seq_id => params[:seq_id],
+         :seq_region => params[:seq_region],
          :start_pos => params[:start_pos],
          :end_pos => params[:end_pos])          %>);"></div>
 <%=  javascript_include_tag "browserhelper" %>
