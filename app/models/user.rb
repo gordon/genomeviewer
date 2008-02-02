@@ -35,12 +35,12 @@ class User < ActiveRecord::Base
   
   # returns a GT::Config object with the personalisations for this user
   def config
-    c = GTSvr.get_config_object 
+    c = GTSvr.new_config_object 
     # load default configuration
     c.load_file(File.expand_path("config/view.lua"))
     # load user specific colors
     color_configurations.each do |record|
-      color = GTSvr.get_color_object
+      color = GTSvr.new_color_object
       color.red    = record.red.to_f
       color.green = record.green.to_f
       color.blue   = record.blue.to_f

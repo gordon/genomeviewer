@@ -49,7 +49,7 @@ class GTServer
  # a client to this server.
  # @return a config Object
  #
- def get_config_object
+ def new_config_object
   return GT::Config.new
  end
 
@@ -61,7 +61,7 @@ class GTServer
  # a client to this server.
  # @return a Color Object
  #
- def get_color_object
+ def new_color_object
   return GT::Color.malloc
  end
 
