@@ -5,7 +5,7 @@ require 'drb'
 require 'gtruby'
 
 ##
-# The GTServer forwards requests from the GenomeViwer to the
+# The GTServer forwards requests from the GenomeViewer to the
 # GenomeTools. Additionally it is responsible for caching
 # feature_index structures
 #
@@ -14,18 +14,19 @@ class GTServer
  ##
  # Creates a GTServer instance
  #
- def initialize()
+ def initialize
+  puts "Initializing GT DRB server"
   @mutex = Mutex.new
-  @feature_indices=Hash.new()
+  @feature_indices = Hash.new
  end
 
  ##
- # Returns sequence regions of a gff3 file
+ # Returns sequence region identifiers of a gff3 file
  # @param filename Path to a gff3 file
  # @return The sequence regions contained in filename
  #
  def get_sequence_regions(filename)
-  feature_index=get_feature_index_for_file(filename, false)
+  feature_index=get_feature_index_for_file(filename)
   return feature_index.get_seqids
  end
 
@@ -36,7 +37,7 @@ class GTServer
  # @return The range that belongs to the given sequence region
  #
  def get_range_for_sequence_region(filename, sequence_region)
-  feature_index=get_feature_index_for_file(filename, false)
+  feature_index=get_feature_index_for_file(filename)
   return feature_index.get_range_for_seqid(sequence_region)
  end
 
@@ -48,7 +49,7 @@ class GTServer
  # a client to this server.
  # @return a config Object
  #
- def get_config_object()
+ def get_config_object
   return GT::Config.new
  end
 
@@ -60,7 +61,7 @@ class GTServer
  # a client to this server.
  # @return a Color Object
  #
- def getColorObject()
+ def getColorObject
   return GT::Color.malloc
  end
 
@@ -77,7 +78,7 @@ class GTServer
  # @return A png stream
  #
  def get_image_stream (filename, sequence_region, start_pos, end_pos, config, width, add_introns)
-  feature_index=get_feature_index_for_file(filename, add_introns)
+  feature_index=get_feature_index_for_file(filename, :add_introns => add_introns)
 
   range = feature_index.get_range_for_seqid(sequence_region)
   range.start = start_pos
@@ -96,7 +97,7 @@ class GTServer
  #
  def validateFile(filename)
   begin
-   get_feature_index_for_file(filename, false)
+   get_feature_index_for_file(filename, :delete_cache => true)
    return nil
   rescue => error
    return error.to_s
@@ -105,31 +106,41 @@ class GTServer
 
 
  private
- def get_feature_index_for_file(filename, add_introns)
+ # options:
+ # :delete_cache => true : empty the cache for this feature_index [default: false]
+ # :add_introns => true  : turns on add_introns feature [default: false]
+ def get_feature_index_for_file(filename, options = {})
   @mutex.synchronize do # avoid concurrent @feature_indices accesses
-   if @feature_indices[filename]!=nil then
+   
+   if @feature_indices.has_key?(filename) 
     # If a featureindex for the file is in memory return it
-    return @feature_indices[filename]
-   else
     
-    #If there is no featureindex in memory create one
+    # save it from garbage collection if is to be deleted
+    feature_index = @feature_indices[filename]
+    @feature_indices[filename] = nil if options[:delete_cache]
+    return feature_index
+   
+   else
+     
+    # If there is no featureindex in memory create one
+   
     in_stream = GT::GFF3InStream.new(filename)
     
-    if add_introns then
-     # add_introns_stream = GT::AddIntronsStream.new(in_stream)
-     # in_stream = add_introns_stream
+    if options[:add_introns] 
+     add_introns_stream = GT::AddIntronsStream.new(in_stream)
+     in_stream = add_introns_stream
     end
     
-    feature_index = GT::FeatureIndex.new()
+    feature_index = GT::FeatureIndex.new
     
     feature_stream = GT::FeatureStream.new(in_stream, feature_index)
 
-    gn = feature_stream.next_tree()
+    gn = feature_stream.next_tree
     while (gn) do
-     gn = feature_stream.next_tree()
+     gn = feature_stream.next_tree
     end
 
-    @feature_indices[filename]=feature_index
+    @feature_indices[filename] = feature_index unless options[:delete_cache]
     return feature_index
    end
   end
@@ -137,8 +148,7 @@ class GTServer
 
 end
 
-puts "Initializing GT DRB server"
-DRb.start_service("druby://:7777", GTServer.new())
+DRb.start_service("druby://:7777", GTServer.new)
 puts "GT DRB server running"
 DRb.thread.join
 p "GT DRB server shut down"
