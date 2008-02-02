@@ -12,6 +12,7 @@ class BrowserController < ApplicationController
 
  def seq_id_select
   partial = session[:user] ? "/in_session/navbar" : "/public/navbar"
+  @stylesheets = ["in_session", "browser"]
   @navbar = (render_to_string :partial => partial)
   @annotation = Annotation.find(params[:annotation])
   @sequence_regions = @annotation.sequence_regions

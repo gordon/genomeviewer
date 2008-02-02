@@ -5,11 +5,12 @@
  <% @sequence_regions.each do |region| %>
  <%= "<tr>" if (counter % @seq_ids_per_line) == 0 -%>
  <% counter += 1 %>
- <td class='seq_id'>
+ <td>
   <%= link_to region.seq_id, {:action=> "browser",
                                         :annotation =>  params[:annotation],
                                         :seq_region => region.id},
                                        {:target => "browser",
+                                        :class=>'seq_id',
                                         :style => "text-decoration: none;"}  %>
   </td>
  <%= "</tr>" if (counter % @seq_ids_per_line) == 0 -%>
