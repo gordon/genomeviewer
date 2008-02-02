@@ -77,7 +77,12 @@ class GTServer
  # @param add_introns switch add_introns genometools functionality
  # @return A png stream
  #
- def get_image_stream (filename, sequence_region, start_pos, end_pos, config, width, add_introns)
+ def get_image_stream(filename, sequence_region, start_pos, end_pos, config, width, add_introns)
+  puts "Requested image stream for:"
+  puts "- #{File.basename(filename)}, "
+  puts "- seq_id: #{sequence_region},  "
+  puts "- range: #{start_pos} - #{end_pos}"
+       
   feature_index=get_feature_index_for_file(filename, :add_introns => add_introns)
 
   range = feature_index.get_range_for_seqid(sequence_region)
@@ -87,6 +92,7 @@ class GTServer
   diagram = GT::Diagram.new(feature_index, sequence_region, range, config)
 
   render = GT::Render.new(config)
+  puts "- streaming..."
   return render.to_png_stream(diagram, width)
  end
 
@@ -114,19 +120,24 @@ class GTServer
    
    if @feature_indices.has_key?(filename) 
     # If a featureindex for the file is in memory return it
-    
+    puts "-- using cached feature index"
     # save it from garbage collection if is to be deleted
     feature_index = @feature_indices[filename]
-    @feature_indices[filename] = nil if options[:delete_cache]
+    if options[:delete_cache]
+      @feature_indices[filename] = nil 
+      puts "-- deleting cached feature index"
+    end
     return feature_index
    
    else
      
     # If there is no featureindex in memory create one
-   
+    puts "-- new feature index"
+     
     in_stream = GT::GFF3InStream.new(filename)
     
     if options[:add_introns] 
+     puts "-- adding introns to in_stream"
      add_introns_stream = GT::AddIntronsStream.new(in_stream)
      in_stream = add_introns_stream
     end
@@ -139,8 +150,12 @@ class GTServer
     while (gn) do
      gn = feature_stream.next_tree
     end
+    puts "-- populated feature_stream"
 
-    @feature_indices[filename] = feature_index unless options[:delete_cache]
+    unless options[:delete_cache]
+      @feature_indices[filename] = feature_index 
+      puts "-- saved feature_index in cache"
+    end
     return feature_index
    end
   end
