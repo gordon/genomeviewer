@@ -40,7 +40,7 @@ class User < ActiveRecord::Base
     c.load_file(File.expand_path("config/view.lua"))
     # load user specific colors
     color_configurations.each do |record|
-      color = GTSvr.getColorObject()
+      color = GTSvr.get_color_object
       color.red    = record.red.to_f
       color.green = record.green.to_f
       color.blue   = record.blue.to_f
