@@ -35,10 +35,9 @@ module FileManager
 
  def file_accessibility
   annotation=Annotation.find(params[:annotation].to_i)
-  if params[:public] then public=true else public=false end
-  # prevent others from mofifiing our data
+  # prevent others from modifying own data
   if annotation.user.id == session[:user]
-   annotation.public=public
+   annotation.public=params[:public]
    annotation.save
   end
   redirect_to :action => "file_manager"
