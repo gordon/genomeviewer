@@ -18,13 +18,14 @@ class User < ActiveRecord::Base
   validates_confirmation_of :password, :message => "You entered two different passwords!"
   validates_format_of :email, :with => /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i, :message => 'Email address invalid'
 
-  ### callbacks ###
+  ### attribute method overrides ###
   
-  before_save :hash_password 
   # avoids privacy problems involved in storing user passwords as plain text
-  def hash_password
-    self[:password] = Digest::SHA1.hexdigest(self[:password])
+  def password=(word)
+    self[:password] = Digest::SHA1.hexdigest(word)
   end
+  
+  ### callbacks ###
   
   # returns the desired image width 
   def width(default = 800)
