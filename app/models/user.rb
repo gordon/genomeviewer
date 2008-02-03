@@ -21,9 +21,9 @@ class User < ActiveRecord::Base
   ### attribute method overrides ###
   
   # avoids privacy problems involved in storing user passwords as plain text
-  def password=(word)
-    self[:password] = Digest::SHA1.hexdigest(word)
-  end
+  # def password=(word)
+    # self[:password] = Digest::SHA1.hexdigest(word)
+  # end
   
   ### callbacks ###
   
