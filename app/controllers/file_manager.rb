@@ -37,7 +37,7 @@ module FileManager
   annotation=Annotation.find(params[:annotation].to_i)
   # prevent others from modifying own data
   if annotation.user.id == session[:user]
-   annotation.public=params[:public]
+   annotation.public=params.has_key?(:public)
    annotation.save
   end
   redirect_to :action => "file_manager"
