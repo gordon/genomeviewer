@@ -1,5 +1,6 @@
 <h1>Login</h1>
 
+<p style="color:green"><%=flash[:notice]-%></p>
 <p style="color:red"><%=flash[:errors]-%></p>
 
 <% form_tag({:action=>"do_login"}) do %>
