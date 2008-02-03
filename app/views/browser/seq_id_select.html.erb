@@ -1,10 +1,9 @@
 <h1>Browsing: <%= Annotation.find(params[:annotation]).name %></h1>
 
- <% counter = 0 %>
+ <% counter = @seq_ids_per_line %>
  <table>
  <% @sequence_regions.each do |region| %>
  <%= "<tr>" if (counter % @seq_ids_per_line) == 0 -%>
- <% counter += 1 %>
  <td>
   <%= link_to region.seq_id, {:action=> "browser",
                                         :annotation =>  params[:annotation],
@@ -13,8 +12,16 @@
                                         :class=>'seq_id',
                                         :style => "text-decoration: none;"}  %>
   </td>
- <%= "</tr>" if (counter % @seq_ids_per_line) == 0 -%>
- <% end %>
+  <% counter = (counter == 1) ? @seq_ids_per_line : counter-1 %>
+  <%= "</tr>" if (counter % @seq_ids_per_line) == 0 -%>
+  <% end %>
+  <%# add the resting td to have a conform table %>
+  <% unless counter == @seq_ids_per_line %>
+   <% counter.downto(1) do %>
+    <td></td>
+   <% end %>
+   </tr>
+  <% end %>
  </table>
  
 <hr/>
