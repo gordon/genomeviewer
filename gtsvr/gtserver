@@ -121,14 +121,14 @@ class GTServer
    if @feature_indices.has_key?(filename) 
     # If a featureindex for the file is in memory return it
     puts "-- using cached feature index"
-    # save it from garbage collection if is to be deleted
     feature_index = @feature_indices[filename]
     if options[:delete_cache]
-      @feature_indices[filename] = nil 
       puts "-- deleting cached feature index"
+      return @feature_indices.delete(filename)
+    else
+      return feature_index
     end
-    return feature_index
-   
+    
    else
      
     # If there is no featureindex in memory create one
