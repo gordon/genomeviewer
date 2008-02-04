@@ -1,20 +1,20 @@
 <h1>File Manager</h1>
 
 <% User.find(session[:user]).annotations.each do |annotation| %>
-  <table border="1" width="100%">
+  <table width="100%" style=" border: 1px black solid;">
     <tr>
-      <td colspan="2" bgcolor="rgb(60%, 60%, 90%)">
+      <td colspan="2" style="color:white; background-color:rgb(60%, 60%, 90%); padding-left: 10px">
         <%= annotation.name %>
       </td>
     </tr>
     <tr>
-      <td colspan="2">
-        Contains:<br/>
+      <td colspan="2" style=" border: 1px black solid;">
+        <u>Contains:</u><br/>
         <%= annotation.sequence_regions.map(&:seq_id).join(", ")%>
         </td>
     </tr>
     <tr>
-      <td colspan="2">Description:<br/>
+      <td colspan="2" >Description:<br/>
       <% form_tag({:action => 'change_annotation_description'}, 
                  :multipart => true) do %>
         <%= hidden_field_tag 'annotation', annotation.id %>
@@ -27,7 +27,7 @@
       </td>
     </tr>
     <tr>
-      <td>Accessibility:<br/>
+      <td style=" border: 1px black solid;">Accessibility:<br/>
       
       <input type="radio" name="access_<%=annotation.id%>" value="Private"
        <%="checked='checked'" unless annotation.public %>
@@ -35,7 +35,7 @@
         url_for :action => "file_accessibility",
         :public => false,
         :annotation => annotation.id 
-        %>'" >Private
+        %>'" />Private
         
       <input type="radio" name="access_<%=annotation.id%>" value="Public"
        <%="checked='checked'" if annotation.public %>
@@ -43,11 +43,11 @@
         url_for :action => "file_accessibility",
         :public => true,
         :annotation => annotation.id 
-        %>'" >Public
+        %>'" />Public
       
       </td>
       
-      <td align="center">
+      <td align="center" style=" border: 1px red dashed;">
       <input type="button" name="del" value="Delete File" 
        onclick="location.href='<%=
         url_for :action => "file_delete", :annotation=> annotation.id
