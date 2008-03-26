@@ -6,6 +6,9 @@ module ApplicationHelper
    output << stylesheet_link_tag("default")
    if @navbar or File.exist?("app/views/#{controller.controller_name}/_navbar.html.erb")
      output << stylesheet_link_tag("menu")
+    # XXX: remove this hack
+   elsif @navbar or File.exist?("../app/views/#{controller.controller_name}/_navbar.html.erb")
+     output << stylesheet_link_tag("menu")
    end
    output << stylesheet_link_tag(*@stylesheets) if @stylesheets
    return output
@@ -16,6 +19,10 @@ module ApplicationHelper
   return @navbar if @navbar
   # (2) control if the partial _navbar exists
   if File.exist?("app/views/#{controller.controller_name}/_navbar.html.erb")
+   return(render :partial => "navbar")
+  end
+  # XXX: remove this hack
+  if File.exist?("../app/views/#{controller.controller_name}/_navbar.html.erb")
    return(render :partial => "navbar")
   end
   # (3) if both don't exist display nothing
