@@ -1,4 +1,5 @@
-path = "../tmp/sessions/"
+#!/usr/bin/env ruby
+path = File.dirname(__FILE__)+"/../tmp/sessions/"
 loop do
  Dir.new(path).entries.collect {|file_name|
   if (not file_name=="." and not file_name=="..")

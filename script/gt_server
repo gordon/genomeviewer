@@ -166,4 +166,4 @@ end
 DRb.start_service("druby://:7777", GTServer.new)
 puts "GT DRB server running"
 DRb.thread.join
-p "GT DRB server shut down"
+puts "GT DRB server shut down"
