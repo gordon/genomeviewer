@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
   
   # returns a GT::Config object with the personalisations for this user
   def config
-    c = GTSvr.new_config_object 
+    c = GTServer.new_config_object 
     # load default configuration
     c.load_file(File.expand_path("config/view.lua"))
     # load user specific configurations

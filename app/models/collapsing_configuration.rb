@@ -5,7 +5,7 @@ class CollapsingConfiguration < ActiveRecord::Base
   # returns the default value as array
   # reads it from view.lua using gtruby
   def self.default    
-    c = GTSvr.new_config_object
+    c = GTServer.new_config_object
     c.load_file(File.expand_path("config/view.lua"))
     return c.get_cstr_list("collapse","to_parent").to_a
   end

@@ -6,7 +6,7 @@ class DominationConfiguration < ActiveRecord::Base
   
   # returns the default values from view.lua
   def self.defaults
-    c = GTSvr.new_config_object
+    c = GTServer.new_config_object
     c.load_file(File.expand_path("config/view.lua"))
     dominations = {}
     # as there is no iterator yet in gtruby try all features 
