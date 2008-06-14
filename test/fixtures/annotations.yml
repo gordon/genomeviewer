@@ -1,5 +1,0 @@
-# fixtures does not work well because of
-# the data saved in the filesystem
-
-# created some test objects directly in the unit test file 
-# (test/unit/annotation_test.rb) as a module ExampleAnnotations 
