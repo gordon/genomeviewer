@@ -64,7 +64,7 @@ class User < ActiveRecord::Base
   
   def load_user_colors_in(config_object)
     color_configurations.each do |conf|    
-      color = GT::Color.new
+      color = GTServer.new_color_object
       color.red = conf.red.to_f
       color.green = conf.green.to_f
       color.blue = conf.blue.to_f
