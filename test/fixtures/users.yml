@@ -1,17 +1,29 @@
-giorgio:
+john_smith_jr:
   id: 1
-  name: Giorgio Gonnella
-  email: ggonnella@rubyfanclub.jp
-  password: <%=Digest::SHA1.hexdigest("railscool")%>
+  name: John Smith Jr.
+  email: john_smith.jr@genome.test
+  url: www.genome.test/~john_smith/
+  password: p1assword
   
-marvin:
+john_smith_sr:
   id: 2
-  name: Marvin Mundry
-  email: marvin_mundy@javaprog.de
-  password: <%=Digest::SHA1.hexdigest("phpcool")%>
+  name: John Smith Sr.
+  institution: Test Gen AG
+  email: john.smith.sr@test.gen
+  password: pa2ssword
   
-gordon:
+a_test:
   id: 3
-  name: Gordon Gremme
-  email: g.gremme@genometools.org  
-  password: <%=Digest::SHA1.hexdigest("gtcool")%>
+  name: A. Test
+  institution: University of Testtown
+  email: a.test@gene.tst
+  password: pas3sword
+
+<% 255.times do |i| %>
+test_user_<%=i%>:
+  name: Test User <%= i %>
+  email: test_<%=i%>@test.domain
+  url: www.test.domain/~test/<%=i%>
+  institution: Test Institution <%=rand(5)%>
+  password: any_password
+<% end %>

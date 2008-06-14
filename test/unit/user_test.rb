@@ -1,47 +1,27 @@
 require File.dirname(__FILE__) + '/../test_helper'
+require File.dirname(__FILE__) + "/modules/invalid_users.rb"
    
-module InvalidUsers
-
-   No_email = {
-      :name => "John Smith",
-      :password => "password"
-    }
-    
-    No_pass = {
-      :name => "John Smith",
-      :email => "email@smith.org"
-    }
-    
-    No_name = {
-      :password => "genomeviewer",
-      :email => "genome@viewer.org"
-    }
-
-    Invalid_email = {
-      :name => "genomeviewer",
-      :password => "genomeviewer",
-      :email => "I haven't got one"
-    }
-
-    # this one duplicates fixture users(:giorgio)
-    Duplicated_email = {
-      :email => "ggonnella@rubyfanclub.jp",
-      :name => "Twin",
-      :password => "Towers"
-    }
-    
-end
-
 class UserTest < Test::Unit::TestCase
   
   fixtures :users
-  include InvalidUsers
-  
-  def test_invalid_params
-    [No_email, No_pass, No_name, 
-    Invalid_email, Duplicated_email].each do |invalid_params|
-      assert !User.new(invalid_params).save
+
+  i = 0
+  InvalidUsers.each do |invalid_params, error_msg|
+    i += 1
+    define_method :"test_invalid_params_#{i}" do 
+      assert !User.new(invalid_params).save, 
+             "Save was expected to return false as #{error_msg}"
     end
+  end
+
+  def test_email_duplication
+    # create an user to duplicate email from
+    User.create(:password => "test", 
+                :name => "test", 
+                :email => "test@test.tst")
+    assert_nil User.create(:password => "test2",
+                     :name => "test2",
+                     :email => "test@test.tst").id
   end
 
 end
