@@ -39,9 +39,10 @@ Rails::Initializer.run do |config|
   # config.log_level = :debug
   
   # rotate logs
-  config.logger = Logger.new("#{RAILS_ROOT}/log/#{ENV['RAILS_ENV']}.log", 
-                             10, # number of old logs to keep
-                             1.megabyte) # size of each log
+  # XXX
+  #config.logger = Logger.new("#{RAILS_ROOT}/log/#{ENV['RAILS_ENV']}.log", 
+  #                           10, # number of old logs to keep
+  #                           1048576) # size of each log
 
   # Make Time.zone default to the specified zone, and make Active Record store time values
   # in the database in UTC, and return them converted to the specified local zone.
