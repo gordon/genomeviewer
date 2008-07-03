@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'drb'
+require 'gtruby'
+
+if ARGV.size != 1 then
+  raise "Usage: gt_server_test gff3_file"
+end
+
+gff3_file = ARGV[0]
+
+DRb.start_service
+GTServer = DRbObject.new(nil, 'druby://localhost:7777')
+
+errormsg = GTServer.validate_file(gff3_file)
+if errormsg then
+  raise "Error: #{errormsg}"
+end
+
+config = GTServer.new_config_object
+
+seqids = GTServer.get_sequence_regions(gff3_file)
+seqids.each do |seq_id|
+  range = GTServer.get_range_for_sequence_region(gff3_file, seq_id)
+  png_stream = GTServer.get_image_stream(gff3_file, seq_id, range.start,
+                                         range.end, config, 800, false)
+end
