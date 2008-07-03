@@ -1,5 +1,5 @@
 class PublicController < ApplicationController
-  
+
   after_filter :initializations
   def initializations
     @stylesheets = "in_session"
@@ -16,5 +16,5 @@ class PublicController < ApplicationController
     @user = User.find(params[:user_id])
     @annotations = @user.annotations.find_all_by_public(true)
   end
- 
+
 end

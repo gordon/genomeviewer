@@ -3,7 +3,7 @@ class InSessionController < ApplicationController
  prepend_before_filter :check_login
 
  include FileManager
- 
+
  include Config::Formats
  include Config::Colors
  include Config::Styles
@@ -31,7 +31,7 @@ class InSessionController < ApplicationController
     flash[:errors] = "Impossible to create #{fc.name}.<br/>Does it already exist?"
   end
   redirect_to :action => :create_feature_class
- end 
+ end
 
  private
 
