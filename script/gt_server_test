@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'drb'
-require 'gtruby'
 
 if ARGV.size != 1 then
   raise "Usage: gt_server_test gff3_file"
