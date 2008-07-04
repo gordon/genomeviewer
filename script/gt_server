@@ -2,6 +2,7 @@
 $: << ENV['GTRUBY']
 
 require 'drb'
+require 'drb/timeridconv'
 require 'gtruby'
 
 ##
@@ -172,6 +173,7 @@ class GTServer
 
 end
 
+DRb.install_id_conv(DRb::TimerIdConv.new) # keep objects on server alive
 DRb.start_service("druby://:7777", GTServer.new)
 puts "GT DRB server running"
 STDOUT.flush
