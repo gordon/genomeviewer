@@ -1,8 +1,8 @@
 <h1>Users:</h1>
 
 <% @users.each do |user| %>
-  <%= link_to (user.name+" ("+user.id.to_s+")", 
-                  :action=> "show_user_files", 
+  <%= link_to(user.name+" ("+user.id.to_s+")",
+                  :action=> "show_user_files",
                   :user_id => user.id) %>
   <br/>
 <% end %>

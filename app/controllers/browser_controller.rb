@@ -22,7 +22,7 @@ class BrowserController < ApplicationController
 
  def browser
   # check params
-  
+
   #begin checking params annotation and seq_region
   unless params[:annotation] and
              params[:seq_region] and
@@ -39,8 +39,8 @@ class BrowserController < ApplicationController
   seq_begin = sequence_region.seq_begin
   seq_end  = sequence_region.seq_end
 
-  redirect_params = params.clone 
-  
+  redirect_params = params.clone
+
   unless params[:start_pos] and params[:end_pos]
    redirect_params[:start_pos] = seq_begin
    redirect_params[:end_pos] = seq_end

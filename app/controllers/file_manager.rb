@@ -4,7 +4,7 @@ module FileManager
   @annotation = Annotation.new
   @annotation.name = params[:gff3_file].original_filename
   @annotation.user_id = session[:user]
-  @annotation.description = params[:description] 
+  @annotation.description = params[:description]
   @annotation.gff3_data = params[:gff3_file].read
   if @annotation.save
    flash[:notice] = "Successfully uploaded"

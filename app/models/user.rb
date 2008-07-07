@@ -2,68 +2,68 @@ class User < ActiveRecord::Base
 
   ### associations ###
   has_many :annotations, :dependent => :destroy
-  
+
   # configuration objects: if not existing, standard configuration will be used
   # => see config method
   has_one  :drawing_format_configuration, :dependent => :destroy
   has_one  :collapsing_configuration,     :dependent => :destroy
   has_many :color_configurations,         :dependent => :destroy
   has_many :feature_style_configurations, :dependent => :destroy
-  has_many :domination_configurations,    :dependent => :destroy 
-  
+  has_many :domination_configurations,    :dependent => :destroy
+
   ### validations ###
-  
+
   # email
   validates_presence_of :email, :message => "Please enter your email address"
-  validates_uniqueness_of :email, 
+  validates_uniqueness_of :email,
         :message => "This account already exists. Please choose another one."
-  validates_length_of :email, :maximum => 64, 
+  validates_length_of :email, :maximum => 64,
           :too_long => "The entered email address is too long (max 64 chars)"
-  validates_format_of :email, 
-                      :with => /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i, 
+  validates_format_of :email,
+                      :with => /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}/i,
                       :message => 'Email address invalid'
-  
+
   # name
   validates_presence_of :name, :message => "Please enter your full name"
-  validates_length_of :name, 
-              :in => 4..64, 
+  validates_length_of :name,
+              :in => 4..64,
               :too_short => "Your name should be at least %d characters long",
               :too_long => "Please enter a name shorter than %d characters"
-  
+
   # password
   validates_presence_of :password, :message => "Please choose a password"
-  validates_confirmation_of :password, 
+  validates_confirmation_of :password,
                             :message => "You entered two different passwords!"
-  
+
   ### virtual attributes ###
-  
-  # returns the desired image width 
+
+  # returns the desired image width
   def width(default = 800)
-     drawing_format_configuration ?	
+     drawing_format_configuration ?
         drawing_format_configuration.width :
         default
   end
-  
+
   # returns a GT::Config object with the personalisations for this user
   def config
-    c = GTServer.new_config_object 
+    c = GTServer.new_config_object
     # load default configuration
-    c.load_file(File.expand_path("config/view.lua"))
+    c.load_file(File.expand_path("config/view.lua", RAILS_ROOT))
     # load user specific configurations
-    load_user_colors_in(c) 
-    load_user_styles_in(c) 
+    load_user_colors_in(c)
+    load_user_styles_in(c)
     load_user_formats_in(c)
     load_user_dominates_in(c)
     load_user_collapses_in(c)
     return c
   end
-  
+
   private
-  
+
   ### helper functions for config ###
-  
+
   def load_user_colors_in(config_object)
-    color_configurations.each do |conf|    
+    color_configurations.each do |conf|
       color = GTServer.new_color_object
       color.red = conf.red.to_f
       color.green = conf.green.to_f
@@ -79,41 +79,41 @@ class User < ActiveRecord::Base
                              record.style.name)
     end
   end
-  
+
   def load_user_formats_in(config_object)
     return unless drawing_format_configuration
     dfc = drawing_format_configuration
     # set show_grid
     show_grid = dfc.show_grid ? "yes" : "no"
     config_object.set_cstr("format",
-                           "show_grid", 
+                           "show_grid",
                            show_grid)
-    # set all other format attributes 
+    # set all other format attributes
     dfc.pixel_attribute_names.each do |attr|
       c.set_num("format",
                 attr,
                 dfc.send(attr).to_f)
     end
   end
-  
+
   def load_user_dominates_in(config_object)
     domination_configurations.each do |conf|
       unless conf.dominated_features.empty?
         dfs = conf.dominated_features.map(&:feature_class).map(&:name)
-        config_object.set_cstr_list("dominate", 
-                                    conf.dominator.name, 
+        config_object.set_cstr_list("dominate",
+                                    conf.dominator.name,
                                     dfs)
       else
         config_object.set_cstr_list("dominate", conf.dominator.name, [])
       end
     end
   end
-  
+
   def load_user_collapses_in(config_object)
     return unless collapsing_configuration
-    config_object.set_cstr_list("collapse", 
-                                "to_parent", 
+    config_object.set_cstr_list("collapse",
+                                "to_parent",
                                 collapsing_configuration.to_parent)
-  end 
+  end
 
 end

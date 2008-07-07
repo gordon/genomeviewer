@@ -2,6 +2,7 @@
 $: << ENV['GTRUBY']
 
 require 'drb'
+require 'drb/timeridconv'
 require 'gtruby'
 
 ##
@@ -16,6 +17,7 @@ class GTServer
  #
  def initialize
   puts "Initializing GT DRB server"
+  STDOUT.flush
   @mutex = Mutex.new
   @feature_indices = Hash.new
  end
@@ -82,7 +84,8 @@ class GTServer
   puts "- #{File.basename(filename)}, "
   puts "- seq_id: #{sequence_region},  "
   puts "- range: #{start_pos} - #{end_pos}"
-       
+  STDOUT.flush
+
   feature_index=get_feature_index_for_file(filename, :add_introns => add_introns)
 
   range = feature_index.get_range_for_seqid(sequence_region)
@@ -93,6 +96,7 @@ class GTServer
 
   render = GT::Render.new(config)
   puts "- streaming..."
+  STDOUT.flush
   return render.to_png_stream(diagram, width)
  end
 
@@ -110,6 +114,10 @@ class GTServer
   end
  end
 
+ def test_call()
+   puts "tast_call() called"
+   return "test_call() return value"
+ end
 
  private
  # options:
@@ -117,33 +125,37 @@ class GTServer
  # :add_introns => true  : turns on add_introns feature [default: false]
  def get_feature_index_for_file(filename, options = {})
   @mutex.synchronize do # avoid concurrent @feature_indices accesses
-   
-   if @feature_indices.has_key?(filename) 
+
+   if @feature_indices.has_key?(filename)
     # If a featureindex for the file is in memory return it
     puts "-- using cached feature index"
+    STDOUT.flush
     feature_index = @feature_indices[filename]
     if options[:delete_cache]
       puts "-- deleting cached feature index"
+      STDOUT.flush
       return @feature_indices.delete(filename)
     else
       return feature_index
     end
-    
+
    else
-     
+
     # If there is no featureindex in memory create one
     puts "-- new feature index"
-     
+    STDOUT.flush
+
     in_stream = GT::GFF3InStream.new(filename)
-    
-    if options[:add_introns] 
+
+    if options[:add_introns]
      puts "-- adding introns to in_stream"
+     STDOUT.flush
      add_introns_stream = GT::AddIntronsStream.new(in_stream)
      in_stream = add_introns_stream
     end
-    
+
     feature_index = GT::FeatureIndex.new
-    
+
     feature_stream = GT::FeatureStream.new(in_stream, feature_index)
 
     gn = feature_stream.next_tree
@@ -151,10 +163,12 @@ class GTServer
      gn = feature_stream.next_tree
     end
     puts "-- populated feature_stream"
+    STDOUT.flush
 
     unless options[:delete_cache]
-      @feature_indices[filename] = feature_index 
+      @feature_indices[filename] = feature_index
       puts "-- saved feature_index in cache"
+      STDOUT.flush
     end
     return feature_index
    end
@@ -163,7 +177,10 @@ class GTServer
 
 end
 
+DRb.install_id_conv(DRb::TimerIdConv.new) # keep objects on server alive
 DRb.start_service("druby://:7777", GTServer.new)
 puts "GT DRB server running"
+STDOUT.flush
 DRb.thread.join
 puts "GT DRB server shut down"
+STDOUT.flush

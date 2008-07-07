@@ -31,7 +31,7 @@ class InSessionController < ApplicationController
     flash[:errors] = "Impossible to create #{fc.name}.<br/>Does it already exist?"
   end
   redirect_to :action => :create_feature_class
- end 
+ end
 
  private
 

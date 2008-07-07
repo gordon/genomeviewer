@@ -2,4 +2,4 @@ uploads
 tmp
 log
 test/uploads
-
+*.swp

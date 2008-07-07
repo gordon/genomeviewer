@@ -39,6 +39,9 @@ Rails::Initializer.run do |config|
   # config.log_level = :debug
   
   # rotate logs
+  # <<< this version should work, if still causing problems
+  #     disable it again
+
   config.logger = Logger.new("#{RAILS_ROOT}/log/#{ENV['RAILS_ENV']}.log", 
                              10, # number of old logs to keep
                              1048576) # size of each log
