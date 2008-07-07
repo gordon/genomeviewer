@@ -11,6 +11,8 @@ gff3_file = ARGV[0]
 DRb.start_service
 GTServer = DRbObject.new(nil, 'druby://localhost:7777')
 
+puts GTServer.test_call()
+
 errormsg = GTServer.validate_file(gff3_file)
 if errormsg then
   raise "Error: #{errormsg}"
@@ -23,4 +25,7 @@ seqids.each do |seq_id|
   range = GTServer.get_range_for_sequence_region(gff3_file, seq_id)
   png_stream = GTServer.get_image_stream(gff3_file, seq_id, range.start,
                                          range.end, config, 800, false)
+  puts "png_stream.size=" + png_stream.size.to_s
 end
+
+puts GTServer.test_call()

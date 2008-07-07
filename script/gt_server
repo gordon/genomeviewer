@@ -114,6 +114,10 @@ class GTServer
   end
  end
 
+ def test_call()
+   puts "tast_call() called"
+   return "test_call() return value"
+ end
 
  private
  # options:
