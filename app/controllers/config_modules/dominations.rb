@@ -1,4 +1,4 @@
-module Config::Dominations
+module ConfigModules::Dominations
 
   def config_dominations
     @dominations = DominationConfiguration.defaults

@@ -1,4 +1,4 @@
-module Config::Collapse
+module ConfigModules::Collapse
 
   def config_collapse
     user = User.find(session[:user])

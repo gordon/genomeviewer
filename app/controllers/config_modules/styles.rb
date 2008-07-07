@@ -1,4 +1,4 @@
-module Config::Styles
+module ConfigModules::Styles
 
   def config_styles
     user = User.find(session[:user])

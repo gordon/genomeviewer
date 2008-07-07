@@ -1,4 +1,4 @@
-module Config::Colors
+module ConfigModules::Colors
 
   def config_colors
     user = User.find(session[:user])

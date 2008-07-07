@@ -4,11 +4,11 @@ class InSessionController < ApplicationController
 
  include FileManager
  
- include Config::Formats
- include Config::Colors
- include Config::Styles
- include Config::Dominations
- include Config::Collapse
+ include ConfigModules::Formats
+ include ConfigModules::Colors
+ include ConfigModules::Styles
+ include ConfigModules::Dominations
+ include ConfigModules::Collapse
 
  def check_login
   unless session[:user]

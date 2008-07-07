@@ -1,4 +1,4 @@
-module Config::Formats
+module ConfigModules::Formats
 
   def config_formats
     user = User.find(session[:user])
