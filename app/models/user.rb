@@ -48,7 +48,7 @@ class User < ActiveRecord::Base
   def config
     c = GTServer.new_config_object
     # load default configuration
-    c.load_file(File.expand_path("config/view.lua"))
+    c.load_file(File.expand_path("config/view.lua", RAILS_ROOT))
     # load user specific configurations
     load_user_colors_in(c)
     load_user_styles_in(c)
