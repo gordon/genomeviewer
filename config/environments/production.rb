@@ -22,4 +22,4 @@ config.action_view.cache_template_loading            = true
 # config.action_mailer.raise_delivery_errors = false
 
 # folder where to save gff3 files
-$GFF3_STORAGE_PATH = "/genomeviewer_user_files"
+$GFF3_STORAGE_PATH = "/var/www/genomeviewer_user_files"
