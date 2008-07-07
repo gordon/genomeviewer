@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 14) do
+ActiveRecord::Schema.define(:version => 15) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -85,12 +85,14 @@ ActiveRecord::Schema.define(:version => 14) do
   end
 
   create_table "users", :force => true do |t|
-    t.string "password",    :limit => 40, :default => "", :null => false
-    t.string "name",        :limit => 64, :default => "", :null => false
-    t.string "email",       :limit => 64, :default => "", :null => false
-    t.string "institution",               :default => ""
-    t.string "url",                       :default => ""
+    t.string  "password",                 :limit => 40, :default => "", :null => false
+    t.string  "name",                     :limit => 64, :default => "", :null => false
+    t.string  "email",                    :limit => 64, :default => "", :null => false
+    t.string  "institution",                            :default => ""
+    t.string  "url",                                    :default => ""
+    t.integer "public_annotations_count",               :default => 0,  :null => false
   end
-  
-  require "db/schema_extra.rb" 
+
+  require 'db/schema_extra.rb'
+
 end

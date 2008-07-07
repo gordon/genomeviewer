@@ -35,10 +35,20 @@ module FileManager
 
  def file_accessibility
   annotation=Annotation.find(params[:annotation].to_i)
+  user=User.find(session[:user])
   # prevent others from modifying own data
-  if annotation.user.id == session[:user]
-   annotation.public=params.has_key?(:public)
-   annotation.save
+  if annotation.user == user
+   previously_public = annotation.public
+   annotation.public = params.has_key?(:public)
+     if annotation.public
+      user.increment(public_annotations_count) unless previously_public        
+     else # private
+      user.decrement(public_annotations_count) if previously_public
+     end
+   ActiveRecord::Base.transaction do 
+     user.save
+     annotation.save
+    end
   end
   redirect_to :action => "file_manager"
  end
