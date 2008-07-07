@@ -14,7 +14,7 @@ class PublicUsersController < ApplicationController
             
     config.list.sorting = { :public_annotations_count => :desc } 
 
-    config.nested.add_link "Show Annotations", [:public_annotations]
+    config.nested.add_link "Show Annotations", [:annotations]
     
   end
   
@@ -22,4 +22,9 @@ class PublicUsersController < ApplicationController
     "public_annotations_count > 0"
   end
   
+  def self.active_scaffold_controller_for(klass)
+    return PublicAnnotationsController if klass==Annotation
+    super
+  end
+   
 end
