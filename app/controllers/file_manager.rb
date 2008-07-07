@@ -41,9 +41,9 @@ module FileManager
    previously_public = annotation.public
    annotation.public = params.has_key?(:public)
      if annotation.public
-      user.increment(public_annotations_count) unless previously_public        
+      user.increment(:public_annotations_count) unless previously_public        
      else # private
-      user.decrement(public_annotations_count) if previously_public
+      user.decrement(:public_annotations_count) if previously_public
      end
    ActiveRecord::Base.transaction do 
      user.save
