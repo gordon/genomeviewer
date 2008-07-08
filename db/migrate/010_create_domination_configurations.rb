@@ -3,10 +3,10 @@ class CreateDominationConfigurations < ActiveRecord::Migration
     create_table :domination_configurations do |t|
       t.belongs_to :user
       t.references :dominator
-    end 
-  end 
+    end
+  end
 
-  def self.dow
+  def self.down
     drop_table :domination_configurations
   end
 end
