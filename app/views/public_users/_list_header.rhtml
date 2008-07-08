@@ -1,0 +1,6 @@
+<div class="actions">
+<%= link_to image_tag('icons/all_users.png', :size=> "16x16", :style => "border:none")+" All Users", 
+                :controller => :public_annotations%>
+</div>
+<h1><%= active_scaffold_config.list.user.label %></h1>
+<div class="show_search-view view"><%= render :partial => "live_search"%></div>
