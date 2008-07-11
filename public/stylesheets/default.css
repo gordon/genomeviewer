@@ -67,11 +67,11 @@ div.figure div.subfigure {
 
 /* Forms */
 
-input.nice {
+.nice {
   padding: 2px;
-  border: 1px solid black;
+  border: 1px solid darkgray;
 }
-input.nice:focus {
+.nice:focus {
   background-color: #FFFFCC;
 }
 
