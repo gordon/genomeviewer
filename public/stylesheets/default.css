@@ -64,3 +64,14 @@ div.figure div.subfigure {
   float: left;
   margin:12px;
 }
+
+/* Forms */
+
+input.nice {
+  padding: 2px;
+  border: 1px solid black;
+}
+input.nice:focus {
+  background-color: #FFFFCC;
+}
+

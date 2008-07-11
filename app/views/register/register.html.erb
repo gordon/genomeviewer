@@ -1,28 +1,60 @@
-<h1>Register</h1>
+<h1>Create a new account</h1>
 <% form_tag :action => "do_register" do%>
-<table>
- <tr>
-  <td>Your E-Mail Address:</td>
-  <td><%= text_field 'user', :email, :maxlength=>64, :size=>24 %></td>
-  <td><%=error_message_on :user, :email%></td>
- </tr>
- <tr>
-  <td>Your Name:</td>
-  <td><%= text_field 'user', 'name', :maxlength=>64, :size=>24 %></td>
-  <td><%=error_message_on :user, :name%></td>
- </tr>
- <tr>
-  <td>Your Password:</td>
-  <td><%= password_field 'user', :password, :maxlength=>64, :size=>24 %></td>
-  <td><%=error_message_on :user, :password%></td>
- </tr>
- <tr>
-  <td>Retype Password:</td>
-  <td><%= password_field 'user', :password_confirmation, 
-                                 :maxlength=>64, :size=>24 %></td>
-  <td><%# empty table cell %></td>
- </tr>
- <tr>
-  <td colspan="3"><%= submit_tag "Register" %></td></tr>
-</table>
+  <table>
+    <tr>
+      <td colspan=3>Your e-mail address is used as a login name and will be kept absolutely confidential. </td>
+    </tr>
+    <tr>
+      <td colspan=3>It will be used for confirmation of your account registration and in case you forget your password. </td>
+    </tr>
+    <tr>
+      <td colspan=3>You will not receive any unwanted e-mail from us.</td>
+    </tr>
+    <tr>
+      <td>E-Mail address (*):</td>
+      <td><%= text_field 'user', :email, :maxlength=> 64, :size=> 48, :class => "nice" %></td>
+      <td><%=error_message_on :user, :email%></td>
+    </tr>
+    <tr><td colspan=3>&nbsp;</td></tr>
+    <tr>
+      <td colspan=3>Personal information (will be rendered public if you publish any of your uploaded files).</td>
+    </tr>
+    <tr>
+      <td>Full Name (*):</td>
+      <td><%= text_field 'user', 'name', :maxlength=> 64, :size=> 48, :class => "nice"  %></td>
+      <td><%=error_message_on :user, :name%></td>
+    </tr>
+    <tr>
+      <td>Your Institution:</td>
+      <td><%= text_field 'user', 'institution', :size=> 48, :class => "nice"  %></td>
+      <td/>
+    </tr>
+    <tr>
+      <td>Your Homepage:</td>
+      <td><%= text_field 'user', 'url', :size=> 48, :class => "nice"  %></td>
+      <td/>
+    </tr>
+    <tr><td colspan=3>&nbsp;</td></tr>
+    <tr>
+      <td colspan=3>Password</td>
+    </tr>
+    <tr>
+      <td>Enter your Password (*):</td>
+      <td><%= password_field 'user', :password, :maxlength=> 64, :size=> 24, :class => "nice"  %></td>
+      <td><%=error_message_on :user, :password%></td>
+    </tr>
+    <tr>
+      <td>Retype Password (*):</td>
+      <td><%= password_field 'user', :password_confirmation, 
+                                   :maxlength=> 64, :size=> 24, :class => "nice"  %></td>
+      <td/>
+    </tr>
+    <tr>
+      <td colspan=3><%= submit_tag "Register" %></td>
+    </tr>
+    <tr colspan=2><td colspan=3>&nbsp;</td></tr>
+    <tr>
+      <td colspan=3>(*) Required field</td>
+    </tr>
+  </table>
 <% end %>
