@@ -9,8 +9,8 @@ stylesheet_link_tag("browser")
 <% form_tag('browser', :id=>"regselect", :method => :get) do %>
 <%= hidden_field_tag 'annotation', params[:annotation] %>
 <%= hidden_field_tag 'seq_region', params[:seq_region] %>
-Start:<%= text_field_tag 'start_pos', params[:start_pos], :size => 10 %>
-End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10 %>
+Start:<%= text_field_tag 'start_pos', params[:start_pos], :size => 10, :class => "nice" %>
+End:<%= text_field_tag 'end_pos', params[:end_pos], :size => 10, :class => "nice" %>
 <%= submit_tag  "Go" %>
 <% end %>
 

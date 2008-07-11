@@ -9,13 +9,15 @@
       <td>Email:</td>
       <td><%= text_field_tag "email", 
               nil, # (default value)
-              :maxlength=>64 %></td>
+              :maxlength=>64,
+              :class => "nice"              %></td>
     </tr>
     <tr>
       <td>Password:</td>
       <td><%= password_field_tag "password", 
               nil, # (default value)
-              :maxlength=>64 %></td>
+              :maxlength=>64,
+              :class => "nice"              %></td>
     </tr>
     <tr>
       <td colspan="2"><%=submit_tag "Login"%></td>

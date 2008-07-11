@@ -11,7 +11,8 @@
     <tr>
       <td><%= element %></td>
       <% [:red, :green, :blue].each do |rgb| %>
-        <td> <%=rgb.to_s%> <%= text_field_tag "colors[#{element}][#{rgb}]", color[rgb], :size => 3 %></td>
+        <td> <%=rgb.to_s%> <%= text_field_tag "colors[#{element}][#{rgb}]", color[rgb], 
+                    :size => 3, :class => "nice" %></td>
       <% end %>
       <td><%= link_to "Reset", :action => :reset_color, :element => element%></td>
     </tr>
@@ -28,8 +29,7 @@
     <p>Other feature classes: (default value: 0.8 for red, green and blue) <br/>
     <%= collection_select :feature_class, :id, @not_configured, :id, :name %>
     <%= submit_tag "Configure colors" %></p>
-    
-    
+        
   <% end %>
 <% end %>
 

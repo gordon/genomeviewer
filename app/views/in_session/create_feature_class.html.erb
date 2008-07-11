@@ -15,7 +15,7 @@ class will be available for configuration for all users of this website.</p>
 
 <% form_tag({:action=>"do_create_feature_class"}) do %>
 
-  <%= text_field_tag "feature_class[name]", "" %> 
+  <%= text_field_tag "feature_class[name]", "", :class => "nice" %> 
 
   <%= submit_tag "Create"%>
 

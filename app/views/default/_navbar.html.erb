@@ -5,12 +5,14 @@
   <li><%= text_field_tag "email", 
                               nil, # (default value)
                               :maxlength => 64,
-                              :size => 20%></li>
+                              :size => 20,
+                              :class => "nice" %></li>
   <li>Password:</li>
   <li><%= password_field_tag "password", 
                                     nil, # (default value)
                                     :maxlength => 64,
-                                    :size => 20%></li>
+                                    :size => 20,
+                                    :class => "nice" %></li>
   <li><%=check_box_tag "stay_logged"%>Remember me</li>
   <li><%=submit_tag "Login"%></li>
 <% end %>

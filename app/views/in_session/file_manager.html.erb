@@ -20,7 +20,8 @@
         <%= hidden_field_tag 'annotation', annotation.id %>
         <%= text_area_tag "description", 
                         annotation.description, 
-                        :size => "50x5"%>
+                        :size => "50x5",
+                        :class => "nice" %>
         <br/>
         <%= submit_tag  "Save description" %>
       <% end %>
