@@ -21,6 +21,10 @@ ActionController::Routing::Routes.draw do |map|
                         :controller => "register", 
                         :action => "register"
   
+  map.recover_password 'recover_password',
+                        :controller => "register",
+                        :action => "recover_password"
+  
   map.upload 'upload',
                     :controller => "in_session", 
                     :action=> "upload"
