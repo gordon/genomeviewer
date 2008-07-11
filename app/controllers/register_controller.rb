@@ -12,8 +12,11 @@ class RegisterController < ApplicationController
     # try to save
     if @user.save
       # if successful:
+      # send a signup notification
+      UserMailer.deliver_signup_notification_to(@user)
       # go to the login page, displaying a success message
-      flash[:notice] = "Registration successful, you can login now."
+      flash[:notice] = "Registration successful, you can login now.<br/>
+                   A signup notification email has been sent to #{@user.email}."
       redirect_to login_url
     else
       # back to the form if there was a problem
