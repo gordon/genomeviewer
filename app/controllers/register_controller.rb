@@ -36,7 +36,7 @@ class RegisterController < ApplicationController
     flash[:email]=params[:user][:email]
     @user = User.find_by_email(params[:user][:email])
     if @user
-      PasswordRecovery.deliver_password_recovery_email_to(@user)
+      UserMailer.deliver_password_recovery_email_to(@user)
       redirect_to :action => :password_recovery_email_sent
     else
       flash[:errors]="Sorry, no user was registered under this email address."

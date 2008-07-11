@@ -1,11 +1,11 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class PasswordRecoveryTest < ActionMailer::TestCase
-  tests PasswordRecovery
+class UserMailerTest < ActionMailer::TestCase
+  tests UserMailer
   
-  def test_email_delivery
+  def test_password_recovery
     assert_no_emails
-    PasswordRecovery.deliver_password_recovery_email_to(user_for_testing)
+    UserMailer.deliver_password_recovery_email_to(user_for_testing)
     assert_emails 1
   end
   

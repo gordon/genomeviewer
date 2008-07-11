@@ -1,4 +1,4 @@
-class PasswordRecovery < ActionMailer::Base
+class UserMailer < ActionMailer::Base
   
   def password_recovery_email_to(user)
     recipients  user.email
