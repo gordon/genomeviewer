@@ -21,6 +21,28 @@ class RegisterController < ApplicationController
       redirect_to :action => :register
     end
   end
+  
+  def recover_password
+    @title = "Genomeviewer - Password Recovery"
+    @user = User.new(:email => flash[:email])
+  end
+  
+  def password_recovery_email_sent
+    @title = "Genomeviewer - Password Recovery"
+    @user = User.find_by_email(flash[:email])
+  end
+  
+  def send_password_recovery_email
+    flash[:email]=params[:user][:email]
+    @user = User.find_by_email(params[:user][:email])
+    if @user
+      PasswordRecovery.deliver_password_recovery_email_to(@user)
+      redirect_to :action => :password_recovery_email_sent
+    else
+      flash[:errors]="Sorry, no user was registered under this email address."
+      redirect_to :action => :recover_password
+    end
+  end
 
   private
 
