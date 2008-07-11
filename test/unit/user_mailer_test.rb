@@ -9,6 +9,12 @@ class UserMailerTest < ActionMailer::TestCase
     assert_emails 1
   end
   
+  def test_signup_notification
+    assert_no_emails
+    UserMailer.deliver_signup_notification_to(user_for_testing)
+    assert_emails 1
+  end
+  
   def user_for_testing
     @user ||= User.create(:name => "Test Person",
                                      :email => "test@test.test",

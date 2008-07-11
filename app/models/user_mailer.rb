@@ -7,4 +7,11 @@ class UserMailer < ActionMailer::Base
     body        :user => user
   end
 
+  def signup_notification_to(user)
+    recipients  user.email
+    from        "signup_notification@genomeviewer.org"
+    subject     "Genomeviewer: Thank you for registering"
+    body        :user => user
+  end
+
 end
