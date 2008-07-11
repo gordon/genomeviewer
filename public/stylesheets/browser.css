@@ -45,26 +45,3 @@ body {
  background-repeat:no-repeat;
 }
 
-#main .seq_id {
-  list-style-type: none;
-  border : 1px solid black;
-  display: block;
-  padding: 0px 7px 0px 7px;
-  text-decoration: none;
-  background: rgb(60%, 60%, 90%);
-  color: white;
-}
-
-#main .seq_id:link {
-  color: white;
-  background: rgb(60%, 60%, 90%);
-}
-
-#main .seq_id:hover {
-  color: gray;
-  background: rgb(90%, 90%, 20%);
-}
-
-#main .seq_id:visited {
-  color: white;
-}

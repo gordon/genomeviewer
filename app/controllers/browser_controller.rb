@@ -12,7 +12,6 @@ class BrowserController < ApplicationController
 
  def seq_id_select
   partial = session[:user] ? "/in_session/navbar" : "/default/navbar"
-  @stylesheets = ["in_session", "browser"]
   @navbar = (render_to_string :partial => partial)
   @annotation = Annotation.find(params[:annotation])
   @sequence_regions = @annotation.sequence_regions
@@ -87,12 +86,6 @@ class BrowserController < ApplicationController
                   :type => "image/png",
                   :disposition => "inline",
                   :filename => "#{annotation.name}_#{sequence_region.seq_id}.png"
- end
-
- private
-
- def initialize
-  @stylesheets = "in_session"
  end
 
 end

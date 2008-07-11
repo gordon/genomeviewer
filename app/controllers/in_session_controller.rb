@@ -33,10 +33,4 @@ class InSessionController < ApplicationController
   redirect_to :action => :create_feature_class
  end
 
- private
-
- def initialize
-  @stylesheets = "in_session"
- end
-
 end

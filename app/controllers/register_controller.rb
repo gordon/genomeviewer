@@ -51,8 +51,6 @@ class RegisterController < ApplicationController
 
   def initialize
     @title = "Genomeviewer - User Registration"
-    # load the stylesheet to format errors in forms
-    @stylesheets = 'form_errors'
     super
   end
 
