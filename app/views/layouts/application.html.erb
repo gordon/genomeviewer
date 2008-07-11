@@ -13,7 +13,7 @@
   <%= active_scaffold_includes %>
  </head>
  <body>
-  <div id="menu"><%= include_navbar %></div>
+  <div id="menu"><%= render :partial => "shared/sidemenu" %></div>
   <div id="main"><%= yield %></div>
  </body>
 </html>
