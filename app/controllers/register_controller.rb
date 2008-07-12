@@ -30,9 +30,9 @@ class RegisterController < ApplicationController
       # send a signup notification
       UserMailer.deliver_signup_notification_to(@user)
       # go to the login page, displaying a success message
-      flash[:notice] = "Registration successful, you can login now.<br/>
-                   A signup notification email has been sent to #{@user.email}."
-      redirect_to login_url
+      flash[:info] = "Thank you for registering.<br/>
+                A signup notification email has been sent to #{@user.email}."
+      redirect_to login_url(:user => params[:user])
     else
       # back to the form if there was a problem
       flash[:user] = @user
