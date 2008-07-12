@@ -1,8 +1,6 @@
-<h1>Configuration</h1>
-
 <% form_tag({:action=>"do_config_styles"}) do %>
 
-  <h2>Styles</h2>
+  <h2><%= @subtitle %></h2>
 
   <table>
   <% @styles.each_pair do |element, style_name| %>

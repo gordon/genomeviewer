@@ -1,5 +1,7 @@
 module ConfigModules::Styles
-
+  
+  ### actions with a template ###
+  
   def config_styles
     user = User.find(session[:user])
     @styles = FeatureStyleConfiguration.defaults 
@@ -11,7 +13,11 @@ module ConfigModules::Styles
     (FeatureClass.find(:all).map(&:name) - @styles.keys).each do |fc|
       @not_configured << FeatureClass.find_by_name(fc)
     end
+    @title = "Configuration"
+    @subtitle = "Styles"
   end
+  
+  ### actions redirecting to other actions ###
   
   def do_config_styles
     user = User.find(session[:user])
