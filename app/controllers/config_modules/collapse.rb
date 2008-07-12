@@ -1,5 +1,7 @@
 module ConfigModules::Collapse
 
+  ### action with a template ###
+
   def config_collapse
     user = User.find(session[:user])
     @collapse = 
@@ -8,11 +10,14 @@ module ConfigModules::Collapse
       else 
         CollapsingConfiguration.default
       end
-    p user.collapsing_configuration
     @not_collapsing = 
       FeatureClass.find(:all).delete_if {|fc| @collapse.include? fc.name}
+    @title = "Configuration"
+    @subtitle = "Collapsing to parent"
   end
-    
+  
+  ### actions redirecting to other actions ###
+  
   def collapse_remove
     user = User.find(session[:user])
     unless user.collapsing_configuration
