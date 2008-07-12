@@ -1,5 +1,7 @@
 module ConfigModules::Colors
 
+  ### actions with a template ###
+
   def config_colors
     user = User.find(session[:user])
     @colors = ColorConfiguration.defaults 
@@ -21,7 +23,11 @@ module ConfigModules::Colors
         @colors.delete(element_name) if gray_feature
       end
     end
+    @title = "Configuration"
+    @subtitle = "Colors"
   end
+  
+  ### actions redirecting to other actions ###
   
   def add_color_config
     user = User.find(session[:user])
