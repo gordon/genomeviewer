@@ -1,0 +1,2 @@
+module PublicUsersHelper
+end
