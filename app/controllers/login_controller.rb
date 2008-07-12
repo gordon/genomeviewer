@@ -9,7 +9,6 @@ class LoginController < ApplicationController
   ### actions redirecting to other actions ###
 
   def do_login
-    #hashed_password = Digest::SHA1.hexdigest(params[:password])
     user = User.find_by_email_and_password(params[:email], params[:password])
     if user
       session[:user]=user.id
