@@ -1,0 +1,2 @@
+class OwnAnnotationsController < ApplicationController
+end
