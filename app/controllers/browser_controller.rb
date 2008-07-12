@@ -3,11 +3,12 @@ class BrowserController < ApplicationController
  prepend_before_filter :check_permissions
 
  def check_permissions
-   if Annotation.find(params[:annotation]).public == false and
-      Annotation.find(params[:annotation]).user.id != session[:user].to_i then
-    render :text => "<html><h1>NOT AUTHORIZED</h1></html>";
+   @annotation = Annotation.find(params[:annotation])
+   if !@annotation.public and
+      @annotation.user.id != session[:user].to_i
+     flash[:errors] = "Private annotations can be browsed only by their owners."
+     redirect_to :controller => :default, :action => :index
    end
-
  end
 
  def seq_id_select
