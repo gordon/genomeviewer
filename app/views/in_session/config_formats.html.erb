@@ -1,8 +1,6 @@
-<h1>Configuration</h1>
-
 <% form_tag({:action=>"do_config_formats"}) do %>
 
-  <h2>Drawing Formats</h2>
+  <h2><%= @subtitle %></h2>
 
   <table>
   <% @formats.pixel_attribute_names.each do |attr| %>
