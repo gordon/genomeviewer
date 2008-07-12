@@ -1,8 +1,12 @@
 class LoginController < ApplicationController
 
+  ### actions with a template ###
+
   def login
-    @title="GenomeViewer - Login"
+    @title="Login"
   end
+
+  ### actions redirecting to other actions ###
 
   def do_login
     #hashed_password = Digest::SHA1.hexdigest(params[:password])
