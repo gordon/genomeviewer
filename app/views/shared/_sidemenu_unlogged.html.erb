@@ -1,6 +1,7 @@
 <ul>
 <% form_tag({:controller => "login",
-                              :action=>"do_login"}) do %>
+                    :action=>"do_login",
+                    :back_to => params}) do %>
   <li>Email:</li>
   <li><%= text_field_tag "email", 
                               nil, # (default value)

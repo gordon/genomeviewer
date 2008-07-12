@@ -11,16 +11,13 @@ class InSessionController < ApplicationController
  include ConfigModules::Collapse
 
  def check_login
-  unless session[:user]
-   redirect_to login_url
-   session[:location]=params.clone
-  end
+  redirect_to root_url unless session[:user]
   return true
  end
 
  def do_logout
   session[:user]=nil
-  redirect_to root_url
+  redirect_to params[:back_to]
  end
 
  def do_create_feature_class

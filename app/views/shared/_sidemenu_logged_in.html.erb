@@ -1,5 +1,5 @@
 <ul>
- <li><%= link_to("Logout", logout_url) %></li>
+ <li><%= link_to("Logout", logout_url(:back_to => params)) %></li>
  <li><%= link_to("Configuration", configuration_url) %></li>
  <li><%= link_to("Upload GFF3", upload_url) %></li>
  <li><%= link_to("Manage Files", own_files_url) %></li>
