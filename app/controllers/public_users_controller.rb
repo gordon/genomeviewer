@@ -2,7 +2,6 @@ class PublicUsersController < ApplicationController
   
   active_scaffold :user do |config|
     
-    config.label = "Public Annotations: Users"
     config.columns = [:name, :institution, :url, :public_annotations_count]
     config.columns[:public_annotations_count].label = "Public Annotations"
     config.columns[:url].label = "Homepage"
@@ -27,4 +26,11 @@ class PublicUsersController < ApplicationController
     super
   end
 
+  private
+  
+  def initialize
+    @title = "Public Annotations: Users"
+    super
+  end
+  
 end

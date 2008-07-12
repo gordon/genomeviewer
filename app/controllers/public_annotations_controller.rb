@@ -2,7 +2,7 @@ class PublicAnnotationsController < ApplicationController
 
   active_scaffold :annotations do |config|
     
-    config.label = "Public Annotations"
+    config.label = @title
     
     config.columns = [:name, :description, :user, :sequence_regions]
     
@@ -28,4 +28,11 @@ class PublicAnnotationsController < ApplicationController
     super
   end
  
+  private
+  
+  def initialize
+    @title = "Public Annotations"
+    super
+  end
+  
 end
