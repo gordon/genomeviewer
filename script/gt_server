@@ -12,169 +12,170 @@ require 'gtruby'
 #
 class GTServer
 
- ##
- # Creates a GTServer instance
- #
- def initialize
-  puts "Initializing GT DRB server"
-  STDOUT.flush
-  @mutex = Mutex.new
-  @feature_indices = Hash.new
- end
-
- ##
- # Returns sequence region identifiers of a gff3 file
- # @param filename Path to a gff3 file
- # @return The sequence regions contained in filename
- #
- def get_sequence_regions(filename)
-  feature_index=get_feature_index_for_file(filename)
-  return feature_index.get_seqids
- end
-
- ##
- # Returns a range of a sequence region
- # @param filename Path to a gff3 file
- # @param sequence_region A sequence region identifier
- # @return The range that belongs to the given sequence region
- #
- def get_range_for_sequence_region(filename, sequence_region)
-  feature_index=get_feature_index_for_file(filename)
-  range = feature_index.get_range_for_seqid(sequence_region)
-  return [range.start, range.end]
- end
-
- ##
- # Returns a Config object
- # Config objects that should be used with get_image_stream must be
- # created with this function. They can not be created on the
- # GTServer's client because Config objects can not be moved from
- # a client to this server.
- # @return a config Object
- #
- def new_config_object
-  return GT::Config.new
- end
-
- ##
- # Returns a Color object
- # Color objects that should be used in Config Objects must be
- # created with this function. They can not be created on the
- # GTServer's client because Color objects can not be moved from
- # a client to this server.
- # @return a Color Object
- #
- def new_color_object
-  return GT::Color.malloc
- end
-
- ##
- # This function ouputs an image as a png stream
- # If the oputupt is written in a file the file is a valid png file.
- # @param filename Path to a gff3 file
- # @param sequence_region A sequence region identifier
- # @param start_pos A start position
- # @param end_pos An end position
- # @param config A Config object created with get_config_object
- # @param width width of the output image
- # @param add_introns switch add_introns genometools functionality
- # @return A png stream
- #
- def get_image_stream(filename, sequence_region, start_pos, end_pos, config, width, add_introns)
-  puts "Requested image stream for:"
-  puts "- #{File.basename(filename)}, "
-  puts "- seq_id: #{sequence_region},  "
-  puts "- range: #{start_pos} - #{end_pos}"
-  STDOUT.flush
-
-  feature_index=get_feature_index_for_file(filename, :add_introns => add_introns)
-
-  range = feature_index.get_range_for_seqid(sequence_region)
-  range.start = start_pos
-  range.end = end_pos
-
-  diagram = GT::Diagram.new(feature_index, sequence_region, range, config)
-
-  render = GT::Render.new(config)
-  puts "- streaming..."
-  STDOUT.flush
-  return render.to_png_stream(diagram, width)
- end
-
- ##
- # Validates a gff3 file
- # @param filename Path to a gff3 file
- # @return nil if file is a valid gff3 file, an error describing string otherwise.
- #
- def validate_file(filename)
-  begin
-   get_feature_index_for_file(filename, :delete_cache => true)
-   return nil
-  rescue => error
-   return error.to_s
+  ##
+  # Creates a GTServer instance
+  #
+  def initialize
+    puts "Initializing GT DRB server"
+    STDOUT.flush
+    @mutex = Mutex.new
+    @feature_indices = Hash.new
   end
- end
 
- def test_call()
-   puts "tast_call() called"
-   return "test_call() return value"
- end
-
- private
- # options:
- # :delete_cache => true : empty the cache for this feature_index [default: false]
- # :add_introns => true  : turns on add_introns feature [default: false]
- def get_feature_index_for_file(filename, options = {})
-  @mutex.synchronize do # avoid concurrent @feature_indices accesses
-
-   if @feature_indices.has_key?(filename)
-    # If a featureindex for the file is in memory return it
-    puts "-- using cached feature index"
-    STDOUT.flush
-    feature_index = @feature_indices[filename]
-    if options[:delete_cache]
-      puts "-- deleting cached feature index"
-      STDOUT.flush
-      return @feature_indices.delete(filename)
-    else
-      return feature_index
-    end
-
-   else
-
-    # If there is no featureindex in memory create one
-    puts "-- new feature index"
-    STDOUT.flush
-
-    in_stream = GT::GFF3InStream.new(filename)
-
-    if options[:add_introns]
-     puts "-- adding introns to in_stream"
-     STDOUT.flush
-     add_introns_stream = GT::AddIntronsStream.new(in_stream)
-     in_stream = add_introns_stream
-    end
-
-    feature_index = GT::FeatureIndex.new
-
-    feature_stream = GT::FeatureStream.new(in_stream, feature_index)
-
-    gn = feature_stream.next_tree
-    while (gn) do
-     gn = feature_stream.next_tree
-    end
-    puts "-- populated feature_stream"
-    STDOUT.flush
-
-    unless options[:delete_cache]
-      @feature_indices[filename] = feature_index
-      puts "-- saved feature_index in cache"
-      STDOUT.flush
-    end
-    return feature_index
-   end
+  ##
+  # Returns sequence region identifiers of a gff3 file
+  # @param filename Path to a gff3 file
+  # @return The sequence regions contained in filename
+  #
+  def get_sequence_regions(filename)
+    feature_index=get_feature_index_for_file(filename)
+    return feature_index.get_seqids
   end
- end
+
+  ##
+  # Returns a range of a sequence region
+  # @param filename Path to a gff3 file
+  # @param sequence_region A sequence region identifier
+  # @return The range that belongs to the given sequence region
+  #
+  def get_range_for_sequence_region(filename, sequence_region)
+    feature_index=get_feature_index_for_file(filename)
+    range = feature_index.get_range_for_seqid(sequence_region)
+    return [range.start, range.end]
+  end
+
+  ##
+  # Returns a Config object
+  # Config objects that should be used with get_image_stream must be
+  # created with this function. They can not be created on the
+  # GTServer's client because Config objects can not be moved from
+  # a client to this server.
+  # @return a config Object
+  #
+  def new_config_object
+    return GT::Config.new
+  end
+
+  ##
+  # Returns a Color object
+  # Color objects that should be used in Config Objects must be
+  # created with this function. They can not be created on the
+  # GTServer's client because Color objects can not be moved from
+  # a client to this server.
+  # @return a Color Object
+  #
+  def new_color_object
+    return GT::Color.malloc
+  end
+
+  ##
+  # This function ouputs an image as a png stream
+  # If the oputupt is written in a file the file is a valid png file.
+  # @param filename Path to a gff3 file
+  # @param sequence_region A sequence region identifier
+  # @param start_pos A start position
+  # @param end_pos An end position
+  # @param config A Config object created with get_config_object
+  # @param width width of the output image
+  # @param add_introns switch add_introns genometools functionality
+  # @return A png stream
+  #
+  def get_image_stream(filename, sequence_region, start_pos, end_pos, config, width, add_introns)
+    puts "Requested image stream for:"
+    puts "- #{File.basename(filename)}, "
+    puts "- seq_id: #{sequence_region},  "
+    puts "- range: #{start_pos} - #{end_pos}"
+    STDOUT.flush
+
+    feature_index=get_feature_index_for_file(filename, :add_introns => add_introns)
+
+    range = feature_index.get_range_for_seqid(sequence_region)
+    range.start = start_pos
+    range.end = end_pos
+
+    diagram = GT::Diagram.new(feature_index, sequence_region, range, config)
+
+    render = GT::Render.new(config)
+    puts "- streaming..."
+    STDOUT.flush
+    return render.to_png_stream(diagram, width)
+  end
+
+  ##
+  # Validates a gff3 file
+  # @param filename Path to a gff3 file
+  # @return nil if file is a valid gff3 file, an error describing string otherwise.
+  #
+  def validate_file(filename)
+    begin
+      get_feature_index_for_file(filename, :delete_cache => true)
+      return nil
+    rescue => error
+      return error.to_s
+    end
+  end
+
+  def test_call()
+    puts "tast_call() called"
+    return "test_call() return value"
+  end
+
+  private
+  
+  # options:
+  # :delete_cache => true : empty the cache for this feature_index [default: false]
+  # :add_introns => true  : turns on add_introns feature [default: false]
+  def get_feature_index_for_file(filename, options = {})
+    @mutex.synchronize do # avoid concurrent @feature_indices accesses
+
+    if @feature_indices.has_key?(filename)
+      # If a featureindex for the file is in memory return it
+      puts "-- using cached feature index"
+      STDOUT.flush
+      feature_index = @feature_indices[filename]
+      if options[:delete_cache]
+        puts "-- deleting cached feature index"
+        STDOUT.flush
+        return @feature_indices.delete(filename)
+      else
+        return feature_index
+      end
+
+      else
+
+        # If there is no featureindex in memory create one
+        puts "-- new feature index"
+        STDOUT.flush
+
+        in_stream = GT::GFF3InStream.new(filename)
+
+        if options[:add_introns]
+          puts "-- adding introns to in_stream"
+          STDOUT.flush
+          add_introns_stream = GT::AddIntronsStream.new(in_stream)
+          in_stream = add_introns_stream
+        end
+
+        feature_index = GT::FeatureIndex.new
+
+        feature_stream = GT::FeatureStream.new(in_stream, feature_index)
+
+        gn = feature_stream.next_tree
+        while (gn) do
+          gn = feature_stream.next_tree
+        end
+        puts "-- populated feature_stream"
+        STDOUT.flush
+
+        unless options[:delete_cache]
+          @feature_indices[filename] = feature_index
+          puts "-- saved feature_index in cache"
+          STDOUT.flush
+        end
+        return feature_index
+      end
+    end
+  end
 
 end
 
