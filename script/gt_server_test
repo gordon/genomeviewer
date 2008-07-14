@@ -23,8 +23,8 @@ config = GTServer.new_config_object
 seqids = GTServer.get_sequence_regions(gff3_file)
 seqids.each do |seq_id|
   range = GTServer.get_range_for_sequence_region(gff3_file, seq_id)
-  png_stream = GTServer.get_image_stream(gff3_file, seq_id, range.start,
-                                         range.end, config, 800, false)
+  png_stream = GTServer.get_image_stream(gff3_file, seq_id, range.first,
+                                         range.last, config, 800, false)
   puts "png_stream.size=" + png_stream.size.to_s
 end
 

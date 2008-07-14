@@ -40,7 +40,8 @@ class GTServer
  #
  def get_range_for_sequence_region(filename, sequence_region)
   feature_index=get_feature_index_for_file(filename)
-  return feature_index.get_range_for_seqid(sequence_region)
+  range = feature_index.get_range_for_seqid(sequence_region)
+  return [range.start, range.end]
  end
 
  ##

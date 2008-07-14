@@ -134,8 +134,8 @@ class Annotation < ActiveRecord::Base
     parsing_output = []
     seqids.each do |seq_id|
         range = GTServer.get_range_for_sequence_region(File.expand_path(gff3_data_storage), seq_id)
-        seq_begin = range.start
-        seq_end = range.end
+        seq_begin = range.first
+        seq_end = range.last
         parsing_output << ({:seq_id => seq_id, :seq_begin => seq_begin, :seq_end => seq_end} )
     end
     return parsing_output
