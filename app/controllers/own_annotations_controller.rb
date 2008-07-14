@@ -67,7 +67,7 @@ class OwnAnnotationsController < ApplicationController
   private
   
   def initialize
-    @title = "Own Annotations"
+    @title = "My Annotations"
     super
   end
     
