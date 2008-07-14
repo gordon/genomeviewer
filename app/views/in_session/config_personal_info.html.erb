@@ -1,0 +1,29 @@
+<% form_tag({:action=>"do_config_personal_info"}) do -%>
+
+  <h2><%= @subtitle %></h2>
+
+  <table>
+    <tr>
+      <td colspan=3>This information will be public if you have any public annotations.</td>
+    </tr>
+    <tr>
+      <td>Full Name:</td>
+      <td><%= text_field :user, 'name', :maxlength=> 64, :size=> 48, :class => "nice"  %></td>
+      <td><%=error_message_on :user, :name%></td>
+    </tr>
+    <tr>
+      <td>Institution:</td>
+      <td><%= text_field :user, 'institution', :size=> 48, :class => "nice"  %></td>
+      <td/>
+    </tr>
+    <tr>
+      <td>Homepage:</td>
+      <td><%= text_field :user, 'url', :size=> 48, :class => "nice"  %></td>
+      <td/>
+    </tr>
+    <tr>
+      <td colspan=3><%= submit_tag "Update" %></td>
+    </tr>
+  </table>
+    
+<% end -%>

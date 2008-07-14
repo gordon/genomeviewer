@@ -8,6 +8,11 @@ module ConfigModules::Account
     @user = User.find(session[:user])
   end
   
+  def config_personal_info
+    @title = "Configuration"
+    @subtitle = "Personal Information"
+    @user = flash[:user] || User.find(session[:user]) 
+  end
 
   ### actions redirecting to other actions ###
   
@@ -32,6 +37,19 @@ module ConfigModules::Account
       end
     end
   end
-  
+    
+  def do_config_personal_info
+    @user = User.find(session[:user])
+    # try to change parameters
+    if @user.update_attributes(params[:user])
+      # success
+      flash[:info] = "Your account has been updated"
+      redirect_to configuration_url
+    else
+      # error, go back to the form
+      flash[:user] = @user
+      redirect_to :action => :config_personal_info
+    end
+  end
 
 end
