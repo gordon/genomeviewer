@@ -1,0 +1,34 @@
+<% url_options = params_for(:action => :create) -%>
+<%=
+if request.xhr?
+    form_remote_upload_tag url_options.merge({:iframe => true}),
+                           :id => element_form_id(:action => :create),
+                           :class => 'create'
+else
+  form_tag url_options,
+           :id => element_form_id(:action => :create),
+           :multipart => true,
+           :class => 'create'
+end -%>
+
+  <% if request.xhr? -%>
+    <div id="<%= element_messages_id(:action => :create) %>" class="messages-container"><%= error_messages_for :record %></div>
+  <% else -%>
+    <%= render :partial => 'form_messages' %>
+  <% end -%>
+
+  <span style="font-weight:bold; color:darkblue;"><small>Upload a GFF3 file:</small></span><br/>
+  <%= file_field :record, :gff3_file, :size => 60 %><br/>
+  <small>Descriptiron:</small><br/>
+  <%= text_area :record, :description, :class => "nice", :size=>"80x5" %><br/>
+
+  <p class="form-footer">
+    <%= submit_tag as_('Upload'), :class => "submit" %>
+    <%= link_to as_('Cancel'), params_for(:action => 'list'), :class => 'cancel' %>
+    <%= loading_indicator_tag(:action => :create, :id => params[:id]) %>
+  </p>
+
+</form>
+<script type="text/javascript">
+Form.focusFirstElement('<%= element_form_id(:action => :create) -%>');
+</script>

@@ -1,0 +1,10 @@
+<div class="actions">
+  <%= link_to "Upload GFF3", 
+              {:action => :new, :method => :get},
+              {:class=> "new action", 
+               :id => "own_annotations-new--link", 
+               :position => "top"} %>
+  <%= loading_indicator_tag(:action => :table) %>
+</div>
+
+<div class="show_search-view view"><%= render :partial => "live_search"%></div>
