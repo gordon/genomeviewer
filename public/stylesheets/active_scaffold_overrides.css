@@ -1,0 +1,49 @@
+/*
+
+Settings in this file override active scaffold stylesheets 
+(see directory active_scaffold)
+
+*/
+
+/* this is because otherwise #main a:link 
+  overwrites .active-scaffold th a
+  white color resulting in blue over darkgray */
+#main .active-scaffold th a:link {
+  color: white;
+}
+
+/* avoid border on loading-indicator */
+img.loading-indicator {
+  border: 0px;
+}
+
+/* nested scaffolds: no border on search bar */
+div.nested-view div.show_search-view {
+  border: 0px;
+}
+
+/* makes the link bigger, moves it 
+  over the live search line, removes the graying 
+  by visited link  */
+.active-scaffold-header div.actions a {
+  font-size: 16px;
+}
+#main .active-scaffold-header div.actions a:visited {
+  color: blue;
+}
+.active-scaffold-header div.actions {
+  top: -30px;  
+}
+/* correction for nested scaffolds */
+div.nested-view div.actions {
+  top: 0px;
+}
+
+
+
+/* customizes the active_scaffold forms light green background
+  to the same color of the GenomeViewer buttons */
+.active-scaffold .view {
+	background-color: #9999E6;
+	border-color: darkblue;
+}
