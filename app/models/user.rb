@@ -44,18 +44,24 @@ class User < ActiveRecord::Base
         default
   end
 
-  # returns a GT::Config object with the personalisations for this user
+  # returns the (eventually cached) GT::Config object 
+  # with the personalisations for this user
   def config
-    c = GTServer.new_config_object
-    # load default configuration
-    c.load_file(File.expand_path("config/view.lua", RAILS_ROOT))
-    # load user specific configurations
-    load_user_colors_in(c)
-    load_user_styles_in(c)
-    load_user_formats_in(c)
-    load_user_dominates_in(c)
-    load_user_collapses_in(c)
+    cached = GTServer.cached_config_for?(self[:id])
+    c = GTServer.config_object_for_user(self[:id])
+    unless cached
+      # load user specific configurations
+      load_user_colors_in(c)
+      load_user_styles_in(c)
+      load_user_formats_in(c)
+      load_user_dominates_in(c)
+      load_user_collapses_in(c)
+    end
     return c
+  end
+  
+  def flush_config_cache
+    GTServer.config_object_for_user(self[:id], :delete_cache => true)
   end
 
   private

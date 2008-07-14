@@ -42,6 +42,7 @@ module ConfigModules::Colors
       user.color_configurations << new_color_conf    
       flash[:notice] = "You can now configure #{element.name}.<br/>"+\
                           "It was added to the list with values 0.0, 0.0, 0.0 (black)."
+    user.flush_config_cache
     redirect_to :action => :config_colors
   end
   
@@ -60,6 +61,7 @@ module ConfigModules::Colors
       user.color_configurations.delete(old_color_conf) unless old_color_conf.nil?
       user.color_configurations << new_color_conf
     end
+    user.flush_config_cache
     redirect_to :action => :config_colors
   end
   
@@ -70,6 +72,7 @@ module ConfigModules::Colors
     user_conf = 
       user.color_configurations.find_by_element_id_and_element_type(element.id, element.class.to_s)
     user.color_configurations.delete(user_conf) unless user_conf.nil?
+    user.flush_config_cache
     redirect_to :action => :config_colors
   end
 

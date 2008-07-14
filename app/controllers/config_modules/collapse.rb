@@ -30,6 +30,7 @@ module ConfigModules::Collapse
     if user.collapsing_configuration.to_parent == CollapsingConfiguration.default
       user.collapsing_configuration = nil
     end
+    user.flush_config_cache
     redirect_to :action => :config_collapse
   end
   
@@ -46,6 +47,7 @@ module ConfigModules::Collapse
     if user.collapsing_configuration.to_parent == CollapsingConfiguration.default
       user.collapsing_configuration = nil
     end
+    user.flush_config_cache
     redirect_to :action => :config_collapse
   end
     
@@ -53,6 +55,7 @@ module ConfigModules::Collapse
     user = User.find(session[:user])
     user.collapsing_configuration = nil
     user.save
+    user.flush_config_cache
     redirect_to :action => :config_collapse
   end    
 

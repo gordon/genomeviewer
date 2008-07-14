@@ -20,6 +20,14 @@ class GTServer
     STDOUT.flush
     @mutex = Mutex.new
     @feature_indices = Hash.new
+    @config_objects = Hash.new
+    @config_objects[:default] = GT::Config.new
+    # load default settings 
+    @config_objects[:default].load_file File.expand_path("config/view.lua", 
+                                 "#{File.dirname(__FILE__)}/..")
+    @config_objects[:default].freeze
+    puts "Default user configuration loaded"
+    STDOUT.flush
   end
 
   ##
@@ -45,17 +53,56 @@ class GTServer
   end
 
   ##
-  # Returns a Config object
-  # Config objects that should be used with get_image_stream must be
-  # created with this function. They can not be created on the
-  # GTServer's client because Config objects can not be moved from
-  # a client to this server.
-  # @return a config Object
+  # Returns a config object for a user (based on user_id)
   #
-  def new_config_object
-    return GT::Config.new
+  def config_object_for_user(user_id, options = {})
+    @mutex.synchronize do # avoid concurrent accesses
+
+      if @config_objects.has_key?(user_id)
+        # If a config_object for the user is in memory return it
+        puts "-- using cached config object"
+        STDOUT.flush
+        config_object = @config_objects[user_id]
+        if options[:delete_cache]
+          puts "-- deleting cached config object"
+          STDOUT.flush
+          return @config_objects.delete(user_id)
+        else
+          return config_object
+        end
+
+      else
+
+        # If there is no config_object in memory create one
+        puts "-- new config object"
+        STDOUT.flush
+        
+        config_object = @config_objects[:default].dup
+                
+        unless options[:delete_cache]
+          @config_objects[user_id] = config_object
+          puts "-- saved config object in cache"
+          STDOUT.flush
+        end
+        return config_object
+      end
+    end
   end
 
+  ##
+  # Returns a config object with 
+  # the default configuration
+  #
+  def default_config_object
+    @config_objects[:default]
+  end
+  
+  ##
+  # Does the cache contain a config object for this user_id?
+  def cached_config_for?(user_id)
+    @config_objects.has_key?(user_id)
+  end
+  
   ##
   # Returns a Color object
   # Color objects that should be used in Config Objects must be
@@ -128,18 +175,18 @@ class GTServer
   def get_feature_index_for_file(filename, options = {})
     @mutex.synchronize do # avoid concurrent @feature_indices accesses
 
-    if @feature_indices.has_key?(filename)
-      # If a featureindex for the file is in memory return it
-      puts "-- using cached feature index"
-      STDOUT.flush
-      feature_index = @feature_indices[filename]
-      if options[:delete_cache]
-        puts "-- deleting cached feature index"
+      if @feature_indices.has_key?(filename)
+        # If a featureindex for the file is in memory return it
+        puts "-- using cached feature index"
         STDOUT.flush
-        return @feature_indices.delete(filename)
-      else
-        return feature_index
-      end
+        feature_index = @feature_indices[filename]
+        if options[:delete_cache]
+          puts "-- deleting cached feature index"
+          STDOUT.flush
+          return @feature_indices.delete(filename)
+        else
+          return feature_index
+        end
 
       else
 

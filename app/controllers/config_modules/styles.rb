@@ -28,6 +28,7 @@ module ConfigModules::Styles
       new_conf = FeatureStyleConfiguration.new(:feature_class => element, :style_id => style_id)
       user.feature_style_configurations << new_conf
     end
+    user.flush_config_cache
     redirect_to :action => :config_styles
   end
   
@@ -40,6 +41,7 @@ module ConfigModules::Styles
     flash[:notice] = "You can now configure the style of #{element.name}.<br/>"+\
                           "It was added to the list with a default value 'box'."
     redirect_to :action => :config_styles
+    user.flush_config_cache
   end
   
   def reset_style
@@ -47,6 +49,7 @@ module ConfigModules::Styles
     element = FeatureClass.find_by_name(params[:element])
     user_conf = user.feature_style_configurations.find_by_feature_class_id(element.id)
     user.feature_style_configurations.delete(user_conf) if user_conf
+    user.flush_config_cache
     redirect_to :action => :config_styles
   end
 

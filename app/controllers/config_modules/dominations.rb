@@ -34,20 +34,24 @@ module ConfigModules::Dominations
   ### actions redirecting to other actions ###
 
   def reset_dominations
-    User.find(session[:user]).domination_configurations.destroy_all
+    user = User.find(session[:user])
+    user.domination_configurations.destroy_all
+    user.flush_config_cache
     redirect_to :action => :config_dominations
   end    
   
   def add_dominated_list
-    User.find(session[:user]).domination_configurations << 
+    user = User.find(session[:user])
+    user.domination_configurations << 
       DominationConfiguration.new(:dominator_id => params[:feature_class][:id])
+    user.flush_config_cache
     redirect_to :action => :manage_dominated_list, 
                    :dominator => FeatureClass.find(params[:feature_class][:id]).name
   end
   
   def delete_dominated_list
     user = User.find(session[:user])
-    dominator = FeatureClass.find_by_name(params[:dominator])
+   dominator = FeatureClass.find_by_name(params[:dominator])
     dc = DominationConfiguration.find_by_user_id_and_dominator_id(session[:user], dominator.id)
     if dc 
       # it was an user list, delete it 
@@ -56,13 +60,16 @@ module ConfigModules::Dominations
       # it was a default list, create an empty list
       user.domination_configurations << DominationConfiguration.new(:dominator => dominator)
     end
+    user.flush_config_cache
     redirect_to :action => :config_dominations
   end
   
   def reset_dominated_list
+    user = User.find(session[:user])
     dominator = FeatureClass.find_by_name(params[:dominator])
     dc = DominationConfiguration.find_by_user_id_and_dominator_id(session[:user], dominator.id)
     dc.destroy if dc
+    user.flush_config_cache
     redirect_to :action => :config_dominations
   end
 
@@ -80,6 +87,7 @@ module ConfigModules::Dominations
     record_to_delete = dc.dominated_features.find(:first, 
                               :conditions => {:feature_class_id => FeatureClass.find_by_name(params[:feature_class_name]).id})
     dc.dominated_features.delete(record_to_delete)
+    user.flush_config_cache
     redirect_to :action => :manage_dominated_list, :dominator => params[:dominator]
   end
   
@@ -95,6 +103,7 @@ module ConfigModules::Dominations
       user.domination_configurations << dc
     end
     dc.dominated_features << DominatedFeature.new(:feature_class => FeatureClass.find(params[:feature_class][:id]))
+    user.flush_config_cache
     redirect_to :action => :manage_dominated_list, :dominator => params[:dominator]
   end
 

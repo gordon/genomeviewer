@@ -6,8 +6,7 @@ class DominationConfiguration < ActiveRecord::Base
 
   # returns the default values from view.lua
   def self.defaults
-    c = GTServer.new_config_object
-    c.load_file(File.expand_path("config/view.lua"))
+    c = GTServer.default_config_object
     dominations = {}
     # as there is no iterator yet in gtruby try all features
     FeatureClass.find(:all).map(&:name).each do |f|

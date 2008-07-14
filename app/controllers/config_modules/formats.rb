@@ -17,6 +17,7 @@ module ConfigModules::Formats
     dfc = DrawingFormatConfiguration.new(params[:format])
     user.drawing_format_configuration = dfc
     user.save
+    user.flush_config_cache
     redirect_to :action => :config_formats
   end
   
@@ -24,6 +25,7 @@ module ConfigModules::Formats
     user = User.find(session[:user])
     user.drawing_format_configuration = nil
     user.save
+    user.flush_config_cache
     redirect_to :action => :config_formats
   end
 
