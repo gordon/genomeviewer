@@ -1,17 +1,6 @@
 <ul>
  <li><%= link_to("Logout", logout_url(:back_to => params)) %></li>
  <li><%= link_to("Configuration", configuration_url) %></li>
- <li><%= link_to("Upload GFF3", upload_url) %></li>
- <li><%= link_to("Manage Files", own_files_url) %></li>
+ <li><%= link_to("Own Files", own_files_url) %></li>
  <li><%= link_to("Public Files", public_files_url) %></li>
 </ul>
-
-<div id="filelist">
- <h1>Own GFF3 files:</h1>
- <% User.find(session[:user]).annotations.each do |gff3| %>
-   <%= link_to gff3.name, :controller => :browser,
-                          :action => :seq_id_select,
-                          :annotation => gff3.id 
-   %>
- <% end %>
-</div>

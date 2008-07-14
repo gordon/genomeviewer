@@ -25,17 +25,13 @@ ActionController::Routing::Routes.draw do |map|
                         :controller => "register",
                         :action => "recover_password"
   
-  map.upload 'upload',
-                    :controller => "in_session", 
-                    :action=> "upload"
-  
   map.configuration 'configuration',
                         :controller => "in_session",
                         :action => "config"
   
   map.own_files 'files',
-                      :controller => "in_session",
-                      :action => "file_manager"
+                      :controller => "own_annotations",
+                      :action => "list"
   
   map.public_files 'public', 
                         :controller => "public_users"

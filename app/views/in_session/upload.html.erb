@@ -1,5 +1,0 @@
-<% form_tag({:action => 'do_upload'}, :multipart => true) do %>
- <%= file_field_tag "gff3_file" %><br/>
- <%= text_area_tag "description", "", :class => "nice" %>
- <%= submit_tag  "Save" %>
-<% end %>

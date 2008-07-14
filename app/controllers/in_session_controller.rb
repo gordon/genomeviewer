@@ -6,8 +6,6 @@ class InSessionController < ApplicationController
     return true
   end
 
-  include FileManager
- 
   include ConfigModules::Formats
   include ConfigModules::Colors
   include ConfigModules::Styles

@@ -16,7 +16,7 @@ class DefaultController < ApplicationController
       flash[:info] ? flash.keep : (flash[:info] = "Thank you for logging in, #{user.name}!")
       if !params[:back_to] or 
       ["default", "register"].include? params[:back_to][:controller]
-        redirect_to :controller => :in_session, :action => :file_manager
+        redirect_to own_files_url
       else
         redirect_to params[:back_to]
       end
