@@ -103,9 +103,20 @@ class Annotation < ActiveRecord::Base
 
   ### callbacks ###
 
-  after_save            :correct_gff3_file_position
-  after_create         :create_sequence_regions
+  after_save       :correct_gff3_file_position
+  after_create     :create_sequence_regions
   before_destroy   :delete_gff3_data
+  
+  after_create     :increment_pa_count
+  after_destroy    :decrement_pa_count
+  
+  def increment_pa_count
+    user.increment(:public_annotation_count) if public
+  end
+  
+  def decrement_pa_count
+    user.decrement(:public_annotation_count) if public
+  end
 
   def correct_gff3_file_position
     File.rename gff3_data_storage, gff3_data_storage(:new_name)
