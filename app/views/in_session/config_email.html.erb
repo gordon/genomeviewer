@@ -1,0 +1,22 @@
+<% form_tag({:action=>"do_config_email"}) do -%>
+
+  <h2><%= @subtitle %></h2>
+
+  <table>
+    <tr>
+      <td colspan=3>If you change your email address, a confirmation message will be sent to the new address.</td>
+    </tr>
+    <tr>
+      <td colspan=3>Your email address is kept confidential.</td>
+    </tr>
+    <tr>
+      <td>E-Mail address:</td>
+      <td><%= text_field :user, :email, :maxlength=> 64, :size=> 48, :class => "nice" %></td>
+      <td><%=error_message_on :user, :email%></td>
+    </tr>
+    <tr>
+      <td><%= submit_tag "Update" %></td>
+    </tr>
+  </table>
+
+<% end -%>
