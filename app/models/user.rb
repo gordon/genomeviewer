@@ -34,6 +34,8 @@ class User < ActiveRecord::Base
   validates_presence_of :password, :message => "Please choose a password"
   validates_confirmation_of :password,
                             :message => "You entered two different passwords!"
+  validates_length_of :password, :maximum => 40,
+          :too_long => "The entered password is too long (max 40 chars)"
 
   ### virtual attributes ###
 
