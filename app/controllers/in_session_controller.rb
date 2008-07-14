@@ -42,7 +42,7 @@ class InSessionController < ApplicationController
   def do_create_feature_class
     fc = FeatureClass.new(params[:feature_class])
     if fc.save
-      flash[:notice] = "New feature class #{fc.name} created successfully."
+      flash[:info] = "New feature class #{fc.name} created successfully."
     else
       flash[:errors] = "Impossible to create #{fc.name}.<br/>Does it already exist?"
     end
