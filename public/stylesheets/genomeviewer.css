@@ -1,131 +1,13 @@
+/* general settings */
+
 body {
   font-family: Verdana, Geneva, Arial, sans-serif;
 }
 h1, h2, h3, h4, h5, h6 {
   color: darkblue;
 }
-#footer {
-  font-size: 66%;
-  text-align: center;
-  margin-top: 20px;
-  background-color: #EEEEEE;
-}
-img {
-  border-style: solid;
-  border-width: 1px;
-}
 
-#main {
-  margin-right: 10%;
-  line-height: 1.6em;
-}
-#main a:link {
-  color: blue;
-  text-decoration: none;
-  border-bottom: thin dotted blue;
-}
-#main a:visited {
-  color: gray;
-  text-decoration: none;
-  border-bottom: thin dotted gray;
-}
-#main a:hover {
-  background: rgb(90%, 90%, 20%);
-}
-pre {
-  line-height: 1.3em;
-}
-
-/* Figure environment for library documentation. */
-div.figure {
-  position: relative;
-  width: 650px;
-  margin: 0 auto;
-  background-color: white;
-}
-div.figure p {
-  text-align: center;
-  font-style: italic;
-  font-size: smaller;
-  text-indent: 0;
-  margin:0px;
-}
-div.figure img {
-  border: thin solid black;
-  padding: 10px;
-  margin: 0px;
-}
-div.figure img.noborder {
-  border: none;
-  padding: 0px;
-}
-div.figure div.subfigure {
-  width: 300px;
-  float: left;
-  margin:12px;
-}
-
-/* Forms */
-
-.nice {
-  padding: 2px;
-  border: 1px solid darkgray;
-}
-.nice:focus {
-  background-color: #FFFFCC;
-}
-
-.fieldWithErrors input{
- background-color:#FFAAAA;
-}
-
-.formError {
- font-size: 80%;
- color: red;
-}
-
-/* File List */
-
-#filelist {
- margin-left:22px;
- list-style-type: none;
- border : 1px dashed gray;
- display: block;
- text-decoration: none;
-}
-
-#filelist a {
-  list-style-type: none;
-  border : 1px solid black;
-  display: block;
-  padding: 0.1em 2px 0.1em 2px;
-  text-decoration: none;
-  margin-top:1px;
-  margin-bottom:1px;
-  font-size: 70%;
-  overflow:hidden;
-}
-
-#filelist a:link {
-  color: white;
-  background: rgb(60%, 60%, 90%);
-}
-
-#filelist a:visited {
-  color: white;
-  background: rgb(60%, 60%, 90%);
-}
-#filelist a:hover {
-  color: gray;
-  background: rgb(90%, 90%, 20%);
-}
-#filelist h1 {
-  font-size: 80%;
-  margin: 0px 0px 0px 0px;
-  text-decoration: underline;
-}
-
-/* Menu */
+/* left menu div */
 
 #menu {
   float: left;
@@ -161,13 +43,52 @@ div.figure div.subfigure {
   color: gray;
   background: rgb(90%, 90%, 20%);
 }
+
+/* main content div */
+
 #main {
+  margin-right: 10%;
   margin-left: 220px;
+  line-height: 1.6em;
+}
+#main a:link {
+  color: blue;
+  text-decoration: none;
+  border-bottom: thin dotted blue;
+}
+#main a:visited {
+  color: blue;
+  text-decoration: none;
+  border-bottom: thin dotted blue;
+}
+#main a:hover {
+  background: rgb(90%, 90%, 20%);
 }
 
-/* Sequence IDs */
+/* forms */
 
-#main .seq_id {
+.nice {
+  padding: 2px;
+  border: 1px solid darkgray;
+}
+.nice:focus {
+  background-color: #FFFFCC;
+}
+
+.fieldWithErrors input{
+ background-color:#FFAAAA;
+}
+
+.formError {
+ font-size: 80%;
+ color: red;
+}
+
+/*** viewer ***/
+
+/* seq_id buttons */
+
+#viewer .seq_id {
   list-style-type: none;
   border : 1px solid black;
   display: block;
@@ -177,16 +98,65 @@ div.figure div.subfigure {
   color: white;
 }
 
-#main .seq_id:link {
+#viewer .seq_id:link {
   color: white;
   background: rgb(60%, 60%, 90%);
 }
 
-#main .seq_id:hover {
+#viewer .seq_id:hover {
   color: gray;
   background: rgb(90%, 90%, 20%);
 }
 
-#main .seq_id:visited {
+#viewer .seq_id:visited {
   color: white;
 }
+
+/* command bar */
+
+#command_bar {
+  background: rgb(60%, 60%, 90%);
+  min-height: 40px;
+  max-height: 40px;
+  overflow: hidden;
+  text-align: center;
+  vertical-align: middle;
+}
+
+#position_form {
+  display: inline;
+}
+
+/* orientation bar */
+
+#total {
+  background: rgb(60%, 60%, 90%);
+  display: block;
+  border: 1px black dashed;
+  max-height: 20px;
+  min-height: 20px;
+}
+
+#current {
+  background: rgb(90%, 90%, 20%);
+  max-height: 18px;
+  min-height: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 0%;
+  border: 1px black solid;
+  text-align: center;
+  color: gray;
+  overflow: hidden;
+}
+
+/* image div */
+
+#image {
+  position:absolute;
+  top:62px; 
+  height:500px;
+  cursor: move;
+  background-repeat:no-repeat;
+}
+
