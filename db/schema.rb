@@ -9,11 +9,11 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 15) do
+ActiveRecord::Schema.define(:version => 16) do
 
   create_table "annotations", :force => true do |t|
-    t.string  "name",                           :null => false
-    t.integer "user_id",                        :null => false
+    t.string  "name",        :default => "",    :null => false
+    t.integer "user_id",     :default => 0,     :null => false
     t.text    "description"
     t.boolean "public",      :default => false, :null => false
     t.boolean "add_introns", :default => true,  :null => false
@@ -73,10 +73,10 @@ ActiveRecord::Schema.define(:version => 15) do
   end
 
   create_table "sequence_regions", :force => true do |t|
-    t.string  "seq_id",        :null => false
-    t.integer "annotation_id", :null => false
-    t.integer "seq_begin",     :null => false
-    t.integer "seq_end",       :null => false
+    t.string  "seq_id",        :default => "", :null => false
+    t.integer "annotation_id", :default => 0,  :null => false
+    t.integer "seq_begin",     :default => 0,  :null => false
+    t.integer "seq_end",       :default => 0,  :null => false
     t.text    "description"
   end
 
@@ -85,12 +85,13 @@ ActiveRecord::Schema.define(:version => 15) do
   end
 
   create_table "users", :force => true do |t|
-    t.string  "password",                 :limit => 40,                :null => false
-    t.string  "name",                     :limit => 64,                :null => false
-    t.string  "email",                    :limit => 64,                :null => false
-    t.string  "institution"
-    t.string  "url"
-    t.integer "public_annotations_count",               :default => 0, :null => false
+    t.string  "password",                 :limit => 40, :default => "", :null => false
+    t.string  "name",                     :limit => 64, :default => "", :null => false
+    t.string  "email",                    :limit => 64, :default => "", :null => false
+    t.string  "institution",                            :default => ""
+    t.string  "url",                                    :default => ""
+    t.integer "public_annotations_count",               :default => 0,  :null => false
+    t.string  "username",                 :limit => 64, :default => "", :null => false
   end
 
 end
