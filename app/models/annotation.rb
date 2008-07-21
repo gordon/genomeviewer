@@ -61,7 +61,7 @@ class Annotation < ActiveRecord::Base
   def permanent_location
     return nil if user.nil? or name.nil?
     return nil unless user.valid? and not name.blank?
-    "#{$GFF3_STORAGE_PATH}/#{user_id}_#{name}"
+    "#{$GFF3_STORAGE_PATH}/#{user_id}/#{name}"
   end
   private :permanent_location
 

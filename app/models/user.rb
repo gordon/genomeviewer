@@ -11,6 +11,19 @@ class User < ActiveRecord::Base
   has_many :feature_style_configurations, :dependent => :destroy
   has_many :domination_configurations,    :dependent => :destroy
 
+  ### callbacks ###
+  
+  after_create :create_storage
+  after_destroy :destroy_storage
+  
+  def create_storage
+    Dir.mkdir "#{$GFF3_STORAGE_PATH}/#{user_id}"
+  end
+  
+  def destroy_storage
+    Dir.rmdir "#{$GFF3_STORAGE_PATH}/#{user_id}"
+  end
+  
   ### validations ###
 
   # email
