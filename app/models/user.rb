@@ -26,6 +26,15 @@ class User < ActiveRecord::Base
   
   ### validations ###
 
+  # login name
+  validates_presence_of :username,
+                        :message => 'Please enter an username'
+  validates_format_of :username, 
+                       :with => /^[A-Z0-9\._]+$/i,
+                       :message => "Usernames can only contain letters, numbers, dots (.) and undescores (_)."
+  validates_uniqueness_of :username, 
+                          :message => "This username is already in use."
+
   # email
   validates_presence_of :email, :message => "Please enter your email address"
   validates_uniqueness_of :email,
