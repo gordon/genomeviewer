@@ -9,7 +9,7 @@ class DefaultController < ApplicationController
   ### actions redirecting to other actions ###
 
   def do_login
-    user = User.find_by_email_and_password(params[:user][:email], 
+    user = User.find_by_username_and_password(params[:user][:username], 
                                            params[:user][:password])
     if user
       session[:user]=user.id

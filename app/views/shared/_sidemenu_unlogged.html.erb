@@ -1,8 +1,8 @@
 <ul>
 <% form_tag(login_url({:back_to => params})) do -%>
-  <li>Email:</li>
+  <li>Username:</li>
   <li><%= text_field :user, 
-                     :email, 
+                     :username, 
                      :maxlength => 64,
                      :size => 20,
                      :class => "nice" %></li>
@@ -12,7 +12,6 @@
                          :maxlength => 64,
                          :size => 20,
                          :class => "nice" %></li>
-  <!--<li><%#=check_box_tag "stay_logged"%>Remember me</li>-->
   <li><%=submit_tag "Login"%></li>
 <% end -%>
   <li><%= link_to "Register", registration_url %></li>
