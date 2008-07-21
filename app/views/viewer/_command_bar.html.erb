@@ -1,0 +1,16 @@
+<div id="command_bar">
+  <% form_tag({:action => :index, 
+                    :annotation => @annotation.id, 
+                    :seq_region => @sequence_region.id, 
+                    :method => :get}, 
+                    {:id => "position_form"}) do -%>
+    Start:<%= text_field_tag 'start_pos', @start, :size => 10, :class => "nice" %>
+    End:<%= text_field_tag 'end_pos', @end, :size => 10, :class => "nice" %>
+    <%= submit_tag  "Go" %>
+  <% end -%>
+  <%= zoom_out_button -%>
+  <%= back_button -%>
+  <%= forward_button -%>
+  <%= zoom_in_button -%>
+  <%= show_all_button -%>
+</div>
