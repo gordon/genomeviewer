@@ -28,8 +28,8 @@ class OwnAnnotationsController < ApplicationController
   end
   
   def open 
-    redirect_to :controller => :browser,
-                :action => :seq_id_select, 
+    redirect_to :controller => :viewer,
+                :action => :index, 
                 :annotation => params["id"]
   end
 

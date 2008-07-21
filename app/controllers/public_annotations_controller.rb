@@ -20,7 +20,7 @@ class PublicAnnotationsController < ApplicationController
   end
  
   def open
-    redirect_to :controller => :browser, :action => :seq_id_select, :annotation => params["id"]
+    redirect_to :controller => :viewer, :action => :index, :annotation => params["id"]
   end
   
   def self.active_scaffold_controller_for(klass)
