@@ -1,10 +1,19 @@
 <% form_tag :action => "do_register" do%>
   <table>
     <tr>
-      <td colspan=3>Your e-mail address is used as a login name and will be kept absolutely confidential. </td>
+      <td colspan=3>Your username will be used for login and in the URL of your files.</td>
     </tr>
     <tr>
-      <td colspan=3>It will be used for confirmation of your account registration and in case you forget your password. </td>
+      <td colspan=3>It can contain letters, numbers, dots and underscores (no spaces).</td>
+    </tr>
+    <tr>
+      <td>Username (*):</td>
+      <td><%= text_field 'user', :username, :maxlength=> 64, :size=> 48, :class => "nice" %></td>
+      <td><%=error_message_on :user, :username%></td>
+    </tr>
+    <tr><td colspan=3>&nbsp;</td></tr>
+    <tr>
+      <td colspan=3>Your e-mail address will be used to confirm your registration and in case you forget your password. </td>
     </tr>
     <tr>
       <td colspan=3>You will not receive any unsolicited e-mail from us.</td>
