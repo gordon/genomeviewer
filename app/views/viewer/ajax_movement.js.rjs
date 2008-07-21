@@ -1,0 +1,4 @@
+page.replace_html 'image', :partial => 'image'
+page.replace_html 'command_bar', :partial => 'command_bar'
+page.replace_html 'orientation_bar', :partial => 'orientation_bar'
+page << "$('image').style.left = 0;"
