@@ -121,10 +121,28 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
   text-align: center;
   vertical-align: middle;
+  border: 1px solid black;
 }
 
 #position_form {
   display: inline;
+}
+
+#command_bar a {
+  border: 0px;
+}
+#command_bar a:link {
+  border: 0px;
+}
+#command_bar a:hover {
+  border: 0px;
+}
+#command_bar a:visited {
+  border: 0px;
+}
+
+#command_bar img {
+  border: 0px;
 }
 
 /* orientation bar */
@@ -139,24 +157,13 @@ h1, h2, h3, h4, h5, h6 {
 
 #current {
   background: rgb(90%, 90%, 20%);
-  max-height: 18px;
-  min-height: 18px;
+  max-height: 20px;
+  min-height: 20px;
   margin-left: auto;
   margin-right: auto;
   width: 0%;
-  border: 1px black solid;
   text-align: center;
   color: gray;
   overflow: hidden;
-}
-
-/* image div */
-
-#image {
-  position:absolute;
-  top:62px; 
-  height:500px;
-  cursor: move;
-  background-repeat:no-repeat;
 }
 
