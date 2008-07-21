@@ -1,0 +1,12 @@
+<div style="background-color:gray;">
+  <div id="image">
+    <%= image_tag url_for(:action => :image,
+             :annotation => @annotation.id,
+             :seq_region => @sequence_region.id,
+             :start_pos => @start,
+             :end_pos => @end), :alt => "Loading..." %>
+  </div>
+</div>
+<%= draggable_element :image, 
+                      :constraint => '"horizontal"',
+                      :onEnd => "function(){#{ajax_replacer}}" -%>
