@@ -10,31 +10,31 @@ ActionController::Routing::Routes.draw do |map|
   # This route can be invoked with purchase_url(:id => product.id)
   
   map.login 'login', 
-                :controller => "default", 
-                :action => "do_login"
+            :controller => "default", 
+            :action => "do_login"
   
   map.logout 'logout',
-                  :controller => "in_session",
-                  :action => "do_logout"
+             :controller => "in_session",
+             :action => "do_logout"
 
   map.registration 'registration', 
-                        :controller => "register", 
-                        :action => "register"
+                   :controller => "register", 
+                   :action => "register"
   
   map.recover_password 'recover_password',
                         :controller => "register",
                         :action => "recover_password"
   
   map.configuration 'configuration',
-                        :controller => "in_session",
-                        :action => "config"
+                    :controller => "in_session",
+                    :action => "config"
   
   map.own_files 'files',
-                      :controller => "own_annotations",
-                      :action => "list"
+                :controller => "own_annotations",
+                :action => "list"
   
   map.public_files 'public', 
-                        :controller => "public_annotations"
+                   :controller => "public_annotations"
                         
   map.root :controller => "default"
 
