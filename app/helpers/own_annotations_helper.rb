@@ -23,4 +23,15 @@ module OwnAnnotationsHelper
     return html
   end
   
+  def description_column(record)
+    simple_format(record.description) +
+    '<p style="text-align: right; font-size: 80%;">['+
+    link_to("edit", 
+            {"action" => :edit,
+             "id" => record.id},
+             {:class => "edit action", 
+              :position => :after})+
+    ']</p>'
+  end
+
 end

@@ -11,8 +11,6 @@ class OwnAnnotationsController < ApplicationController
     config.actions.exclude :show
     # create action will be used for uploads
     config.create.link.label = "Upload&nbsp;GFF3"
-    # update action will be limited to file description
-    config.update.link.label = "Description"
     config.create.multipart = true
     config.list.columns = [:name, :description, :sequence_regions, :public]
     config.columns[:public].label = "File&nbsp;Access"

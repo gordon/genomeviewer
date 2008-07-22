@@ -16,5 +16,9 @@ module PublicAnnotationsHelper
               :seq_region => sr.seq_id
     end.join(", ")
   end
+  
+  def description_column(record)
+    simple_format(record.description)
+  end
 
 end
