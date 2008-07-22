@@ -7,24 +7,41 @@ h1, h2, h3, h4, h5, h6 {
   color: darkblue;
 }
 
-/* left menu div */
+/* menu div */
 
 #menu {
+  font-size: 80%;
+  padding: 0.5em 0em 2.5em;
+  border-bottom: 1px dotted black;
+}
+#menu a.logo {
+  color: darkblue;
+  font-weight: bold;
+  font-size: 150%;
   float: left;
-  clear: left;
-  width: 180px;
-  padding-right: 20px;
+  border : 0px;
+  padding: 0px;
+  text-decoration: none;
+}
+#menu a.logo:hover {
+  color: gray;
+  background: rgb(90%, 90%, 20%);
+}
+#menu ul {
+  display: inline;
+  float: right;
+  margin: 0px;
 }
 #menu li {
   list-style-type: none;
+  display: inline;
   margin-bottom: 10px;
-  margin-left: -18px;
 }
 #menu li a {
   list-style-type: none;
-  border : 1px solid black;
-  display: block;
-  padding: 4px 15px 4px 15px;
+  border: 1px solid black;
+  padding: 3px 5px;
+  margin-right: 10px;
   text-decoration: none;
 }
 #menu li a:link {
@@ -47,8 +64,8 @@ h1, h2, h3, h4, h5, h6 {
 /* main content div */
 
 #main {
-  margin-right: 10%;
-  margin-left: 220px;
+  margin-right: 2%;
+  margin-left: 2%;
   line-height: 1.6em;
 }
 #main a:link {
