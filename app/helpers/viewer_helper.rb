@@ -20,8 +20,8 @@ module ViewerHelper
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
-            :start_pos => @start-@current_lenght/4,
-            :end_pos => @end+@current_lenght/4
+            :start_pos => (@start-@current_lenght/4).round,
+            :end_pos => (@end+@current_lenght/4).round
   end
   
   def back_button
@@ -30,8 +30,8 @@ module ViewerHelper
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
-            :start_pos => @start-@current_lenght/2,
-            :end_pos => @end -@current_lenght/2
+            :start_pos => (@start-@current_lenght/2).round,
+            :end_pos => (@end -@current_lenght/2).round
   end
         
   def forward_button
@@ -40,8 +40,8 @@ module ViewerHelper
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
-            :start_pos =>  @start+@current_lenght/2,
-            :end_pos => @end+@current_lenght/2
+            :start_pos =>  (@start+@current_lenght/2).round,
+            :end_pos => (@end+@current_lenght/2).round
   end
           
   def zoom_in_button 
@@ -50,8 +50,8 @@ module ViewerHelper
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
-            :start_pos => @start+@current_lenght/4,
-            :end_pos => @end-@current_lenght/4
+            :start_pos => (@start+@current_lenght/4).round,
+            :end_pos => (@end-@current_lenght/4).round
   end
   
   def show_all_button  
