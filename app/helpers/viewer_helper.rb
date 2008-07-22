@@ -25,23 +25,51 @@ module ViewerHelper
   end
   
   def back_button
-    link_to back_icon,
+    if @start == @seq_begin
+      return back_icon
+    else      
+      old_window = @end-@start+1
+      new_start = @start - (old_window*@current_lenght/2).round     
+      new_start = @seq_begin if new_start < @seq_begin
+      new_start = @end -1 if new_start >= @end        
+      
+      new_end = new_start + old_window
+      if new_end > @seq_end 
+        new_end = @seq_end 
+        new_start = new_end - old_window
+      end
+      return link_to back_icon,
             :action => :index,
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
-            :start_pos => (@start-@current_lenght/2).round,
-            :end_pos => (@end -@current_lenght/2).round
+            :start_pos =>  new_start,
+            :end_pos => new_end
+    end
   end
         
   def forward_button
-    link_to forward_icon,
+    if @end == @seq_end 
+      return forward_icon
+    else      
+      old_window = @end-@start+1      
+      new_start = @start + (old_window*@current_lenght/2).round     
+      new_start = @seq_begin if new_start < @seq_begin
+      new_start = @end -1 if new_start >= @end        
+      
+      new_end = new_start + old_window
+      if new_end > @seq_end 
+        new_end = @seq_end 
+        new_start = new_end - old_window
+      end
+      return link_to forward_icon,
             :action => :index,
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
-            :start_pos =>  (@start+@current_lenght/2).round,
-            :end_pos => (@end+@current_lenght/2).round
+            :start_pos =>  new_start,
+            :end_pos => new_end
+    end
   end
           
   def zoom_in_button 
@@ -79,14 +107,14 @@ module ViewerHelper
               :title => "go left",
               :alt => "<<"
   end
-  
+            
   def forward_icon
     image_tag "icons/forward.png", 
               :size => "32x32", 
               :title => "go right", 
               :alt => ">>"
   end
-  
+
   def zoom_in_icon
     image_tag "icons/zoom_in.png", 
               :size => "32x32", 

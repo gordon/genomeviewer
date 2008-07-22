@@ -1,3 +1,9 @@
-page.replace 'image', :partial => 'image'
-page.replace 'command_bar', :partial => 'command_bar'
-page.replace 'orientation_bar', :partial => 'orientation_bar'
+if @out_of_range
+  # don't move, as you are at the extremity already
+  # bring only the image back in position
+  page << "$('image').style.left=0"
+else
+  page.replace 'image', :partial => 'image'
+  page.replace 'command_bar', :partial => 'command_bar'
+  page.replace 'orientation_bar', :partial => 'orientation_bar'
+end

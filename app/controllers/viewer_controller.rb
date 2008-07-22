@@ -38,20 +38,33 @@ class ViewerController < ApplicationController
   ### actions for ajax ###
   
   def ajax_movement
+    
     # @start and @end are currently the old ones
-    # their new values must be calculated using params[:movement]
-    old_window = @end-@start+1
+    # their new values must be calculated using params[:movement]    
     movement = params[:movement].to_f / @width
     
-    @start -= (old_window*movement).round     
-    @start = @seq_begin if @start < @seq_begin
-    @start = @end -1 if @start >= @end        
-    
-    @end -= (old_window*movement).round
-    @end = @seq_end if @end > @seq_end 
-    @end = @start +1 if @end <= @start 
-    
-    get_values_for_orientation_bar
+    if (@start == @seq_begin and movement > 0) or 
+       (@end == @seq_end and movement < 0)
+      
+      @out_of_range = true
+      
+    else
+      
+      old_window = @end-@start+1
+      
+      @start -= (old_window*movement).round     
+      @start = @seq_begin if @start < @seq_begin
+      @start = @end -1 if @start >= @end        
+      
+      @end = @start + old_window
+      if @end > @seq_end 
+        @end = @seq_end 
+        @start = @end - old_window
+      end
+      
+      get_values_for_orientation_bar
+
+    end
     
   end
 
