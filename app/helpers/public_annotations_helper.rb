@@ -8,10 +8,13 @@ module PublicAnnotationsHelper
   end
   
   def sequence_regions_column(record)
-    link_to record.sequence_regions.map(&:seq_id).join(", "), 
-            :controller => :public_annotations, 
-            :action => :open,
-            :id => record.id
+    record.sequence_regions.map do |sr|
+      link_to sr.seq_id, 
+              :controller => :viewer, 
+              :username => record.user.username,
+              :annotation => record.name,
+              :seq_region => sr.seq_id
+    end.join(", ")
   end
 
 end
