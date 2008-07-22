@@ -1,10 +1,10 @@
 module PublicAnnotationsHelper
 
   def user_column(record)
-    link_to record.user.name, :controller => :public_users, 
-                                       :action => :nested, 
-                                       :id => record.user.id, 
-                                       :associations => "annotations"
+    link_to record.user.name, 
+            :controller => :public_annotations, 
+            :action => :user, 
+            :username => record.user.username
   end
   
   def sequence_regions_column(record)
