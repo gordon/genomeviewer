@@ -26,7 +26,7 @@ module ViewerHelper
   
   def back_button
     if @start == @seq_begin
-      return back_icon
+      return back_icon_inactive
     else      
       old_window = @end-@start+1
       new_start = @start - (old_window*@current_lenght/2).round     
@@ -50,7 +50,7 @@ module ViewerHelper
         
   def forward_button
     if @end == @seq_end 
-      return forward_icon
+      return forward_icon_inactive
     else      
       old_window = @end-@start+1      
       new_start = @start + (old_window*@current_lenght/2).round     
@@ -108,6 +108,13 @@ module ViewerHelper
               :alt => "<<"
   end
             
+  def back_icon_inactive
+    image_tag "icons/back_inactive.png", 
+              :size => "32x32", 
+              :title => "you are at the beginning",
+              :alt => "|<<"
+  end
+  
   def forward_icon
     image_tag "icons/forward.png", 
               :size => "32x32", 
@@ -115,6 +122,13 @@ module ViewerHelper
               :alt => ">>"
   end
 
+  def forward_icon_inactive
+    image_tag "icons/forward_inactive.png", 
+              :size => "32x32", 
+              :title => "you are at the end", 
+              :alt => ">>|"
+  end
+  
   def zoom_in_icon
     image_tag "icons/zoom_in.png", 
               :size => "32x32", 

@@ -33,13 +33,13 @@ From: http://commons.wikimedia.org/wiki/Image:Gtk-zoom-fit.svg
 Original source: http://ftp.gnome.org/
 pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
 ===============================================================================
-File: forward.png
+File: forward.png and forward_inactive.png (modification of the first one)
 Author: David Vignoni
 From: http://commons.wikimedia.org/wiki/Image:Gtk-media-forward-ltr.svg
 Original source: http://ftp.gnome.org/
 pub/GNOME/sources/gnome-themes-extras/0.9/gnome-themes-extras-0.9.0.tar.gz
 ===============================================================================
-File: back.png
+File: back.png and back_inactive.png (modification of the first one)
 Author: David Vignoni
 From: http://commons.wikimedia.org/wiki/Image:Gtk-media-rewind-ltr.svg
 Original source: http://ftp.gnome.org/
