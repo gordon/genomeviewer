@@ -34,7 +34,16 @@ class User < ActiveRecord::Base
                        :message => "Usernames can only contain letters, numbers, dots (.) and undescores (_)."
   validates_uniqueness_of :username, 
                           :message => "This username is already in use."
-
+  
+  # the following names are invalid and can't be used as username
+  # see config/routes.rb
+  validates_exclusion_of :username,
+                         :in => %w[login logout registration recover_password 
+                         configuration files public default in_session 
+                         own_annotations public_annotations public_users 
+                         register image move],
+                         :message => "This username is reserved. Please choose a different one."
+  
   # email
   validates_presence_of :email, :message => "Please enter your email address"
   validates_uniqueness_of :email,
