@@ -1,0 +1,6 @@
+<%= link_to "GenomeViewer", root_url, :class => 'logo' -%>
+<% if session[:user] -%>
+  <%= render :partial => "shared/menu_logged_in" %>
+<% else -%>
+  <%= render :partial => "shared/menu_unlogged" %>
+<% end -%>
