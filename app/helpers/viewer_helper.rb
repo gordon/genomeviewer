@@ -77,13 +77,19 @@ module ViewerHelper
   end
           
   def zoom_in_button 
-    link_to zoom_in_icon,
-            :action => :index,
-            :username => @annotation.user.username,
-            :annotation => @annotation.name,
-            :seq_region => @sequence_region.seq_id,
-            :start_pos => (@start+@current_lenght/4).round,
-            :end_pos => (@end-@current_lenght/4).round
+    new_start = (@start+@current_lenght/4).round
+    new_end = (@end-@current_lenght/4).round
+    if new_end-new_start < 10
+      return zoom_in_icon_inactive
+    else
+      return link_to zoom_in_icon,
+                     :action => :index,
+                     :username => @annotation.user.username,
+                     :annotation => @annotation.name,
+                     :seq_region => @sequence_region.seq_id,
+                     :start_pos => new_start,
+                     :end_pos => new_end
+    end
   end
   
   def show_all_button  
@@ -151,6 +157,13 @@ module ViewerHelper
               :alt => "(+)"
   end
   
+  def zoom_in_icon_inactive
+    image_tag "icons/zoom_in_inactive.png", 
+              :size => "32x32", 
+              :title => "Zoom in", 
+              :alt => "(+)"
+  end
+            
   def show_all_icon
     image_tag "icons/show_all.png", 
               :size => "32x32", 
