@@ -31,6 +31,18 @@ class PublicAnnotationsController < ApplicationController
     super
   end
  
+  def user
+    @public_user = User.find_by_username(params[:username])
+    if !@public_user
+      flash[:errors] = "#{params[:username]}: user not found"
+      redirect_to :action => :index 
+    elsif @public_user.public_annotations_count == 0
+      flash[:errors] = "#{params[:username]} has no public annotations"
+      redirect_to :action => :index
+    end
+    @title = @public_user.name
+  end
+ 
   private
   
   def initialize

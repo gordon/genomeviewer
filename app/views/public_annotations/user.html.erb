@@ -1,0 +1,12 @@
+<table>
+  <tr>
+    <td>Institution:</td>
+    <td><%=@public_user.institution%></td>
+  </tr>
+  <tr>
+    <td>Homepage:</td>
+    <td><%=auto_link(@public_user.url)%></td>
+  </tr>
+</table>
+<%= render :active_scaffold => :public_annotations, 
+           :constraints => {:user_id => @public_user.id} %>
