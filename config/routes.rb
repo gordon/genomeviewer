@@ -46,6 +46,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'register/:action',
               :controller => "register"
   
+  # user public page
+  
+  map.connect ':username',
+              :controller => 'public_annotations',
+              :action => 'user'
+  
   # all other URLs are interpreted as viewer URLs
   map.image 'image/:username/:annotation/:seq_region/:start_pos/:end_pos',
               :action => "image",
