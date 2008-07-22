@@ -83,13 +83,17 @@ module ViewerHelper
   end
   
   def show_all_button  
-    link_to show_all_icon,
-            :action => :index,
-            :username => @annotation.user.username,
-            :annotation => @annotation.name,
-            :seq_region => @sequence_region.seq_id,
-            :start_pos => @seq_begin,
-            :end_pos => @seq_end
+    if @start == @seq_begin and @end == @seq_end
+      return show_all_icon_inactive
+    else      
+      return link_to show_all_icon,
+                     :action => :index,
+                     :username => @annotation.user.username,
+                     :annotation => @annotation.name,
+                     :seq_region => @sequence_region.seq_id,
+                     :start_pos => @seq_begin,
+                     :end_pos => @seq_end
+    end
   end
 
   ### icons ###
@@ -140,7 +144,14 @@ module ViewerHelper
     image_tag "icons/show_all.png", 
               :size => "32x32", 
               :title => "view full sequence", 
-              :alt => "Show all"
+              :alt => "|<-->|"
   end
-  
+
+  def show_all_icon_inactive
+    image_tag "icons/show_all_inactive.png", 
+              :size => "32x32", 
+              :title => "you already see the whole sequence", 
+              :alt => "[<-->]"
+  end
+
 end
