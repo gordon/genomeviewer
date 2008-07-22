@@ -15,13 +15,17 @@ module ViewerHelper
   ### buttons ###
   
   def zoom_out_button  
-    link_to zoom_out_icon,
-            :action => :index,
-            :username => @annotation.user.username,
-            :annotation => @annotation.name,
-            :seq_region => @sequence_region.seq_id,
-            :start_pos => (@start-@current_lenght/4).round,
-            :end_pos => (@end+@current_lenght/4).round
+    if @start == @seq_begin and @end == @seq_end 
+      return zoom_out_icon_inactive
+    else      
+      return link_to zoom_out_icon,
+                     :action => :index,
+                     :username => @annotation.user.username,
+                     :annotation => @annotation.name,
+                     :seq_region => @sequence_region.seq_id,
+                     :start_pos => (@start-@current_lenght/4).round,
+                     :end_pos => (@end+@current_lenght/4).round
+    end
   end
   
   def back_button
@@ -103,6 +107,13 @@ module ViewerHelper
               :size => "32x32", 
               :title => "zoom out", 
               :alt => "(-)"
+  end
+  
+  def zoom_out_icon_inactive
+    image_tag "icons/zoom_out_inactive.png", 
+              :size => "32x32", 
+              :title => "you already see the whole sequence", 
+              :alt => "[-]"
   end
   
   def back_icon
