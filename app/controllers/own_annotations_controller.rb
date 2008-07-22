@@ -28,9 +28,10 @@ class OwnAnnotationsController < ApplicationController
   end
   
   def open 
-    redirect_to :controller => :viewer,
-                :action => :index, 
-                :annotation => params["id"]
+    annotation = Annotation.find(params["id"])
+    redirect_to :controller => :viewer, 
+                    :annotation => annotation.name, 
+                    :username => annotation.user.username
   end
 
   # upload callback

@@ -1,7 +1,8 @@
 <div id="image">
   <%= image_tag url_for(:action => :image,
-           :annotation => @annotation.id,
-           :seq_region => @sequence_region.id,
+           :username => @annotation.user.username,
+           :annotation => @annotation.name,
+           :seq_region => @sequence_region.seq_id,
            :start_pos => @start,
            :end_pos => @end), :alt => '' %>
 </div>

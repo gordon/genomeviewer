@@ -70,7 +70,12 @@ class ViewerController < ApplicationController
 
   def get_annotation
     raise "No annotation specified!" unless params[:annotation]
-    @annotation = Annotation.find(params[:annotation], :include => :sequence_regions)
+    @annotation = 
+      Annotation.find(:first, 
+                      :conditions => 
+                        {:name => params[:annotation],
+                         :user_id => User.find_by_username(params[:username])}, 
+                      :include => :sequence_regions)
     raise "This annotation is not available anymore." unless @annotation
   end
   
@@ -83,7 +88,7 @@ class ViewerController < ApplicationController
   def get_seq_region
     # check sequence region
     @sequence_regions = @annotation.sequence_regions
-    @sequence_region = params[:seq_region] ? SequenceRegion.find(params[:seq_region]) : nil
+    @sequence_region = params[:seq_region] ? SequenceRegion.find_by_seq_id(params[:seq_region]) : nil
     if @sequence_region  
       raise "Sequence region not available for this annotation." \
         unless @sequence_regions.include?(@sequence_region)

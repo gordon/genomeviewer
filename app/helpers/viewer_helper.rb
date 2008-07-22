@@ -5,8 +5,9 @@ module ViewerHelper
   def ajax_replacer
     remote_function(:with => "'movement='+$('image').style.left",
                     :url =>{:action => :ajax_movement,
-                            :annotation => @annotation.id,
-                            :seq_region => @sequence_region.id,
+                            :username => @annotation.user.username,
+                            :annotation => @annotation.name,
+                            :seq_region => @sequence_region.seq_id,
                             :start_pos => @start,
                             :end_pos => @end})
   end
@@ -16,8 +17,9 @@ module ViewerHelper
   def zoom_out_button  
     link_to zoom_out_icon,
             :action => :index,
-            :annotation => @annotation.id,
-            :seq_region => @sequence_region.id,
+            :username => @annotation.user.username,
+            :annotation => @annotation.name,
+            :seq_region => @sequence_region.seq_id,
             :start_pos => @start-@current_lenght/4,
             :end_pos => @end+@current_lenght/4
   end
@@ -25,8 +27,9 @@ module ViewerHelper
   def back_button
     link_to back_icon,
             :action => :index,
-            :annotation => @annotation.id,
-            :seq_region => @sequence_region.id,
+            :username => @annotation.user.username,
+            :annotation => @annotation.name,
+            :seq_region => @sequence_region.seq_id,
             :start_pos => @start-@current_lenght/2,
             :end_pos => @end -@current_lenght/2
   end
@@ -34,8 +37,9 @@ module ViewerHelper
   def forward_button
     link_to forward_icon,
             :action => :index,
-            :annotation => @annotation.id,
-            :seq_region => @sequence_region.id,
+            :username => @annotation.user.username,
+            :annotation => @annotation.name,
+            :seq_region => @sequence_region.seq_id,
             :start_pos =>  @start+@current_lenght/2,
             :end_pos => @end+@current_lenght/2
   end
@@ -43,8 +47,9 @@ module ViewerHelper
   def zoom_in_button 
     link_to zoom_in_icon,
             :action => :index,
-            :annotation => @annotation.id,
-            :seq_region => @sequence_region.id,
+            :username => @annotation.user.username,
+            :annotation => @annotation.name,
+            :seq_region => @sequence_region.seq_id,
             :start_pos => @start+@current_lenght/4,
             :end_pos => @end-@current_lenght/4
   end
@@ -52,8 +57,9 @@ module ViewerHelper
   def show_all_button  
     link_to show_all_icon,
             :action => :index,
-            :annotation => @annotation.id,
-            :seq_region => @sequence_region.id,
+            :username => @annotation.user.username,
+            :annotation => @annotation.name,
+            :seq_region => @sequence_region.seq_id,
             :start_pos => @seq_begin,
             :end_pos => @seq_end
   end

@@ -1,7 +1,8 @@
 <div id="command_bar">
   <% form_tag({:action => :index, 
-                    :annotation => @annotation.id, 
-                    :seq_region => @sequence_region.id, 
+                    :username => @annotation.user.username,
+                    :annotation => @annotation.name, 
+                    :seq_region => @sequence_region.seq_id, 
                     :method => :get}, 
                     {:id => "position_form"}) do -%>
     Start:<%= text_field_tag 'start_pos', @start, :size => 10, :class => "nice" %>
