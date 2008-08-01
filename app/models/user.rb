@@ -17,11 +17,11 @@ class User < ActiveRecord::Base
   after_destroy :destroy_storage
   
   def create_storage
-    Dir.mkdir "#{$GFF3_STORAGE_PATH}/#{user_id}"
+    Dir.mkdir "#{$GFF3_STORAGE_PATH}/#{self[:id]}"
   end
   
   def destroy_storage
-    Dir.rmdir "#{$GFF3_STORAGE_PATH}/#{user_id}"
+    Dir.rmdir "#{$GFF3_STORAGE_PATH}/#{self[:id]}"
   end
   
   ### validations ###
