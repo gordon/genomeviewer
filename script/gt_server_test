@@ -18,8 +18,19 @@ if errormsg then
   raise "Error: #{errormsg}"
 end
 
-config = GTServer.new_config_object
+config_1 = GTServer.config_object_for_user(1)
+config_2 = GTServer.config_object_for_user(2)
 
+puts "config_1 margins=#{config_1.get_cstr("format", "margins")}"
+puts "config_2 margins=#{config_2.get_cstr("format", "margins")}"
+
+puts "set config_1 margins=20"
+config_1.set_cstr("format", "margins", 20.to_s);
+
+puts "config_1 margins=#{config_1.get_cstr("format", "margins")}"
+puts "config_2 margins=#{config_2.get_cstr("format", "margins")}"
+
+=begin
 seqids = GTServer.get_sequence_regions(gff3_file)
 seqids.each do |seq_id|
   range = GTServer.get_range_for_sequence_region(gff3_file, seq_id)
@@ -29,3 +40,4 @@ seqids.each do |seq_id|
 end
 
 puts GTServer.test_call()
+=end
