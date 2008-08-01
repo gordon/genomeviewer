@@ -7,8 +7,11 @@
 2. Put the path to the gtruby files in the environment variable GTRUBY
    If you are using a bash shell use export GTRUBY=/path/to/gtruby
 3. navigate to the genomeviewer directory
-   3.1 setup the database used by genomeviewer (rake db:schema:load)
-   3.2 start the genometools server (script/gt_server)
+   3.1 start the genometools server (script/gt_server)
+   3.2 setup the database used by genomeviewer 
+        - usually this can be done with "rake db:load"
+        - if you want to preload an example user (login:foo/pass:foo)
+          use "rake db:load_with_foo" instead 
    3.3 start the web server (script/server)
    3.4 optional: start the session deamon (script/session_deamon)
 

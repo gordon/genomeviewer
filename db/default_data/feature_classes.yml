@@ -1,0 +1,12 @@
+---
+:name: gene
+:name: exon
+:name: intron
+:name: CDS
+:name: mRNA
+:name: TF_binding_site
+:name: repeat_region
+:name: long_terminal_repeat
+:name: LTR_retrotransposon
+:name: inverted_repeat
+:name: target_site_duplication
