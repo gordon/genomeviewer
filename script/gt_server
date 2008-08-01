@@ -22,8 +22,8 @@ class GTServer
     @feature_indices = Hash.new
     @config_objects = Hash.new
     @config_objects[:default] = GT::Config.new
-    # load default settings 
-    @config_objects[:default].load_file File.expand_path("config/view.lua", 
+    # load default settings
+    @config_objects[:default].load_file File.expand_path("config/view.lua",
                                  "#{File.dirname(__FILE__)}/..")
     @config_objects[:default].freeze
     puts "Default user configuration loaded"
@@ -76,9 +76,9 @@ class GTServer
         # If there is no config_object in memory create one
         puts "-- new config object"
         STDOUT.flush
-        
+
         config_object = @config_objects[:default].dup
-                
+
         unless options[:delete_cache]
           @config_objects[user_id] = config_object
           puts "-- saved config object in cache"
@@ -90,19 +90,19 @@ class GTServer
   end
 
   ##
-  # Returns a config object with 
+  # Returns a config object with
   # the default configuration
   #
   def default_config_object
     @config_objects[:default]
   end
-  
+
   ##
   # Does the cache contain a config object for this user_id?
   def cached_config_for?(user_id)
     @config_objects.has_key?(user_id)
   end
-  
+
   ##
   # Returns a Color object
   # Color objects that should be used in Config Objects must be
@@ -168,7 +168,7 @@ class GTServer
   end
 
   private
-  
+
   # options:
   # :delete_cache => true : empty the cache for this feature_index [default: false]
   # :add_introns => true  : turns on add_introns feature [default: false]
