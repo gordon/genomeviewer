@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 16) do
+ActiveRecord::Schema.define(:version => 17) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -59,7 +59,8 @@ ActiveRecord::Schema.define(:version => 16) do
   end
 
   create_table "feature_classes", :force => true do |t|
-    t.string "name"
+    t.string  "name"
+    t.integer "user_id"
   end
 
   create_table "feature_style_configurations", :force => true do |t|
