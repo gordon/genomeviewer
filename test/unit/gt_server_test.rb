@@ -88,8 +88,11 @@ class GtServerTest < ActiveSupport::TestCase
   end
 
   def test_feature_index_caching
-    # not implemented as feature index 
-    # caching method is private
+    file = "test/gff3/little1.gff3"
+    GTServer.get_feature_index_for_file(file, :delete_cache => true)
+    assert !GTServer.cached_feature_index_for?(file)
+    GTServer.get_feature_index_for_file(file)
+    assert GTServer.cached_feature_index_for?(file)    
   end
 
 end
