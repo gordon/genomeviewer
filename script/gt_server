@@ -206,7 +206,7 @@ class GTServer
 
       else
 
-        # If there is no featureindex in memory create one
+        # If there is no feature index in memory create one
         puts "-- new feature index"
         STDOUT.flush
 
