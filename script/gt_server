@@ -30,6 +30,8 @@ class GTServer
   # @return The sequence regions contained in filename
   #
   def get_sequence_regions(filename)
+    puts "Requested sequence regions for #{filename}"
+    STDOUT.flush
     feature_index=get_feature_index_for_file(filename)
     return feature_index.get_seqids
   end
