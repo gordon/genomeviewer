@@ -1,5 +1,5 @@
 ---
-:name: line
-:name: caret
-:name: box
-:name: dashed
+- :name: line
+- :name: caret
+- :name: box
+- :name: dashed
