@@ -18,13 +18,13 @@ module ViewerHelper
     if @start == @seq_begin and @end == @seq_end 
       return zoom_out_icon_inactive
     else      
-      return link_to zoom_out_icon,
+      return link_to(zoom_out_icon,
                      :action => :index,
                      :username => @annotation.user.username,
                      :annotation => @annotation.name,
                      :seq_region => @sequence_region.seq_id,
                      :start_pos => (@start-@current_lenght/4).round,
-                     :end_pos => (@end+@current_lenght/4).round
+                     :end_pos => (@end+@current_lenght/4).round)
     end
   end
   
@@ -42,13 +42,13 @@ module ViewerHelper
         new_end = @seq_end 
         new_start = new_end - old_window
       end
-      return link_to back_icon,
+      return link_to(back_icon,
             :action => :index,
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
             :start_pos =>  new_start,
-            :end_pos => new_end
+            :end_pos => new_end)
     end
   end
         
@@ -66,13 +66,13 @@ module ViewerHelper
         new_end = @seq_end 
         new_start = new_end - old_window
       end
-      return link_to forward_icon,
+      return link_to(forward_icon,
             :action => :index,
             :username => @annotation.user.username,
             :annotation => @annotation.name,
             :seq_region => @sequence_region.seq_id,
             :start_pos =>  new_start,
-            :end_pos => new_end
+            :end_pos => new_end)
     end
   end
           
@@ -82,13 +82,13 @@ module ViewerHelper
     if new_end-new_start < 10
       return zoom_in_icon_inactive
     else
-      return link_to zoom_in_icon,
+      return link_to(zoom_in_icon,
                      :action => :index,
                      :username => @annotation.user.username,
                      :annotation => @annotation.name,
                      :seq_region => @sequence_region.seq_id,
                      :start_pos => new_start,
-                     :end_pos => new_end
+                     :end_pos => new_end)
     end
   end
   
@@ -96,13 +96,13 @@ module ViewerHelper
     if @start == @seq_begin and @end == @seq_end
       return show_all_icon_inactive
     else      
-      return link_to show_all_icon,
+      return link_to(show_all_icon,
                      :action => :index,
                      :username => @annotation.user.username,
                      :annotation => @annotation.name,
                      :seq_region => @sequence_region.seq_id,
                      :start_pos => @seq_begin,
-                     :end_pos => @seq_end
+                     :end_pos => @seq_end)
     end
   end
 
