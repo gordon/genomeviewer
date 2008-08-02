@@ -1,125 +1,75 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-Dir.mkdir($GFF3_STORAGE_PATH) \
-  unless File.exists?($GFF3_STORAGE_PATH)
-
-module ExampleAnnotations
-     
-  # some users to save the annotations:
-    
-  john_smith = User.create({
-    :name => "John Smith",
-    :password => "goodpassword",
-    :email => "genome@viewer.org"
-  }) 
-   
-  jane_doe = User.create({
-    :name => "Jane Doe",
-    :password => "mypassword",
-    :email => "jane@gviewer.org"
-  }) 
-
-  encode_known_genes = Annotation.new do |a|
-    a.name = "encode_known_genes_Mar07.gff3"
-    a.user = User.find_by_name("John Smith")
-    a.description = "Encode known genes, March 2007\nA test gff3 file from genometools."
-    a.gff3_data = IO.read("test/gff3/encode_known_genes_Mar07.gff3")
-    a.save
-  end
-
-  standard_gene_1 = Annotation.new do |a|
-    a.name = "standard_gene_with_introns_as_tree.gff3"
-    a.user = User.find_by_name("Jane Doe")
-    # no description
-    a.gff3_data = IO.read("test/gff3/standard_gene_with_introns_as_tree.gff3")
-    a.save
-  end
-  
-end
-
 class AnnotationTest < Test::Unit::TestCase
     
-  include ExampleAnnotations
-  
-  def test_annotation_create
-    @a = Annotation.create(:name => "test1", :user_id => 1, :gff3_data=>"testtesttest")
-    @b = Annotation.create(:gff3_data=>"another test",:name => "test2", :user_id => 1)
-    assert @a
-    assert @b
+  def setup    
+    # be sure the necessary storage and tmp directory exist
+    Dir.mkdir($GFF3_STORAGE_PATH) rescue nil
+    Dir.mkdir("tmp/gff3_data") rescue nil
+    # delete all users and create some test ones
+    User.destroy_all
+    u1 = User.create!(:username => "u1", :name => "Uu 1", 
+                      :password => "...",:email => "u1@x.xxx") 
+    u2 = User.create!(:username => "u2", :name => "Uu 2", 
+                      :password => "...",:email => "u2@x.xxx") 
   end
-
-  def test_filesystem_upload_1
-    uploaded_encode_known_genes = $GFF3_STORAGE_PATH+"/"+\
-                         User.find_by_name("John Smith").id.to_s+\
-                         "_encode_known_genes_Mar07.gff3"
-    assert File.exists?(uploaded_encode_known_genes)
-  end
-
-  def test_filesystem_upload_2
-    uploaded_standard_gene_1 = $GFF3_STORAGE_PATH+"/"+\
-                         User.find_by_name("Jane Doe").id.to_s+\
-                         "_standard_gene_with_introns_as_tree.gff3"    
-    assert File.exists?(uploaded_standard_gene_1)
-  end
-
-  def test_upload_content_1
-    path_of_encode_known_genes = $GFF3_STORAGE_PATH+"/"+\
-                         User.find_by_name("John Smith").id.to_s+\
-                         "_encode_known_genes_Mar07.gff3"
-    f = File.open(path_of_encode_known_genes)
-    first_two_lines = f.gets + f.gets
-    assert_equal first_two_lines,
-      "##gff-version   3\n##sequence-region   chr1 147971134 148468994\n"
-  end
-
-  def test_upload_content_2
-    original_file = "test/gff3/standard_gene_with_introns_as_tree.gff3"
-    uploaded_file = $GFF3_STORAGE_PATH+"/"+\
-                         User.find_by_name("Jane Doe").id.to_s+\
-                         "_standard_gene_with_introns_as_tree.gff3"  
-    assert_equal IO.read(original_file), 
-                 IO.read(uploaded_file)
-   end
-             
-  def test_rename
-    standard_gene_1 = Annotation.find_by_name("standard_gene_with_introns_as_tree.gff3")
-    old_location = $GFF3_STORAGE_PATH+"/"+\
-                         User.find_by_name("Jane Doe").id.to_s+\
-                         "_standard_gene_with_introns_as_tree.gff3"  
-                         
-    standard_gene_1.name = "standard_gene_1"
     
-#    assert_equal standard_gene_1.gff3_data_storage, old_location
-    
-    new_location = $GFF3_STORAGE_PATH+"/"+\
-                         User.find_by_name("Jane Doe").id.to_s+\
-                         "_standard_gene_1"    
-    standard_gene_1.save
-    assert File.exists?(new_location)
-    standard_gene_1.name = "standard_gene_with_introns_as_tree.gff3"  
-    standard_gene_1.save
-    assert File.exists?(old_location)
-  end
-  
-  def test_seq_id_modification
-
-    little1 = Annotation.new do |a|
-      a.name = "little1.gff3"
-      a.user = User.find_by_name("Jane Doe")
+  def test_new_method
+    u1 = User.find_by_username("u1")
+    a1 = Annotation.new do |a|
       a.gff3_data = IO.read("test/gff3/little1.gff3")
+      # gff3_data saved before a name and user is available
+      # should have landed in the tmp/gff3_data directory
+      assert File.exist?(a.gff3_data_storage)
+      assert_equal "tmp/gff3_data", File.dirname(a.gff3_data_storage)
+      a.user = u1
+      a.description = "A little annotation"
+      a.name = "little1.gff3"
       a.save
+      # now an user and name were available, so after saving it should 
+      # have been moved to the storage directory
+      assert File.exist?(a.gff3_data_storage)
+      assert_equal "#{$GFF3_STORAGE_PATH}/#{u1.id}", File.dirname(a.gff3_data_storage)
     end
+  end
+  
+  def test_create_method 
+    u2 = User.find_by_username("u2")
+    little2 = IO.read("test/gff3/little2.gff3")
+    a2 = Annotation.create( 
+          :user => u2, 
+          :gff3_data => little2,
+          :name =>  "little2.gff3")
+    assert File.exist?(a2.gff3_data_storage)
+    assert_equal "#{$GFF3_STORAGE_PATH}/#{u2.id}", File.dirname(a2.gff3_data_storage)
+    assert_equal little2, IO.read("#{$GFF3_STORAGE_PATH}/#{u2.id}/little2.gff3")
+    assert_equal little2, a2.gff3_data
+  end
+  
+  def test_non_standard_type
+    t = "test_type"
+    # check that t is not global otherwise this test has no sense
+    assert !FeatureClass.global.map(&:name).include?(t)
     
-    seq_region_test1_changed = SequenceRegion.new do |sr|
-      sr.seq_id = "test1"
-      sr.seq_begin = 2000
-      sr.seq_end = 8000
-    end
-    
-    little1.sequence_regions=[seq_region_test1_changed]
-    little1.save
-    assert little1.sequence_regions[0].seq_begin=2000
-    assert little1.sequence_regions[0].seq_end=8000
+    gff3_data = IO.read("test/gff3/little1.gff3")
+    # change "gene" in the non standard type
+    gff3_data = gff3_data.gsub("gene", t)
+    # upload the modified annotation
+    u = User.find(:first)
+    assert !u.own_feature_classes.map(&:name).include?(t)
+    a = Annotation.create(:name => "~deleteme",
+                          :user => u,
+                          :gff3_data => gff3_data)
+    assert u.own_feature_classes.map(&:name).include?(t)
+    # note: 
+    # in the current implementation, feature classes are 
+    # *not* deleted when the annotation that caused their
+    # creation is deleted
+    a.destroy
+    assert u.own_feature_classes.map(&:name).include?(t)
+    # however they are deleted if the user is deleted
+    u.destroy
+    assert_nil FeatureClass.find_by_user_id(u.id)
   end
   
 end
