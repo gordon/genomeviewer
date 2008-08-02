@@ -145,11 +145,12 @@ class GTServer
     range.end = end_pos
 
     diagram = GT::Diagram.new(feature_index, sequence_region, range, config)
-
-    render = GT::Render.new(config)
+    canvas = GT::Canvas.new(config, width, GT::ImageInfo.new)
+    diagram.render(canvas)
+    
     puts "- streaming..."
     STDOUT.flush
-    return render.to_png_stream(diagram, width)
+    return canvas.to_stream
   end
 
   ##
