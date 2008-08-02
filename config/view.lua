@@ -43,7 +43,8 @@ config =
   {
     to_parent = {"CDS","exon","intron","long_terminal_repeat",
                  "LTR_retrotransposon","inverted_repeat",
-                 "target_site_duplication"},
+                 "target_site_duplication", "five_prime_splice_site",
+                 "three_prime_splice_site" },
   },
   -- Defines precedence of same level feature types when overlapping
   -- in a collapsed track.
@@ -51,6 +52,8 @@ config =
   dominate =
   {
     CDS = {"exon","intron","mRNA","gene"},
+    five_prime_splice_site = {"intron", "mRNA", "gene"},
+    three_prime_splice_site = {"intron", "mRNA", "gene"},
     exon = {"mRNA","gene"},
     intron = {"mRNA", "gene"},
     mRNA = {"gene"},
@@ -70,5 +73,6 @@ config =
     stroke_width = .5, -- width of outlines, in pixels
     stroke_marked_width = 1.5, -- width of outlines for marked elements, in pixels
     show_grid = "yes", -- shows light vertical lines for orientation
+    min_len_block = 40, -- minimum length of a block in which single elements are shown
   },
 }
