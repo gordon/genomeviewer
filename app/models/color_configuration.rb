@@ -4,12 +4,12 @@ class ColorConfiguration < ActiveRecord::Base
   belongs_to :user
 
   # returns an hash with the default values from view.lua
-  def self.defaults
+  def self.defaults_for(user)
     c = GTServer.default_config_object
     colors = {}
-    # as there is no iterator yet in gtruby
+    # as there is no iterator in gtruby
     # try all features and graphical elements
-    elements = FeatureClass.find(:all) +
+    elements = user.feature_classes +
                   GraphicalElement.find(:all)
     elements.map(&:name).each do |e|
       # if e did not exist 0.8 is returned for all colors

@@ -11,7 +11,7 @@ module ConfigModules::Collapse
         CollapsingConfiguration.default
       end
     @not_collapsing = 
-      FeatureClass.find(:all).delete_if {|fc| @collapse.include? fc.name}
+      user.feature_classes.delete_if {|fc| @collapse.include? fc.name}
     @title = "Configuration"
     @subtitle = "Collapsing to parent"
   end

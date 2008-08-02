@@ -1,7 +1,7 @@
 module ConfigModules::Styles
   
   ### actions with a template ###
-  
+ 
   def config_styles
     user = User.find(session[:user])
     @styles = FeatureStyleConfiguration.defaults 
@@ -10,8 +10,10 @@ module ConfigModules::Styles
       @styles[conf.feature_class.name] = conf.style.name
     end
     @not_configured = []
-    (FeatureClass.find(:all).map(&:name) - @styles.keys).each do |fc|
-      @not_configured << FeatureClass.find_by_name(fc)
+    (user.feature_classes.map(&:name) - @styles.keys).each do |fc_name|
+      fc = FeatureClass.global.find_by_name(fc_name)
+      fc ||= FeatureClass.find_by_name_and_user_id(fc_name, user.id)
+      @not_configured << fc
     end
     @title = "Configuration"
     @subtitle = "Styles"
@@ -22,7 +24,8 @@ module ConfigModules::Styles
   def do_config_styles
     user = User.find(session[:user])
     params[:styles].each_pair do |element_name, style_id|
-      element = FeatureClass.find_by_name(element_name) 
+      element = FeatureClass.global.find_by_name(element_name)
+      element ||= FeatureClass.find_by_name_and_user_id(element_name, user.id)
       old_conf = user.feature_style_configurations.find_by_feature_class_id(element.id)
       user.feature_style_configurations.delete(old_conf) if old_conf
       new_conf = FeatureStyleConfiguration.new(:feature_class => element, :style_id => style_id)
@@ -46,7 +49,8 @@ module ConfigModules::Styles
   
   def reset_style
     user = User.find(session[:user])
-    element = FeatureClass.find_by_name(params[:element])
+    element = FeatureClass.global.find_by_name(params[:element])
+    element ||= FeatureClass.find_by_name_and_user_id(params[:element], user.id)
     user_conf = user.feature_style_configurations.find_by_feature_class_id(element.id)
     user.feature_style_configurations.delete(user_conf) if user_conf
     user.flush_config_cache
