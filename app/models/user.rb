@@ -2,6 +2,12 @@ class User < ActiveRecord::Base
 
   ### associations ###
   has_many :annotations, :dependent => :destroy
+  # user specific feature classes:
+  has_many :own_feature_classes, :class_name => "FeatureClass", :dependent => :destroy
+  
+  def feature_classes
+    FeatureClass.global+own_feature_classes
+  end
 
   # configuration objects: if not existing, standard configuration will be used
   # => see config method
