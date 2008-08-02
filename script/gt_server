@@ -236,6 +236,10 @@ class GTServer
       end
     end
   end
+  
+  def cached_feature_index_for?(filename)
+    @feature_indices.has_key?(filename)
+  end
 
 end
 
