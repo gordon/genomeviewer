@@ -35,6 +35,17 @@ class GTServer
   end
 
   ##
+  # Returns the name of the feature classes contained in a gff3 file
+  #
+  def get_feature_classes(filename)
+    puts "Requested feature classes used in #{filename}"
+    STDOUT.flush
+    in_stream = GT::GFF3InStream.new(filename)
+    loop {break unless in_stream.next_tree}
+    return in_stream.get_used_types
+  end
+
+  ##
   # Returns a range of a sequence region
   # @param filename Path to a gff3 file
   # @param sequence_region A sequence region identifier
