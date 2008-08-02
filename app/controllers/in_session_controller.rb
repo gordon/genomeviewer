@@ -24,11 +24,6 @@ class InSessionController < ApplicationController
   def config
     @title = "Configuration"
   end
-
-  def create_feature_class
-    @title = "Configuration"
-    @subtitle = "Create a Feature Class"
-  end
   
   # see also in the included modules 
   
@@ -37,16 +32,6 @@ class InSessionController < ApplicationController
   def do_logout
     session[:user]=nil
     redirect_to params[:back_to]
-  end
-
-  def do_create_feature_class
-    fc = FeatureClass.new(params[:feature_class])
-    if fc.save
-      flash[:info] = "New feature class #{fc.name} created successfully."
-    else
-      flash[:errors] = "Impossible to create #{fc.name}.<br/>Does it already exist?"
-    end
-    redirect_to :action => :create_feature_class
   end
   
   # see also in the included modules
