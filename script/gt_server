@@ -185,8 +185,6 @@ class GTServer
     return canvas.to_stream
   end
 
-  private
-  
   # options:
   # :delete_cache => true : empty the cache for this feature_index [default: false]
   # :add_introns => true  : turns on add_introns feature [default: false]
