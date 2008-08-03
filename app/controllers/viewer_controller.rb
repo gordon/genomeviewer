@@ -71,7 +71,7 @@ class ViewerController < ApplicationController
   ### image ###
   
   def image
-    send_data @sequence_region.to_png(@start, @end, @width),
+    send_data @sequence_region.image(@start, @end, @width),
               :type => "image/png",
               :disposition => "inline",
               :filename => "#{@annotation.name}_#{@sequence_region.seq_id}.png"
