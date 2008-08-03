@@ -62,12 +62,21 @@ class GtServerTest < ActiveSupport::TestCase
   end
     
   def test_get_image_stream
-    f_classes = %w{mRNA gene exon intron TF_binding_site}
     file = "test/gff3/encode_known_genes_Mar07.gff3"
     config = GTServer.default_config_object
     png_data = GTServer.get_image_stream(file, "chrX", 122525028, 153939916, config, 100, true)
     assert png_data.size > 1000
     assert_equal "PNG", png_data[1..3]
+  end
+  
+  def test_get_image_map
+    file = "test/gff3/little1.gff3"
+    config = GTServer.default_config_object
+    info = GTServer.get_image_map(file, "test1", 1000, 9000, config, 100, true)
+    info.each_hotspot do |a,b,c,d,feat|
+      assert_equal [30,95,70,110], [a, b, c, d]
+      assert_equal "gene1", feat.get_attribute("ID")
+    end
   end
   
   #

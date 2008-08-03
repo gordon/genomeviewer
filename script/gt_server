@@ -8,7 +8,7 @@ require 'gtruby'
 ##
 # The GTServer forwards requests from the GenomeViewer to the
 # GenomeTools. Additionally it is responsible for caching
-# feature_index and config structures
+# feature_index, config structures and image maps
 #
 class GTServer
 
@@ -21,6 +21,7 @@ class GTServer
     @mutex = Mutex.new
     @feature_indices = Hash.new
     @config_objects = Hash.new
+    @image_maps = Hash.new
     STDOUT.flush
   end
 
@@ -153,7 +154,7 @@ class GTServer
 
   ##
   # This function ouputs an image as a png stream
-  # If the oputupt is written in a file the file is a valid png file.
+  # If the output is written in a file the file is a valid png file.
   # @param filename Path to a gff3 file
   # @param sequence_region A sequence region identifier
   # @param start_pos A start position
@@ -163,26 +164,61 @@ class GTServer
   # @param add_introns switch add_introns genometools functionality
   # @return A png stream
   #
-  def get_image_stream(filename, sequence_region, start_pos, end_pos, config, width, add_introns)
-    puts "Requested image stream for:"
+  def get_image_stream(filename, sequence_region, start_pos, end_pos, 
+                       config, width, add_introns, map_mode = false)
+    puts "Requested image #{map_mode ? 'map' : 'stream'} for:"
     puts "- #{File.basename(filename)}, "
     puts "- seq_id: #{sequence_region},  "
     puts "- range: #{start_pos} - #{end_pos}"
     STDOUT.flush
 
-    feature_index=get_feature_index_for_file(filename, :add_introns => add_introns)
-
+    feature_index = get_feature_index_for_file(filename, 
+                                               :add_introns => add_introns)
     range = feature_index.get_range_for_seqid(sequence_region)
     range.start = start_pos
     range.end = end_pos
 
     diagram = GT::Diagram.new(feature_index, sequence_region, range, config)
-    canvas = GT::Canvas.new(config, width, GT::ImageInfo.new)
+    info = GT::ImageInfo.new
+    canvas = GT::Canvas.new(config, width, info)
     diagram.render(canvas)
     
-    puts "- streaming..."
-    STDOUT.flush
-    return canvas.to_stream
+    unless map_mode
+      #cache image map
+      key = [filename, sequence_region, start_pos, 
+             end_pos, config, width, add_introns].hash
+      puts "- caching map for key #{key}"
+      STDOUT.flush
+      @image_maps[key] = info
+      
+      puts "- streaming..."
+      STDOUT.flush
+      return canvas.to_stream
+    else
+      puts "- returning image map..."
+      STDOUT.flush
+      return info
+    end
+  end
+  
+  #
+  # returns the image map that was generated with the image
+  # (or generate an image and return the image map)
+  #
+  def get_image_map(*params)
+    key = params.hash
+    puts "Requested image map for key #{key}:"
+    if @image_maps[key]
+      puts "- returning image map (cached)..."
+      STDOUT.flush
+      return @image_maps.delete(key)
+    else
+      # maybe the server was down?
+      puts "- no map in cache: creating one..."
+      STDOUT.flush
+      params << :map_mode
+      return get_image_stream(*params)
+    end
   end
 
   # options:
