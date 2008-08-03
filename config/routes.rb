@@ -33,18 +33,11 @@ ActionController::Routing::Routes.draw do |map|
   
   # connect controllers
   
-  map.connect 'default/:action',
-              :controller => "default"
-  map.connect 'in_session/:action',
-              :controller => "in_session"
-  map.connect 'own_annotations/:action',
-              :controller => "own_annotations"
-  map.connect 'public_annotations/:action',
-              :controller => "public_annotations"
-  map.connect 'public_users/:action',
-              :controller => "public_users"
-  map.connect 'register/:action',
-              :controller => "register"
+  %w[default in_session own_annotations public_annotations 
+  public_users register viewer].each do |controller_name|
+    map.connect "#{controller_name}/:action",
+               :controller => controller_name
+  end
   
   # user public page
   
