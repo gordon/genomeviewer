@@ -33,5 +33,25 @@ module OwnAnnotationsHelper
               :position => :after})+
     ']</p>'
   end
+  
+  #
+  # similar to the action view implementation 
+  # of error_messages_for(*params), 
+  # but without options, which are hardcoded
+  #
+  def upload_error_messages_for(record)
+    object = instance_variable_get("@#{record}")
+    count = object.errors.count
+    if count.zero?
+      return ''
+    else
+      contents = ''
+      contents << content_tag(:h2, "This file could not be uploaded") 
+      contents << content_tag(:p, 'for the following reason:')
+      error_messages = object.errors.full_messages.map {|msg| content_tag(:li, msg) }
+      contents << content_tag(:ul, error_messages)
+      return content_tag(:div, contents, :id => 'errorExplanation', :class => 'errorExplanation')
+    end
+  end
 
 end

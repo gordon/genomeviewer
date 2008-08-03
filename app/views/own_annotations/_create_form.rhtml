@@ -12,7 +12,7 @@ else
 end -%>
 
   <% if request.xhr? -%>
-    <div id="<%= element_messages_id(:action => :create) %>" class="messages-container"><%= error_messages_for :record %></div>
+    <div id="<%= element_messages_id(:action => :create) %>" class="messages-container"><%= upload_error_messages_for :record %></div>
   <% else -%>
     <%= render :partial => 'form_messages' %>
   <% end -%>
