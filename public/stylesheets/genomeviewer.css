@@ -184,3 +184,19 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 
+/* image */
+#image img{
+  border: 0;
+}
+
+/* tooltips */
+
+.tooltip_body {
+  background: white;
+  border: 1px solid darkblue;
+}
+
+.tooltip_header {
+ background: darkblue;
+ color: white;
+}
