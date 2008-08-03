@@ -45,9 +45,9 @@ class User < ActiveRecord::Base
   # see config/routes.rb
   validates_exclusion_of :username,
                          :in => %w[login logout registration recover_password 
-                         configuration files public default in_session 
+                         configuration files public default in_session viewer
                          own_annotations public_annotations public_users 
-                         register image move],
+                         register image move images javascripts stylesheets],
                          :message => "This username is reserved. Please choose a different one."
   
   # email
