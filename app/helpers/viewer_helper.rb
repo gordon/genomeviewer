@@ -219,8 +219,8 @@ module ViewerHelper
   def info(feature)
     i = [] # no hash, so order remains constant
     i << ["Type", feature.get_type]
-    range = feature.get_range
-    i << ["Range", "#{range.start} - #{range.end}"]
+    i << ["Range", "#{GTServer.range_start(feature)} - "+
+                   "#{GTServer.range_end(feature)}"]
     score = feature.get_score
     (i << ["Score", score]) if score
     feature.each_attribute {|k,v| (i << [k, v])}
