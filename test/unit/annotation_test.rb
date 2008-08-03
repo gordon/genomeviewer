@@ -72,4 +72,24 @@ class AnnotationTest < Test::Unit::TestCase
     assert_nil FeatureClass.find_by_user_id(u.id)
   end
   
+  def test_unique_name_validation
+    u1 = User.find_by_username("u1")
+    u2 = User.find_by_username("u2")
+    gff3 = IO.read("test/gff3/little1.gff3")
+    # upload it the first time for u1
+    a1 = Annotation.create(:name => "little1.gff3",
+                      :user => u1, :gff3_data => gff3)
+    # try to upload it the second time for u1 with the same name
+    assert_nil Annotation.create(:name => "little1.gff3",
+                      :user => u1, :gff3_data => gff3).id
+    # upload it for u2 with the same name used for u1
+    assert_not_nil Annotation.create(:name => "little1.gff3",
+                      :user => u2, :gff3_data => gff3).id
+    # delete the first copy for u1 and retry to upload
+    a1.destroy
+    assert_not_nil Annotation.create(:name => "little1.gff3",
+                      :user => u1, :gff3_data => gff3).id
+    
+  end
+  
 end

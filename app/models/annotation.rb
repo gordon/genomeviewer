@@ -82,7 +82,7 @@ class Annotation < ActiveRecord::Base
 
   ### validations ###
 
- #validates_uniqueness_of :name, :scope => :user_id
+  validates_uniqueness_of :name, :scope => :user_id, :message => "You already have a file with this name. Either delete that or rename this."
   validates_presence_of :user
 
   def validate
