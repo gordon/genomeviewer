@@ -178,4 +178,53 @@ module ViewerHelper
               :alt => "[<-->]"
   end
 
+  def map_tag(image_info)
+    content_tag(:map, :name => "imap", :id => "imap") do 
+      content = ''
+      image_info.each_hotspot do |x1, y1, x2, y2, feature|
+        coords = [x1, y1, x2, y2].join(", ")
+        content << hotspot_area_tag(coords, feature)
+      end
+      content
+    end
+  end
+    
+  def hotspot_area_tag(coords, feature)
+    tag :area, 
+        # use boxover to create a js tooltip:
+        :title => "header=[#{feature.get_attribute("ID")}] "+
+                  "body=[#{tooltip_table(feature)}]"+
+                  "cssheader=[tooltip_header]"+
+                  "cssbody=[tooltip_body]",
+        :shape => 'rect',
+        :coords => coords,
+        :href => 'javascript:void(0)'
+  end
+    
+  
+  def tooltip_table(feature)
+    content_tag(:table) do 
+      content = ""
+      info(feature).each do |k, v|
+        tr = content_tag(:tr) do 
+          content_tag(:td, k)+
+          content_tag(:td, v)
+        end
+        content << tr
+      end
+      content
+    end
+  end
+    
+  def info(feature)
+    i = [] # no hash, so order remains constant
+    i << ["Type", feature.get_type]
+    range = feature.get_range
+    i << ["Range", "#{range.start} - #{range.end}"]
+    score = feature.get_score
+    (i << ["Score", score]) if score
+    feature.each_attribute {|k,v| (i << [k, v])}
+    return i
+  end    
+
 end
