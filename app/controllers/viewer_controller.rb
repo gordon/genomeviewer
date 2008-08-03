@@ -101,14 +101,11 @@ class ViewerController < ApplicationController
   def get_seq_region
     # check sequence region
     @sequence_regions = @annotation.sequence_regions
-    @sequence_region = params[:seq_region] ? SequenceRegion.find_by_seq_id(params[:seq_region]) : nil
-    if @sequence_region  
-      raise "Sequence region not available for this annotation." \
-        unless @sequence_regions.include?(@sequence_region)
-    else
-      # default fallback
-      @sequence_region = @annotation.sequence_regions.first
-    end
+    @sequence_region = params[:seq_region] ? 
+          @sequence_regions.find_by_seq_id(params[:seq_region]) :
+          @sequence_regions.first # default fallback
+    raise "Sequence region not available for this annotation." \
+          unless @sequence_region
   end    
   
   def get_width
