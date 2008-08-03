@@ -188,7 +188,7 @@ module ViewerHelper
       content
     end
   end
-    
+
   def hotspot_area_tag(coords, feature)
     tag :area, 
         # use boxover to create a js tooltip:
@@ -198,9 +198,18 @@ module ViewerHelper
                   "cssbody=[tooltip_body]",
         :shape => 'rect',
         :coords => coords,
-        :href => 'javascript:void(0)'
+        :href => 'javascript:void(0);',
+        :ondblclick => "javascript:#{tooltip_zoomer(feature)};"
   end
     
+  def tooltip_zoomer(feature)
+    remote_function(:url =>{:action => :ajax_reloader,
+                            :username => @annotation.user.username,
+                            :annotation => @annotation.name,
+                            :seq_region => @sequence_region.seq_id,
+                            :start_pos => GTServer.range_start(feature),
+                            :end_pos => GTServer.range_end(feature)})
+  end
   
   def tooltip_table(feature)
     content_tag(:table) do 

@@ -67,6 +67,11 @@ class ViewerController < ApplicationController
     end
     
   end
+  
+  def ajax_reloader
+    get_values_for_orientation_bar
+    render :action => "ajax_movement.js.rjs"
+  end
 
   ### image ###
   
