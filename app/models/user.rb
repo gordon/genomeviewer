@@ -83,82 +83,23 @@ class User < ActiveRecord::Base
         default
   end
 
+  include ConfigObjectLoaders
+  
   # returns the (eventually cached) GT::Config object 
   # with the personalisations for this user
   def config
-    cached = GTServer.cached_config_for?(self[:id])
-    c = GTServer.config_object_for_user(self[:id])
-    unless cached
-      # load user specific configurations
-      load_user_colors_in(c)
-      load_user_styles_in(c)
-      load_user_formats_in(c)
-      load_user_dominates_in(c)
-      load_user_collapses_in(c)
+    unless @config_object
+      cached = GTServer.cached_config_for?(self[:id])
+      @config_object = GTServer.config_object_for_user(self[:id])
+      # see ConfigObjectLoaders module for the next:
+      load_user_specific_configurations unless cached
     end
-    return c
+    @config_object
   end
   
   def flush_config_cache
     GTServer.config_object_for_user(self[:id], :delete_cache => true)
-  end
-
-  private
-
-  ### helper functions for config ###
-
-  def load_user_colors_in(config_object)
-    color_configurations.each do |conf|
-      color = GTServer.new_color_object
-      color.red = conf.red.to_f
-      color.green = conf.green.to_f
-      color.blue = conf.blue.to_f
-      config_object.set_color(conf.element.name, color)
-    end
-  end
-
-  def load_user_styles_in(config_object)
-    feature_style_configurations.each do |record|
-      config_object.set_cstr("feature_styles",
-                             record.feature_class.name,
-                             record.style.name)
-    end
-  end
-
-  def load_user_formats_in(config_object)
-    return unless drawing_format_configuration
-    dfc = drawing_format_configuration
-    # set show_grid
-    show_grid = dfc.show_grid ? "yes" : "no"
-    config_object.set_cstr("format",
-                           "show_grid",
-                           show_grid)
-    # set all other format attributes
-    dfc.pixel_attribute_names.each do |attr|
-      config_object.set_num("format",
-                attr,
-                dfc.send(attr).to_f)
-    end
-  end
-
-  def load_user_dominates_in(config_object)
-    domination_configurations.each do |conf|
-      unless conf.dominated_features.empty?
-        dfs = conf.dominated_features.map(&:feature_class).map(&:name)
-        config_object.set_cstr_list("dominate",
-                                    conf.dominator.name,
-                                    dfs)
-      else
-        config_object.set_cstr_list("dominate", conf.dominator.name, [])
-      end
-    end
-  end
-
-  def load_user_collapses_in(config_object)
-    return unless collapsing_configuration
-    config_object.set_cstr_list("collapse",
-                                "to_parent",
-                                collapsing_configuration.to_parent)
+    @config_object = nil
   end
 
 end
