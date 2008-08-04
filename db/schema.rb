@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 17) do
+ActiveRecord::Schema.define(:version => 18) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -56,6 +56,7 @@ ActiveRecord::Schema.define(:version => 17) do
     t.decimal "stroke_width",        :default => 0.5
     t.decimal "stroke_marked_width", :default => 1.5
     t.boolean "show_grid",           :default => true
+    t.decimal "min_len_block",       :default => 40.0
   end
 
   create_table "feature_classes", :force => true do |t|

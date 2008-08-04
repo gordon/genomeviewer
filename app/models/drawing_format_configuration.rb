@@ -20,6 +20,7 @@ class DrawingFormatConfiguration < ActiveRecord::Base
       when "stroke_width" : "(width of outlines)"
       when "stroke_marked_width" : "(width of outlines for marked elements)"
       when "show_grid" : "(shows light vertical lines for orientation)"
+      when "min_len_block" : "(minimum length of a block in which single elements are shown)"
       else
 	""
     end
