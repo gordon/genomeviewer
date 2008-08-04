@@ -4,6 +4,7 @@ john_smith_jr:
   email: john_smith.jr@genome.test
   url: www.genome.test/~john_smith/
   password: p1assword
+  username: john_smith_jr
   
 john_smith_sr:
   id: 2
@@ -11,6 +12,7 @@ john_smith_sr:
   institution: Test Gen AG
   email: john.smith.sr@test.gen
   password: pa2ssword
+  username: john_smith_sr
   
 a_test:
   id: 3
@@ -18,6 +20,7 @@ a_test:
   institution: University of Testtown
   email: a.test@gene.tst
   password: pas3sword
+  username: a_test
 
 <% 255.times do |i| %>
 test_user_<%=i%>:
@@ -26,4 +29,5 @@ test_user_<%=i%>:
   url: www.test.domain/~test/<%=i%>
   institution: Test Institution <%=rand(5)%>
   password: any_password
+  username: test_<%=i%>
 <% end %>
