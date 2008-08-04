@@ -135,7 +135,7 @@ class User < ActiveRecord::Base
                            show_grid)
     # set all other format attributes
     dfc.pixel_attribute_names.each do |attr|
-      c.set_num("format",
+      config_object.set_num("format",
                 attr,
                 dfc.send(attr).to_f)
     end
