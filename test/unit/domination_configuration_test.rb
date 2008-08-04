@@ -5,8 +5,9 @@ class DominationConfigurationTest < ActiveSupport::TestCase
   fixtures :users, :feature_classes
   
   def test_load_dominations
+    u = users("a_test")
     assert_not_equal ["intron","mRNA"],
-         users("giorgio").config.get_cstr_list("dominate","exon").to_a
+         u.config.get_cstr_list("dominate","exon").to_a
                       
                       
     dd = DominationConfiguration.create(:dominator => feature_classes("exon"))
@@ -21,10 +22,11 @@ class DominationConfigurationTest < ActiveSupport::TestCase
       df.save
     end
     
-    users("giorgio").domination_configurations = [dd]
-    assert users("giorgio").save
+    u.domination_configurations = [dd]
+    u.save
+    u.flush_config_cache
     assert_equal ["intron","mRNA"], 
-                      users("giorgio").config.get_cstr_list("dominate","exon").to_a
+                      u.config.get_cstr_list("dominate","exon").to_a
                       
   end
 
