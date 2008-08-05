@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20) do
+ActiveRecord::Schema.define(:version => 21) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -17,36 +17,6 @@ ActiveRecord::Schema.define(:version => 20) do
     t.text    "description"
     t.boolean "public",      :default => false, :null => false
     t.boolean "add_introns", :default => true,  :null => false
-  end
-
-  create_table "collapsing_configurations", :force => true do |t|
-    t.integer "user_id"
-    t.text    "to_parent"
-  end
-
-  create_table "color_configurations", :force => true do |t|
-    t.integer "user_id"
-    t.integer "element_id"
-    t.string  "element_type"
-    t.decimal "red"
-    t.decimal "green"
-    t.decimal "blue"
-  end
-
-  create_table "dominated_features", :force => true do |t|
-    t.integer "domination_configuration_id"
-    t.integer "feature_class_id"
-  end
-
-  create_table "domination_configurations", :force => true do |t|
-    t.integer "user_id"
-    t.integer "dominator_id"
-  end
-
-  create_table "feature_style_configurations", :force => true do |t|
-    t.integer "user_id"
-    t.integer "feature_class_id"
-    t.integer "style_id"
   end
 
   create_table "feature_types", :force => true do |t|
@@ -68,10 +38,6 @@ ActiveRecord::Schema.define(:version => 20) do
     t.decimal "stroke_marked_width", :default => 1.5
     t.boolean "show_grid",           :default => true
     t.decimal "min_len_block",       :default => 40.0
-  end
-
-  create_table "graphical_elements", :force => true do |t|
-    t.string "name"
   end
 
   create_table "sequence_regions", :force => true do |t|

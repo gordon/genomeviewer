@@ -5,13 +5,6 @@ class User < ActiveRecord::Base
   has_many :feature_types, :dependent => :destroy
   has_one  :format, :dependent => :destroy
   
-  # configuration objects: if not existing, standard configuration will be used
-  # => see config method
-  has_one  :collapsing_configuration,     :dependent => :destroy
-  has_many :color_configurations,         :dependent => :destroy
-  has_many :feature_style_configurations, :dependent => :destroy
-  has_many :domination_configurations,    :dependent => :destroy
-
   ### callbacks ###
   
   after_create :create_storage
