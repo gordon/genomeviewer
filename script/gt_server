@@ -246,13 +246,15 @@ class GTServer
         puts "-- new feature index"
         STDOUT.flush
 
-        in_stream = GT::GFF3InStream.new(filename)
+        gff3_in_stream = GT::GFF3InStream.new(filename)
 
         if options[:add_introns]
           puts "-- adding introns to in_stream"
           STDOUT.flush
-          add_introns_stream = GT::AddIntronsStream.new(in_stream)
+          add_introns_stream = GT::AddIntronsStream.new(gff3_in_stream)
           in_stream = add_introns_stream
+        else
+          in_stream = gff3_in_stream
         end
 
         feature_index = GT::FeatureIndex.new
@@ -265,7 +267,7 @@ class GTServer
 
         unless options[:delete_cache]
           @feature_indices[filename] = feature_index
-          @feature_classes[filename] = in_stream.get_used_types
+          @feature_classes[filename] = gff3_in_stream.get_used_types
           puts "-- saved feature_index in cache"
           STDOUT.flush
         end
