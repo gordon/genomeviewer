@@ -48,28 +48,26 @@ class AnnotationTest < Test::Unit::TestCase
   
   def test_non_standard_type
     t = "test_type"
-    # check that t is not global otherwise this test has no sense
-    assert !FeatureClass.global.map(&:name).include?(t)
     
     gff3_data = IO.read("test/gff3/little1.gff3")
     # change "gene" in the non standard type
     gff3_data = gff3_data.gsub("gene", t)
     # upload the modified annotation
     u = User.find(:first)
-    assert !u.own_feature_classes.map(&:name).include?(t)
+    assert !u.feature_types.map(&:name).include?(t)
     a = Annotation.create(:name => "~deleteme",
                           :user => u,
                           :gff3_data => gff3_data)
-    assert u.own_feature_classes.map(&:name).include?(t)
+    assert u.feature_types.map(&:name).include?(t)
     # note: 
-    # in the current implementation, feature classes are 
+    # in the current implementation, feature types are 
     # *not* deleted when the annotation that caused their
     # creation is deleted
     a.destroy
-    assert u.own_feature_classes.map(&:name).include?(t)
+    assert u.feature_type.map(&:name).include?(t)
     # however they are deleted if the user is deleted
     u.destroy
-    assert_nil FeatureClass.find_by_user_id(u.id)
+    assert_nil FeatureType.find_by_user_id(u.id)
   end
   
   def test_unique_name_validation

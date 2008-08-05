@@ -20,7 +20,7 @@ class GTServer
     STDOUT.flush
     @mutex = Mutex.new
     @feature_indices = Hash.new
-    @feature_classes = Hash.new
+    @feature_types = Hash.new
     @config_objects = Hash.new
     @image_maps = Hash.new
     STDOUT.flush
@@ -58,13 +58,13 @@ class GTServer
   end
 
   ##
-  # Returns the name of the feature classes contained in a gff3 file
+  # Returns the name of the feature types contained in a gff3 file
   #
-  def get_feature_classes(filename)
-    puts "Requested feature classes used in #{filename}"
+  def get_feature_types(filename)
+    puts "Requested feature types used in #{filename}"
     STDOUT.flush
-    get_feature_index_for_file(filename) # fills feature_classes cache
-    return @feature_classes[filename]
+    get_feature_index_for_file(filename) # fills feature_types cache
+    return @feature_types[filename]
   end
 
   ##
@@ -267,7 +267,7 @@ class GTServer
 
         unless options[:delete_cache]
           @feature_indices[filename] = feature_index
-          @feature_classes[filename] = gff3_in_stream.get_used_types
+          @feature_types[filename] = gff3_in_stream.get_used_types
           puts "-- saved feature_index in cache"
           STDOUT.flush
         end

@@ -1,4 +1,4 @@
-class FeatureClass < ActiveRecord::Base
+class FeatureType < ActiveRecord::Base
 
   has_many :color_configurations, :as => :element
   belongs_to :user

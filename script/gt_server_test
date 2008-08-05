@@ -22,7 +22,7 @@ config = GTServer.config_object_for_user(1)
 
 seqids = GTServer.get_sequence_regions(gff3_file)
 puts "types in #{gff3_file}:"
-types = GTServer.get_feature_classes(gff3_file)
+types = GTServer.get_feature_types(gff3_file)
 types.each do |type|
   puts type
 end

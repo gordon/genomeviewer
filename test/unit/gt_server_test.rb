@@ -18,14 +18,14 @@ class GtServerTest < ActiveSupport::TestCase
     assert seq_ids.empty?
   end
 
-  def test_get_feature_classes
-    f_classes = %w{mRNA gene exon intron TF_binding_site}
+  def test_get_feature_types
+    f_types = %w{mRNA gene exon intron TF_binding_site}
     file = "test/gff3/standard_gene_with_introns_as_tree.gff3"
     # don't test direct array equality as the order is not important:
-    response = GTServer.get_feature_classes(file)
-    response.each_with_index{|e, i| response[i]=nil if f_classes.delete(e)}
-    assert response.compact.empty?
-    assert f_classes.empty?
+    response = GTServer.get_feature_types(file)
+    response.each_with_index{|e, i| response[i]=nil if f_types.delete(e)}
+    assert response.compact.empty? 
+    assert f_types.empty?
   end
 
   def test_get_range_for_sequence_region

@@ -105,7 +105,7 @@ class Annotation < ActiveRecord::Base
 
   after_save       :correct_gff3_file_position
   after_create     :create_sequence_regions
-  after_create     :create_feature_classes
+  after_create     :create_feature_types
   before_destroy   :delete_gff3_data
   
   after_create     :increment_pa_count
@@ -131,15 +131,14 @@ class Annotation < ActiveRecord::Base
   end
   
   #
-  # if the feature classes (in genometools are called "types") of the file 
-  # are not included in the standard ones, then user specific classes 
-  # are added, so that the config for that class can be set by the user
+  # if the feature types of the file are 
+  # not present in the user's list they are added
   #
-  def create_feature_classes
-    fcs = GTServer.get_feature_classes(File.expand_path(gff3_data_storage))
-    fcs.each do |fc|
-      unless user.feature_classes.map(&:name).include?(fc)
-        user.own_feature_classes << FeatureClass.new(:name => fc)
+  def create_feature_types
+    fts = GTServer.get_feature_types(File.expand_path(gff3_data_storage))
+    fts.each do |ft|
+      unless user.feature_types.map(&:name).include?(ft)
+        user.feature_types << FeatureType.new(:name => ft)
       end
     end
   end
