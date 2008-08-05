@@ -277,17 +277,6 @@ class GTServer
   def cached_feature_index_for?(filename)
     @feature_indices.has_key?(filename)
   end
-  
-  # GT::Range objects don't come over the DRb connection
-  # (the start at least, end works)
-  # These methods converts them in Integers
-  def range_start(node)
-    node.get_range.start
-  end  
-  def range_end(node)
-    node.get_range.end
-  end
-
 end
 
 DRb.install_id_conv(DRb::TimerIdConv.new) # keep objects on server alive

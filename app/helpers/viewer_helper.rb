@@ -203,12 +203,13 @@ module ViewerHelper
   end
     
   def tooltip_zoomer(feature)
+    range = feature.get_range
     remote_function(:url =>{:action => :ajax_reloader,
                             :username => @annotation.user.username,
                             :annotation => @annotation.name,
                             :seq_region => @sequence_region.seq_id,
-                            :start_pos => GTServer.range_start(feature),
-                            :end_pos => GTServer.range_end(feature)})
+                            :start_pos => range.begin,
+                            :end_pos => range.end})
   end
   
   def tooltip_table(feature)
@@ -228,8 +229,8 @@ module ViewerHelper
   def info(feature)
     i = [] # no hash, so order remains constant
     i << ["Type", feature.get_type]
-    i << ["Range", "#{GTServer.range_start(feature)} - "+
-                   "#{GTServer.range_end(feature)}"]
+    range = feature.get_range
+    i << ["Range", "#{range.begin} - #{range.end}"]
     score = feature.get_score
     (i << ["Score", score]) if score
     feature.each_attribute {|k,v| (i << [k, v])}
