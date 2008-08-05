@@ -1,4 +1,4 @@
-class DrawingFormatConfiguration < ActiveRecord::Base
+class Format < ActiveRecord::Base
 
   belongs_to :user
 

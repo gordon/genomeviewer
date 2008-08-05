@@ -3,10 +3,10 @@ class User < ActiveRecord::Base
   ### associations ###
   has_many :annotations, :dependent => :destroy
   has_many :feature_types, :dependent => :destroy
+  has_one  :format, :dependent => :destroy
   
   # configuration objects: if not existing, standard configuration will be used
   # => see config method
-  has_one  :drawing_format_configuration, :dependent => :destroy
   has_one  :collapsing_configuration,     :dependent => :destroy
   has_many :color_configurations,         :dependent => :destroy
   has_many :feature_style_configurations, :dependent => :destroy
@@ -73,8 +73,8 @@ class User < ActiveRecord::Base
 
   # returns the desired image width
   def width(default = 800)
-     drawing_format_configuration ?
-        drawing_format_configuration.width :
+     format ?
+        format.width :
         default
   end
 
