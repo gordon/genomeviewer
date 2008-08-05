@@ -21,6 +21,11 @@ end
 config = GTServer.config_object_for_user(1)
 
 seqids = GTServer.get_sequence_regions(gff3_file)
+puts "types in #{gff3_file}:"
+types = GTServer.get_feature_classes(gff3_file)
+types.each do |type|
+  puts type
+end
 seqids.each do |seq_id|
   range = GTServer.get_range_for_sequence_region(gff3_file, seq_id)
   png_stream = GTServer.get_image_stream(gff3_file, seq_id, range.first,
