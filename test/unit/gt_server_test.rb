@@ -74,7 +74,7 @@ class GtServerTest < ActiveSupport::TestCase
     config = GTServer.default_config_object
     info = GTServer.get_image_map(file, "test1", 1000, 9000, config, 100, true)
     info.each_hotspot do |a,b,c,d,feat|
-      assert_equal [30,95,70,110], [a, b, c, d]
+      assert_equal [30,100,70,115], [a, b, c, d]
       assert_equal "gene1", feat.get_attribute("ID")
     end
   end
