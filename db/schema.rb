@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 24) do
+ActiveRecord::Schema.define(:version => 25) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -19,9 +19,13 @@ ActiveRecord::Schema.define(:version => 24) do
     t.boolean "add_introns", :default => true,  :null => false
   end
 
+  create_table "configurations", :force => true do |t|
+    t.integer "user_id"
+    t.integer "width",   :default => 800, :null => false
+  end
+
   create_table "feature_types", :force => true do |t|
     t.string  "name"
-    t.integer "user_id",             :default => 0
     t.decimal "fill_red"
     t.decimal "fill_green"
     t.decimal "fill_blue"
@@ -36,6 +40,7 @@ ActiveRecord::Schema.define(:version => 24) do
     t.boolean "split_lines"
     t.integer "max_capt_show_width"
     t.integer "max_num_lines"
+    t.integer "configuration_id"
   end
 
   create_table "formats", :force => true do |t|
@@ -50,14 +55,13 @@ ActiveRecord::Schema.define(:version => 24) do
     t.decimal "stroke_marked_width"
     t.boolean "show_grid"
     t.decimal "min_len_block"
-    t.integer "user_id",                    :default => 0,   :null => false
-    t.integer "width",                      :default => 800
     t.decimal "track_title_color_red"
     t.decimal "track_title_color_green"
     t.decimal "track_title_color_blue"
     t.decimal "default_stroke_color_red"
     t.decimal "default_stroke_color_green"
     t.decimal "default_stroke_color_blue"
+    t.integer "configuration_id"
   end
 
   create_table "sequence_regions", :force => true do |t|

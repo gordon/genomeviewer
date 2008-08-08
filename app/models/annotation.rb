@@ -136,9 +136,10 @@ class Annotation < ActiveRecord::Base
   #
   def create_feature_types
     fts = GTServer.get_feature_types(File.expand_path(gff3_data_storage))
+    user_types = user.configuration.feature_types.map(&:name)
     fts.each do |ft|
-      unless user.feature_types.map(&:name).include?(ft)
-        user.feature_types << FeatureType.new(:name => ft)
+      unless user_types.include?(ft)
+        user.configuration.feature_types << FeatureType.new(:name => ft)
       end
     end
   end

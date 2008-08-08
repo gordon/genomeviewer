@@ -1,6 +1,6 @@
 class Format < ActiveRecord::Base
 
-  belongs_to :user
+  belongs_to :configuration
 
   # list of attribute names that have a value expressed in pixel
   def pixel_attribute_names

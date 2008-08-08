@@ -2,9 +2,8 @@ class User < ActiveRecord::Base
 
   ### associations ###
   has_many :annotations, :dependent => :destroy
-  has_many :feature_types, :dependent => :destroy
-  has_one  :format, :dependent => :destroy
-  
+  has_one :configuration, :dependent => :destroy
+
   ### callbacks ###
   
   after_create :create_storage
@@ -16,6 +15,13 @@ class User < ActiveRecord::Base
   
   def destroy_storage
     Dir.rmdir "#{$GFF3_STORAGE_PATH}/#{self[:id]}" rescue nil
+  end
+  
+  ### configuration methods ###
+  
+  def reset_configuration
+    configuration = Configuration.new
+    configuration(true)
   end
   
   ### validations ###
@@ -61,33 +67,5 @@ class User < ActiveRecord::Base
                             :message => "You entered two different passwords!"
   validates_length_of :password, :maximum => 40,
           :too_long => "The entered password is too long (max 40 chars)"
-
-  ### virtual attributes ###
-
-  # returns the desired image width
-  def width(default = 800)
-     format ?
-        format.width :
-        default
-  end
-
-  include ConfigObjectLoaders
-  
-  # returns the (eventually cached) GT::Config object 
-  # with the personalisations for this user
-  def config
-    unless @config_object
-      cached = GTServer.cached_config_for?(self[:id])
-      @config_object = GTServer.config_object_for_user(self[:id])
-      # see ConfigObjectLoaders module for the next:
-      load_user_specific_configurations unless cached
-    end
-    @config_object
-  end
-  
-  def flush_config_cache
-    GTServer.config_object_for_user(self[:id], :delete_cache => true)
-    @config_object = nil
-  end
 
 end
