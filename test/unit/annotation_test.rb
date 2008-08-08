@@ -54,20 +54,20 @@ class AnnotationTest < Test::Unit::TestCase
     gff3_data = gff3_data.gsub("gene", t)
     # upload the modified annotation
     u = User.find(:first)
-    assert !u.feature_types.map(&:name).include?(t)
+    assert !u.configuration.feature_types.map(&:name).include?(t)
     a = Annotation.create(:name => "~deleteme",
                           :user => u,
                           :gff3_data => gff3_data)
-    assert u.feature_types.map(&:name).include?(t)
+    assert u.configuration.feature_types.map(&:name).include?(t)
     # note: 
     # in the current implementation, feature types are 
     # *not* deleted when the annotation that caused their
     # creation is deleted
     a.destroy
-    assert u.feature_type.map(&:name).include?(t)
+    assert u.configuration.feature_types.map(&:name).include?(t)
     # however they are deleted if the user is deleted
     u.destroy
-    assert_nil FeatureType.find_by_user_id(u.id)
+    assert_nil FeatureType.find_by_configuration_id(u.configuration.id)
   end
   
   def test_unique_name_validation
