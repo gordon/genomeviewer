@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 22) do
+ActiveRecord::Schema.define(:version => 24) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -21,23 +21,43 @@ ActiveRecord::Schema.define(:version => 22) do
 
   create_table "feature_types", :force => true do |t|
     t.string  "name"
-    t.integer "user_id"
+    t.integer "user_id",             :default => 0
+    t.decimal "fill_red"
+    t.decimal "fill_green"
+    t.decimal "fill_blue"
+    t.decimal "stroke_red"
+    t.decimal "stroke_green"
+    t.decimal "stroke_blue"
+    t.decimal "stroke_marked_red"
+    t.decimal "stroke_marked_green"
+    t.decimal "stroke_marked_blue"
+    t.integer "style_key"
+    t.boolean "collapse_to_parent"
+    t.boolean "split_lines"
+    t.integer "max_capt_show_width"
+    t.integer "max_num_lines"
   end
 
   create_table "formats", :force => true do |t|
-    t.integer "user_id"
-    t.integer "width",               :default => 800
-    t.decimal "margins",             :default => 30.0
-    t.decimal "bar_height",          :default => 15.0
-    t.decimal "bar_vspace",          :default => 10.0
-    t.decimal "track_vspace",        :default => 10.0
-    t.decimal "scale_arrow_width",   :default => 6.0
-    t.decimal "scale_arrow_height",  :default => 10.0
-    t.decimal "arrow_width",         :default => 6.0
-    t.decimal "stroke_width",        :default => 0.5
-    t.decimal "stroke_marked_width", :default => 1.5
-    t.boolean "show_grid",           :default => true
-    t.decimal "min_len_block",       :default => 40.0
+    t.decimal "margins"
+    t.decimal "bar_height"
+    t.decimal "bar_vspace"
+    t.decimal "track_vspace"
+    t.decimal "scale_arrow_width"
+    t.decimal "scale_arrow_height"
+    t.decimal "arrow_width"
+    t.decimal "stroke_width"
+    t.decimal "stroke_marked_width"
+    t.boolean "show_grid"
+    t.decimal "min_len_block"
+    t.integer "user_id",                    :default => 0,   :null => false
+    t.integer "width",                      :default => 800
+    t.decimal "track_title_color_red"
+    t.decimal "track_title_color_green"
+    t.decimal "track_title_color_blue"
+    t.decimal "default_stroke_color_red"
+    t.decimal "default_stroke_color_green"
+    t.decimal "default_stroke_color_blue"
   end
 
   create_table "sequence_regions", :force => true do |t|
