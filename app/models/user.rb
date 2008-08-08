@@ -6,11 +6,16 @@ class User < ActiveRecord::Base
 
   ### callbacks ###
   
+  after_save :find_or_create_configuration
   after_create :create_storage
   after_destroy :destroy_storage
   
   def create_storage
     Dir.mkdir "#{$GFF3_STORAGE_PATH}/#{self[:id]}" rescue nil
+  end
+  
+  def find_or_create_configuration
+    Configuration.find_or_create_by_user_id(self[:id])
   end
   
   def destroy_storage
@@ -20,7 +25,7 @@ class User < ActiveRecord::Base
   ### configuration methods ###
   
   def reset_configuration
-    configuration = Configuration.new
+    configuration = Configuration.create(:user => self)
     configuration(true)
   end
   
