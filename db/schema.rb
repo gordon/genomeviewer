@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 21) do
+ActiveRecord::Schema.define(:version => 22) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -46,10 +46,6 @@ ActiveRecord::Schema.define(:version => 21) do
     t.integer "seq_begin",     :default => 0,  :null => false
     t.integer "seq_end",       :default => 0,  :null => false
     t.text    "description"
-  end
-
-  create_table "styles", :force => true do |t|
-    t.string "name"
   end
 
   create_table "users", :force => true do |t|

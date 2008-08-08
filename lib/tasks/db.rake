@@ -3,10 +3,8 @@ namespace :db do
     desc "Load default data in the database"
     task :load => :environment do
       puts "-- load default data in the tables"
-      %w[styles feature_types].each do |k|
-        data = YAML.load(IO.read "db/default_data/#{k}.yml")
-        k.singularize.camelize.constantize.create(data)
-      end
+      data = YAML.load(IO.read "db/default_data/feature_types.yml")
+      FeatureType.create(data)
       puts "   -> done"
     end
   end
