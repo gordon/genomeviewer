@@ -64,9 +64,11 @@ class GtServerTest < ActiveSupport::TestCase
   def test_get_image_stream
     file = "test/gff3/encode_known_genes_Mar07.gff3"
     config = GTServer.default_config_object
-    png_data = GTServer.get_image_stream(file, "chrX", 122525028, 153939916, config, 100, true)
-    assert png_data.size > 1000
-    assert_equal "PNG", png_data[1..3]
+    [true, false].each do |add_introns|
+      png_data = GTServer.get_image_stream(file, "chrX", 122525028, 153939916, config, 100, add_introns)
+      assert png_data.size > 1000
+      assert_equal "PNG", png_data[1..3]
+    end
   end
 
   def test_get_image_map
