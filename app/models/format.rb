@@ -10,6 +10,17 @@ class Format < ActiveRecord::Base
          :scale_arrow_width, :scale_arrow_height, :arrow_width,
          :stroke_width, :stroke_marked_width, :min_len_block
   
+  #
+  # returns a new object with all attributes set to the default
+  #
+  def self.default_new
+    instance = new
+    configuration_attributes.each do |attr|
+      instance.send("#{attr}=", instance.send("default_#{attr}"))
+    end
+    instance
+  end
+  
   def self.helptext(attribute_name)
     case attribute_name.to_sym
       when :margins : "space left and right of diagram"
