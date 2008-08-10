@@ -139,7 +139,7 @@ class Annotation < ActiveRecord::Base
     user_types = user.configuration.feature_types.map(&:name)
     fts.each do |ft|
       unless user_types.include?(ft)
-        user.configuration.feature_types << FeatureType.new(:name => ft)
+        user.configuration.feature_types << FeatureType.default_new(ft)
       end
     end
   end

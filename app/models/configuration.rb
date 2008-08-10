@@ -8,7 +8,11 @@ class Configuration < ActiveRecord::Base
   after_create :flush_cache
   
   def default_format
-    Format.find_or_create_by_configuration_id(self[:id])
+    unless Format.find_by_configuration_id(self[:id])
+     f = Format.default_new
+     f.configuration_id = self[:id]
+     f.save
+    end
   end
 
   # pointer to the gt_ruby GT::Config object in the DRb server
