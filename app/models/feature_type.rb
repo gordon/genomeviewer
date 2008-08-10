@@ -1,9 +1,13 @@
 class FeatureType < ActiveRecord::Base
+  
+  include GTRubyConfigurator
+  set_section { self.name }
+  set_colors :fill, :stroke, :stroke_marked
+  set_bools :collapse_to_parent, :split_lines
+  set_integers :max_capt_show_width, :max_num_lines
+  set_style :style
 
   belongs_to :configuration
   validates_uniqueness_of :name, :scope => :configuration_id
-  composed_of :style, :mapping => ["style_key","key"] do |n| 
-    Style.new(n) 
-  end
 
 end
