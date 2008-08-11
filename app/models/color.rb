@@ -1,6 +1,7 @@
 class Color
   
-  attr_reader :red, :green, :blue
+  Channels = [:red, :green, :blue]
+  attr_reader *Channels
   
   def initialize(red, green, blue)
     @red   = Float(red)
@@ -11,9 +12,10 @@ class Color
   end
   
   def ==(other)
-    @red   == other.red and
-    @green == other.green and 
-    @blue  == other.blue
+    Channels.all? do |comp|
+      return nil unless other.respond_to?(comp)
+      send(comp)==other.send(comp)
+    end
   end
   
 end

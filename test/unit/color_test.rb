@@ -3,6 +3,10 @@ require "app/models/color.rb"
 
 class ColorTest < Test::Unit::TestCase
 
+  def test_constants
+    assert Color.const_defined?("Channels")
+  end
+
   def test_nof_arguments
     # must be 3
     assert_nothing_raised {Color.new(0.5, 0.5, 0.5)}
@@ -53,11 +57,15 @@ class ColorTest < Test::Unit::TestCase
   
   def test_equality
     c1 = Color.new(0.0, 0.0, 0.0)
+    assert_equal c1, c1
     c2 = Color.new(0.0, 0.0, 0.0)
     assert_not_equal c1.object_id, c2.object_id
     assert_equal c1, c2
     c3 = Color.new(1.0, 1.0, 1.0)
     assert_not_equal c1, c3
+    assert_not_nil c1==c3
+    assert_nil c1=="string"
+    assert_not_equal c1, "string"
   end
 
 end
