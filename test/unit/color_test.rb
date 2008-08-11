@@ -1,7 +1,9 @@
-require "test/unit"
-require "app/models/color.rb"
+require "test/test_helper.rb"
+require File.dirname(__FILE__) + "/modules/gt_objects_assertions.rb"
 
 class ColorTest < Test::Unit::TestCase
+  
+  include GTObjectsAssertions
 
   def test_constants
     assert Color.const_defined?("Channels")
@@ -68,4 +70,13 @@ class ColorTest < Test::Unit::TestCase
     assert_not_equal c1, "string"
   end
 
+  def test_conversion_to_gt_color
+    gvc = Color.new(0.1, 0.2, 0.3)
+    gtc = gvc.to_gt
+    assert_gt_color gtc
+    assert_equal gvc.red, gtc.red
+    assert_equal gvc.green, gtc.green
+    assert_equal gvc.blue, gtc.blue
+  end
+  
 end

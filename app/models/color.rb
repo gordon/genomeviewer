@@ -18,4 +18,14 @@ class Color
     end
   end
   
+  # returns a reference to a gt ruby 
+  # color object with the same colors
+  def to_gt
+    color = GTServer.new_color_object
+    color.red   = @red
+    color.green = @green
+    color.blue  = @blue
+    return color
+  end
+  
 end
