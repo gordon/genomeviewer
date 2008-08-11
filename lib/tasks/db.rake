@@ -1,13 +1,4 @@
 namespace :db do 
-  namespace :default_data do 
-    desc "Load default data in the database"
-    task :load => :environment do
-      puts "-- load default data in the tables"
-      data = YAML.load(IO.read "db/default_data/feature_types.yml")
-      FeatureType.create(data)
-      puts "   -> done"
-    end
-  end
   namespace :example_user do 
     desc "Load default user in the database"
     task :load => :environment do 
@@ -29,9 +20,9 @@ namespace :db do
       end
     end
   end
-  desc "Create the db schema from schema.rb and loads default data"
-  task :load => [:environment, "db:schema:load", "db:default_data:load"]
-  desc "Create the db schema, loads default data and example user"
+  desc "Shortcut for db:schema:load"
+  task :load => ["db:schema:load"]
+  desc "Create the db schema and load example user"
   task :load_with_foo => ["db:load", "db:example_user:load"]
 end
 
