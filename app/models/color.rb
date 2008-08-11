@@ -4,11 +4,16 @@ class Color
   attr_reader *Channels
   
   def initialize(red, green, blue)
-    @red   = Float(red)
-    @green = Float(green)
-    @blue  = Float(blue)
-    raise RangeError, "Color channel value out of range 0..1"\
-      unless [@red, @green, @blue].all? {|ch| (0..1).include?(ch)}
+    begin
+      @red   = Float(red) 
+      @green = Float(green) 
+      @blue  = Float(blue) 
+    rescue
+      @red = @green = @blue = nil
+    else
+      raise RangeError, "Color channel value out of range 0..1"\
+        unless [@red, @green, @blue].all? {|ch| (0..1).include?(ch)}
+    end
   end
   
   def ==(other)

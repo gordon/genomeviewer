@@ -36,13 +36,10 @@ class ColorTest < Test::Unit::TestCase
     # valid
     assert_nothing_raised {Color.new(1,1,1)}
     assert_nothing_raised {Color.new("0.5","0.5","0.5")}
-    # invalid
-    assert_raises(ArgumentError) {Color.new("a",1,1)}
-    assert_raises(ArgumentError) {Color.new(1,"a",1)}
-    assert_raises(ArgumentError) {Color.new(1,1,"a")}
-    assert_raises(TypeError) {Color.new(nil,1,1)}
-    assert_raises(TypeError) {Color.new(1,nil,1)}
-    assert_raises(TypeError) {Color.new(1,1,nil)}
+    # undefined
+    assert_equal Color.new(nil, nil, nil), Color.new(nil, nil, nil)
+    # invalid => undefined
+    assert_equal Color.new(nil, nil, nil), Color.new(1,1,"a")
   end
   
   # according to 
@@ -68,6 +65,9 @@ class ColorTest < Test::Unit::TestCase
     assert_not_nil c1==c3
     assert_nil c1=="string"
     assert_not_equal c1, "string"
+    # undefined are all equal to one another:
+    assert_equal Color.new(nil, nil, nil), Color.new("a","b","c")
+    assert_equal Color.new("","",""), Color.new(nil,[],{})
   end
 
   def test_conversion_to_gt_color
@@ -77,6 +77,8 @@ class ColorTest < Test::Unit::TestCase
     assert_equal gvc.red, gtc.red
     assert_equal gvc.green, gtc.green
     assert_equal gvc.blue, gtc.blue
+    # undefined gt color
+    assert_gt_color Color.new(nil,nil,nil).to_gt
   end
   
   def test_conversion_to_color
