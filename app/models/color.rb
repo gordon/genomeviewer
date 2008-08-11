@@ -33,6 +33,21 @@ class Color
     return color
   end
   
+  # return the corresponding 24 bit hexadecimal color code string
+  def to_hex
+    return "undefined" if undefined?
+    "#"+Channels.map{|c| sprintf("%02X",(send(c) * 255).round)}.join
+  end
+  alias_method :to_s, :to_hex
+  
+  def undefined?
+    [@red, @green, @blue].any?(&:nil?)
+  end
+  
+  def self.undefined
+    new(nil, nil, nil)
+  end
+  
   Kernel.module_eval do 
     #
     # Return a new Color based on an object.
@@ -46,6 +61,22 @@ class Color
         raise ArgumentError, "invalid value for Color: #{x.inspect}"
       end
     end
+  end
+  
+  String.class_eval do
+    
+    # Convert a string containing a valid 24 bit hex code 
+    # in an instance of the Color class.
+    # Anything invalid returns the undefinite color.
+    def to_color
+      m = match(/^#([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})([0-9A-Fa-f]{2})$/)
+      if m
+        Color.new(*[m[1],m[2],m[3]].map{|x|x.to_i(16)/255.0})
+      else        
+        Color.undefined
+      end
+    end
+  
   end
   
 end

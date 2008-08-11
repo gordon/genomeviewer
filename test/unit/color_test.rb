@@ -101,4 +101,25 @@ class ColorTest < Test::Unit::TestCase
     assert_equal gtc.blue, gvc.blue
   end
   
+  def test_undefined
+    assert !Color.new(1, 1, 1).undefined?
+    assert Color.new(1, 1, nil).undefined?
+    assert Color.new(nil, nil, nil).undefined?
+    assert_equal Color.new(nil, nil, nil), Color.undefined
+    assert Color.undefined.undefined?
+  end
+  
+  def test_to_hex
+    assert_equal '#001ACC', Color.new(0, 0.1, 0.8).to_hex
+    assert_equal 'undefined', Color.new(nil, nil, nil).to_hex
+  end
+  
+  def test_from_hex
+    assert_equal Color.new(0, 0, 0), '#000000'.to_color
+    assert_equal Color.new(0, 1, 1), '#00fFff'.to_color
+    assert_equal Color.new(nil, nil, nil), '#00000'.to_color
+    assert_equal Color.new(nil, nil, nil), '#0000000'.to_color
+    assert_equal Color.new(nil, nil, nil), 'anything else'.to_color
+  end
+  
 end
