@@ -79,4 +79,24 @@ class ColorTest < Test::Unit::TestCase
     assert_equal gvc.blue, gtc.blue
   end
   
+  def test_conversion_to_color
+    [0,"a",{}].each {|x| assert_raises(ArgumentError) {Color(x)}}
+    c1 = Color.new(0.1, 0.2, 0.3)
+    assert_nothing_raised { Color(c1) }
+    c2 = Color(c1)
+    assert_not_equal c1.object_id, c2.object_id
+    assert_equal c1, c2
+  end
+
+  def test_conversion_from_gt_color
+    gtc = GTServer.new_color_object
+    gtc.red = 0.1
+    gtc.green = 0.2
+    gtc.blue = 0.3
+    gvc = Color(gtc)
+    assert_equal gtc.red, gvc.red
+    assert_equal gtc.green, gvc.green
+    assert_equal gtc.blue, gvc.blue
+  end
+  
 end
