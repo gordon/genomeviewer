@@ -29,11 +29,15 @@ class StyleTest < Test::Unit::TestCase
   
   def test_equality
     s1 = Style.new(1)
+    assert_equal s1, s1
     s2 = Style.new(1)
     assert_not_equal s1.object_id, s2.object_id
     assert_equal s1, s2
     s3 = Style.new(2)
     assert_not_equal s1, s3
+    assert_not_nil s1==s3
+    assert_nil s1=="string"
+    assert_not_equal s1, "string"
   end
   
 end

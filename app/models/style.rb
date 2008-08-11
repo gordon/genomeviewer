@@ -20,6 +20,7 @@ class Style
   alias_method :to_s, :string
  
   def ==(other)
+    return nil unless other.respond_to?(:key)
     @key == other.key
   end
   
