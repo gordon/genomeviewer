@@ -1,6 +1,9 @@
 require File.dirname(__FILE__) + "/../test_helper"
+require File.dirname(__FILE__) + "/modules/gt_objects_assertions.rb"
 
 class GtServerTest < ActiveSupport::TestCase
+  
+  include GTObjectsAssertions
 
   def test_connection
     assert_nothing_raised {GTServer.test_call}
@@ -36,6 +39,15 @@ class GtServerTest < ActiveSupport::TestCase
 
   def test_new_config_object
     assert_nothing_raised {GTServer.new_config_object}
+    assert_gt_config GTServer.new_config_object
+  end
+  
+  def test_config_object_for_user
+    assert_gt_config GTServer.config_object_for_user(1)
+  end
+
+  def test_default_config_object
+    assert_gt_config GTServer.default_config_object
   end
 
   def test_config_cache
@@ -59,6 +71,7 @@ class GtServerTest < ActiveSupport::TestCase
 
   def test_new_color_object
     assert_nothing_raised {GTServer.new_color_object}
+    assert_gt_color GTServer.new_color_object
   end
 
   def test_get_image_stream
