@@ -24,4 +24,21 @@ class Style
     @key == other.key
   end
   
+  String.class_eval do
+    
+    def to_style
+      key = 
+        case self
+          when "box" : 1
+          when "caret" : 2
+          when "dashes" : 3
+          when "line" : 4
+        else
+          nil
+        end
+      Style.new(key)
+    end
+    
+  end
+  
 end
