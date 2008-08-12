@@ -1,0 +1,36 @@
+<% form_tag({:action=>"update_public_data"}) do -%>
+
+  <h2><%= @subtitle %></h2>
+
+  <table>
+    <tr>
+      <td colspan=3>This information will actually be 
+      public only if you have any public annotations.</td>
+    </tr>
+    <tr>
+      <td>Full Name:</td>
+      <td><%= text_field :current_user, 'name', 
+                         :maxlength=> 64, :size=> 48, 
+                         :class => "nice" %></td>
+      <td><%= error_message_on :current_user, :name%></td>
+    </tr>
+    <tr>
+      <td>Institution:</td>
+      <td><%= text_field :current_user, 'institution', 
+                         :size=> 48, :class => "nice" %></td>
+      <td/>
+    </tr>
+    <tr>
+      <td>Homepage:</td>
+      <td><%= text_field :current_user, 'url', 
+                         :size=> 48, :class => "nice"  %></td>
+      <td/>
+    </tr>
+    <tr>
+      <td><%= submit_tag "Update" -%> <%= link_to "Cancel", account_url -%></td>
+      <td/>
+      <td/>
+    </tr>
+  </table>
+    
+<% end -%>

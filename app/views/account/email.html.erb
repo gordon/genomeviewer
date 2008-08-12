@@ -1,0 +1,22 @@
+<% form_tag({:action=>"update_email"}) do -%>
+
+  <h2><%= @subtitle %></h2>
+
+  <table>
+    <tr>
+      <td colspan=4>If you change your email address, a confirmation 
+                    message will be sent to the new address.</td>
+    </tr>
+    <tr>
+      <td colspan=4>Your email address is kept confidential.</td>
+    </tr>
+    <tr>
+      <td>E-Mail address:</td>
+      <td><%= text_field :current_user, :email, :maxlength=> 64, 
+                         :size=> 64, :class => "nice" %></td>
+      <td><%= submit_tag "Update" -%></td>
+      <td><%= link_to "Cancel", account_url -%></td>
+    </tr>
+  </table>
+
+<% end -%>
