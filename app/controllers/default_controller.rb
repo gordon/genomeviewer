@@ -8,6 +8,11 @@ class DefaultController < ApplicationController
 
   ### actions redirecting to other actions ###
 
+  def do_logout
+    session[:user] = nil
+    redirect_to params[:back_to] ? params[:back_to] : root_url
+  end
+  
   def do_login
     user = User.find_by_username_and_password(params[:user][:username], 
                                            params[:user][:password])
@@ -29,5 +34,6 @@ class DefaultController < ApplicationController
       redirect_to params[:back_to]
     end
   end
+
 
 end
