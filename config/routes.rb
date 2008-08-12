@@ -1,5 +1,13 @@
+
+#
+# if you change the routing, remember to update the list 
+# of invalid usernames (in config/invalid_usernames.yml)
+# in order to keep the /:username routing valid
+#
+
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
+
 
   # named routes
   map.login 'login', 
@@ -7,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
             :action => "do_login"
   
   map.logout 'logout',
-             :controller => "in_session",
+             :controller => "default",
              :action => "do_logout"
 
   map.registration 'registration', 
@@ -19,22 +27,33 @@ ActionController::Routing::Routes.draw do |map|
                         :action => "recover_password"
   
   map.configuration 'configuration',
-                    :controller => "in_session",
-                    :action => "config"
-  
-  map.own_files 'files',
+                    :controller => "configuration"
+                    
+  map.account 'account',
+              :controller => "account"
+              
+  map.own_files 'my_files',
                 :controller => "own_annotations",
                 :action => "list"
   
-  map.public_files 'public', 
+  map.public_files 'files', 
                    :controller => "public_annotations"
                         
   map.root :controller => "default"
   
   # connect controllers
   
-  %w[default in_session own_annotations public_annotations 
-  public_users register viewer].each do |controller_name|
+  controllers = 
+      %w[account 
+         configuration 
+         default 
+         own_annotations 
+         public_annotations 
+         public_users 
+         register 
+         viewer]
+  
+  controllers.each do |controller_name|
     map.connect "#{controller_name}/:action",
                :controller => controller_name
   end
@@ -54,7 +73,7 @@ ActionController::Routing::Routes.draw do |map|
               :start_pos => nil,
               :end_pos => nil 
               
- map.move 'move/:username/:annotation/:seq_region/:start_pos/:end_pos',
+  map.move 'move/:username/:annotation/:seq_region/:start_pos/:end_pos',
               :action => "ajax_movement",
               :controller => "viewer",
               :annotation => /[^\/]+\.?[^\/]*/,
