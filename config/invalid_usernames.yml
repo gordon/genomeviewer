@@ -1,0 +1,21 @@
+#
+# a few usernames must be forbidden to allow the /:username routing
+# if you change route.rb update this list too
+#
+---
+- login
+- logout
+- registration
+- recover_password
+- my_files
+- files
+- account
+- configuration
+- default
+- own_annotations
+- public_annotations
+- public_users
+- register
+- viewer
+- image
+- move

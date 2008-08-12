@@ -41,12 +41,9 @@ class User < ActiveRecord::Base
                           :message => "This username is already in use."
   
   # the following names are invalid and can't be used as username
-  # see config/routes.rb
+  # see config/routes.rb and config/invalid_usernames.yml
   validates_exclusion_of :username,
-                         :in => %w[login logout registration recover_password 
-                         configuration files public default in_session viewer
-                         own_annotations public_annotations public_users 
-                         register image move images javascripts stylesheets],
+                         :in => YAML.load(IO.read("config/invalid_usernames.yml")),
                          :message => "This username is reserved. Please choose a different one."
   
   # email
