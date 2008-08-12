@@ -1,4 +1,10 @@
 class PublicAnnotationsController < ApplicationController
+  
+  append_before_filter :title
+  
+  def title
+    @title = "Public Annotations"
+  end
 
   active_scaffold :annotations do |config|
     
@@ -41,13 +47,6 @@ class PublicAnnotationsController < ApplicationController
       redirect_to :action => :index
     end
     @title = @public_user.name
-  end
- 
-  private
-  
-  def initialize
-    @title = "Public Annotations"
-    super
   end
   
 end

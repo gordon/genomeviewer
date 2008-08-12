@@ -1,10 +1,6 @@
 class OwnAnnotationsController < ApplicationController
   
-  prepend_before_filter :check_login
-  def check_login
-    redirect_to root_url unless session[:user]
-    return true
-  end
+  before_filter :enforce_login
   
   active_scaffold :annotations do |config|
   

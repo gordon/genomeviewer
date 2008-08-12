@@ -1,5 +1,11 @@
 class PublicUsersController < ApplicationController
   
+  append_before_filter :title
+  
+  def title
+    @title = "Public Annotations: Users"
+  end
+  
   active_scaffold :user do |config|
     
     config.columns = [:name, :institution, :url, :public_annotations_count]
@@ -26,11 +32,4 @@ class PublicUsersController < ApplicationController
     super
   end
 
-  private
-  
-  def initialize
-    @title = "Public Annotations: Users"
-    super
-  end
-  
 end
