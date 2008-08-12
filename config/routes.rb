@@ -1,13 +1,10 @@
-
 #
 # if you change the routing, remember to update the list 
 # of invalid usernames (in config/invalid_usernames.yml)
 # in order to keep the /:username routing valid
 #
-
 ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
-
 
   # named routes
   map.login 'login', 
@@ -47,6 +44,7 @@ ActionController::Routing::Routes.draw do |map|
       %w[account 
          configuration 
          default 
+         feature_types
          own_annotations 
          public_annotations 
          public_users 
