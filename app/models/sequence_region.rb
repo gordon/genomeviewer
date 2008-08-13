@@ -19,7 +19,7 @@ class SequenceRegion < ActiveRecord::Base
     i = 0
     begin
       return GTServer.send(method, File.expand_path(self.annotation.gff3_data_storage),
-               seq_id, seq_begin, seq_end, annotation.user.config, width, annotation.add_introns)
+               seq_id, seq_begin, seq_end, annotation.user.configuration.gt, width, annotation.add_introns)
     rescue => err_msg
       i += 1
       if i < 3 # limit the number of try
