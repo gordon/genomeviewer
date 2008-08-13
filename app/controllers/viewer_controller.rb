@@ -3,8 +3,6 @@ class ViewerController < ApplicationController
   before_filter :initialization
   def initialization
     
-    @user = session[:user] ? User.find(session[:user]) : nil
-    
     begin 
       
       get_annotation
@@ -15,7 +13,7 @@ class ViewerController < ApplicationController
           
     rescue => error
       flash[:errors] = error.to_s
-      redirect_to(@user ? own_files_url : root_url)    
+      redirect_to(@current_user ? own_files_url : root_url)    
     
     end
     
@@ -98,7 +96,7 @@ class ViewerController < ApplicationController
   end
   
   def check_permission
-    @own = (@annotation.user == @user)
+    @own = (@annotation.user == @current_user)
     raise "Private annotations can be visualized only by their owners." \
       unless @own or @annotation.public
   end
@@ -114,7 +112,9 @@ class ViewerController < ApplicationController
   end    
   
   def get_width
-    @width = @user ? @user.width : @annotation.user.width
+    @width = @current_user ? 
+      @current_user.configuration.width : 
+      @annotation.user.configuration.width
   end
   
   def get_range
