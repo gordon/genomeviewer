@@ -43,6 +43,8 @@ class Annotation < ActiveRecord::Base
 
   ### associations ###
 
+  has_many :feature_type_in_annotations
+  has_many :feature_types, :through => :feature_type_in_annotations
   has_many :sequence_regions, :dependent => :destroy
   belongs_to :user
 
@@ -139,7 +141,9 @@ class Annotation < ActiveRecord::Base
     user_types = user.configuration.feature_types.map(&:name)
     fts.each do |ft|
       unless user_types.include?(ft)
-        user.configuration.feature_types << FeatureType.default_new(ft)
+        new_ft = FeatureType.default_new(ft)
+        user.configuration.feature_types << new_ft
+        feature_types << new_ft
       end
     end
   end

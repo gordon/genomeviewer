@@ -8,6 +8,8 @@ class FeatureType < ActiveRecord::Base
   set_style :style
 
   belongs_to :configuration
+  has_many :feature_type_in_annotations
+  has_many :annotations, :through => :feature_type_in_annotations
   validates_uniqueness_of :name, :scope => :configuration_id
   
   #
