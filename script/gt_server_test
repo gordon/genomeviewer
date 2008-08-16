@@ -13,23 +13,22 @@ GTServer = DRbObject.new(nil, 'druby://localhost:7777')
 
 puts GTServer.test_call()
 
-errormsg = GTServer.validate_file(gff3_file)
+errormsg = GTServer.gff3_errors(gff3_file)
 if errormsg then
   raise "Error: #{errormsg}"
 end
 
-config = GTServer.config_object_for_user(1)
+config = GTServer.config(1)
 
-seqids = GTServer.get_sequence_regions(gff3_file)
+seqids = GTServer.gff3_seqids(gff3_file)
 puts "types in #{gff3_file}:"
-types = GTServer.get_feature_types(gff3_file)
+types = GTServer.gff3_feature_types(gff3_file)
 types.each do |type|
   puts type
 end
 seqids.each do |seq_id|
-  range = GTServer.get_range_for_sequence_region(gff3_file, seq_id)
-  png_stream = GTServer.get_image_stream(gff3_file, seq_id, range.first,
-                                         range.last, config, 800, false)
+  range = GTServer.gff3_range(gff3_file, seq_id)
+  png_stream = GTServer.image(gff3_file, seq_id, range, config, 800, false)
   puts "png_stream.size=" + png_stream.size.to_s
 end
 
