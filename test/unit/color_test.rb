@@ -91,7 +91,7 @@ class ColorTest < Test::Unit::TestCase
   end
 
   def test_conversion_from_gt_color
-    gtc = GTServer.new_color_object
+    gtc = GTServer.color_new
     gtc.red = 0.1
     gtc.green = 0.2
     gtc.blue = 0.3
