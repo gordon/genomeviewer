@@ -93,7 +93,7 @@ class Annotation < ActiveRecord::Base
   end
 
   def gff3_data_valid?
-    errormsg=GTServer.validate_file(File.expand_path(gff3_data_storage))
+    errormsg = GTServer.gff3_errors(File.expand_path(gff3_data_storage))
     if errormsg.nil?
      return true
     else
@@ -137,7 +137,7 @@ class Annotation < ActiveRecord::Base
   # not present in the user's list they are added
   #
   def create_feature_types
-    fts = GTServer.get_feature_types(File.expand_path(gff3_data_storage))
+    fts = GTServer.gff3_feature_types(File.expand_path(gff3_data_storage))
     user_types = user.configuration.feature_types.map(&:name)
     fts.each do |ft|
       unless user_types.include?(ft)
@@ -149,13 +149,11 @@ class Annotation < ActiveRecord::Base
   end
 
   def get_sequence_regions_params
-    seqids=GTServer.get_sequence_regions(File.expand_path(gff3_data_storage))
+    seqids = GTServer.gff3_seqids(File.expand_path(gff3_data_storage))
     parsing_output = []
     seqids.each do |seq_id|
-        range = GTServer.get_range_for_sequence_region(File.expand_path(gff3_data_storage), seq_id)
-        seq_begin = range.first
-        seq_end = range.last
-        parsing_output << ({:seq_id => seq_id, :seq_begin => seq_begin, :seq_end => seq_end} )
+        r = GTServer.gff3_range(File.expand_path(gff3_data_storage), seq_id)
+        parsing_output << ({:seq_id => seq_id, :seq_begin => r.first, :seq_end => r.last} )
     end
     return parsing_output
   end
