@@ -11,7 +11,7 @@ module Output
   # and the given width in pixel (the height depends on the number 
   # of tracks displayed) and with or without adding introns
   def image(filename, seqid, range, config_obj, width, add_introns, uncache = true)
-    log "#{filename}: image map"
+    log "#{filename}: image"
     fetch_img_or_map(:img, filename, seqid, range, config_obj, width, add_introns, uncache)
   end
 
@@ -66,6 +66,7 @@ module Output
       obj = uncache ? @cache[mode].delete(key) : @cache[mode].fetch(key, nil) 
     end
     if obj
+      log "cached", 3
       return obj
     else
       render(*params)
@@ -76,25 +77,29 @@ module Output
     end
   end
   
+  require 'benchmark'
+  
   def render(filename, seqid, range, config_obj, width, add_introns)
-    key = [filename, seqid, range, config_obj, width, add_introns].hash
-    mode = add_introns ? :on : :off
     log "rendering", 3
-    fix = feature_index(filename, mode)
-    gtrange = fix.get_range_for_seqid(seqid)
-    gtrange.start = range.first
-    gtrange.end   = range.last
-    diagram = GT::Diagram.new(fix, seqid, gtrange, config_obj)
-    info = GT::ImageInfo.new
-    canvas = GT::Canvas.new(config_obj, width, info)
-    diagram.render(canvas)
-    lock(:map) do 
-      @cache[:map][key] = info
+    time = Benchmark.measure do 
+      key = [filename, seqid, range, config_obj, width, add_introns].hash
+      mode = add_introns ? :on : :off
+      fix = feature_index(filename, mode)
+      gtrange = fix.get_range_for_seqid(seqid)
+      gtrange.start = range.first
+      gtrange.end   = range.last
+      diagram = GT::Diagram.new(fix, seqid, gtrange, config_obj)
+      info = GT::ImageInfo.new
+      canvas = GT::Canvas.new(config_obj, width, info)
+      diagram.render(canvas)
+      lock(:map) do 
+        @cache[:map][key] = info
+      end
+      lock(:img) do
+        @cache[:img][key] = canvas.to_stream
+      end
     end
-    lock(:img) do
-      @cache[:img][key] = canvas.to_stream
-    end
-    log "done", 3
+    log "done (%.4fs)" % time.real, 3
   end
   
 end
