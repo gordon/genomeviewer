@@ -5,7 +5,7 @@ class Configuration < ActiveRecord::Base
   has_one  :format, :dependent => :destroy
 
   after_save :default_format
-  after_create :flush_cache
+  after_create :uncache
   
   def default_format
     unless Format.find_by_configuration_id(self[:id])
@@ -17,15 +17,20 @@ class Configuration < ActiveRecord::Base
 
   # pointer to the gt_ruby GT::Config object in the DRb server
   def gt
-    GTServer.config_object_for_user(user_id)
+    GTServer.config(config_key)
   end
 
-  def flush_cache
-    GTServer.config_object_for_user(user_id, :delete_cache => true)
+  def uncache
+    GTServer.config_uncache(@key)
+    @key = nil
   end
 
   def self.default
-    GTServer.default_config_object
+    GTServer.config_default
+  end
+
+  def config_key
+    @key ||= (self[:id] || self.object_id)
   end
 
 end

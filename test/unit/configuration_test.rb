@@ -17,11 +17,11 @@ class ConfigurationTest < ActiveSupport::TestCase
     assert_gt_config @conf.gt
   end
   
-  def test_flush_cache
+  def test_uncache
     @conf.gt
-    assert GTServer.cached_config_for?(@conf.user_id)
-    @conf.flush_cache
-    assert !GTServer.cached_config_for?(@conf.user_id)
+    assert GTServer.config_cached?(@conf.user_id)
+    @conf.uncache
+    assert !GTServer.config_cached?(@conf.user_id)
   end
   
   def default
