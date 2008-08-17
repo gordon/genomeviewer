@@ -1,6 +1,6 @@
 class FeatureType < ActiveRecord::Base
-  
   include GTRubyConfigurator
+  
   set_section { self.name }
   set_colors :fill, :stroke, :stroke_marked
   set_bools :collapse_to_parent, :split_lines
@@ -12,15 +12,4 @@ class FeatureType < ActiveRecord::Base
   has_many :annotations, :through => :feature_type_in_annotations
   validates_uniqueness_of :name, :scope => :configuration_id
   
-  #
-  # returns a new object with all attributes set to the default
-  #
-  def self.default_new(name)
-    instance = new(:name => name)
-    configuration_attributes.each do |attr|
-      instance.send("#{attr}=", instance.send("default_#{attr}"))
-    end
-    instance
-  end
-
 end

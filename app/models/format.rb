@@ -1,25 +1,14 @@
 class Format < ActiveRecord::Base
+  include GTRubyConfigurator
   
   belongs_to :configuration
   
-  include GTRubyConfigurator 
   set_section "format"
   set_colors :track_title_color, :default_stroke_color
   set_bools :show_grid
   set_floats :margins, :bar_height, :bar_vspace, :track_vspace, 
          :scale_arrow_width, :scale_arrow_height, :arrow_width,
          :stroke_width, :stroke_marked_width, :min_len_block
-  
-  #
-  # returns a new object with all attributes set to the default
-  #
-  def self.default_new
-    instance = new
-    configuration_attributes.each do |attr|
-      instance.send("#{attr}=", instance.send("default_#{attr}"))
-    end
-    instance
-  end
   
   def self.helptext(attribute_name)
     case attribute_name.to_sym
