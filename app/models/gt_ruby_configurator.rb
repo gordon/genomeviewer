@@ -56,6 +56,10 @@ module GTRubyConfigurator
     # * an #upload_except(*attributes) is also defined, which excludes one 
     #   or more attributes to avoid circular references by uploading
     #
+    # * an instance method #default, which provides the default values
+    #   read from gt server (i.e. considering config/value.lua settings)
+    #   for the section returned by the "section" method. 
+    #
     def set_section(section_name = nil, &block)
       define_method :section, block ? block : lambda {section_name}
       define_method :upload do
@@ -64,6 +68,21 @@ module GTRubyConfigurator
       define_method :upload_except do |*not_to_upload|
         attrs = self.class.configuration_attributes - not_to_upload
         attrs.each {|attr| send("upload_#{attr}")}
+      end
+      define_method :default do 
+        hsh = {}
+        self.class.configuration_attributes.each do |attr| 
+          hsh[attr] = send("default_#{attr}")
+        end
+        hsh
+      end
+    end
+    
+    def default_new(attrs = {})
+      begin
+        new(new(attrs).default) 
+      rescue
+        raise "section was not set, default method not defined"
       end
     end
     
