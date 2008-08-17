@@ -1,3 +1,8 @@
+#
+# creates a DSL to use in classes which configures a "section"
+# of the object returned by #configuration, i.e. its equivalent in 
+# the GT::Configs object returned by the #configuration.gt method chain
+#
 module GTRubyConfigurator
 
   ConfigTypes = [:colors, :floats, :integers, :bools, :style]
@@ -45,8 +50,21 @@ module GTRubyConfigurator
     # * a #section instance method is defined, returning the name of the 
     #   configuration section that belongs to the instances of this class
     #
+    # * a #upload instance method is defined which sets all attributes in 
+    #   the gt config object 
+    #
+    # * an #upload_except(*attributes) is also defined, which excludes one 
+    #   or more attributes to avoid circular references by uploading
+    #
     def set_section(section_name = nil, &block)
       define_method :section, block ? block : lambda {section_name}
+      define_method :upload do
+        upload_except # no exceptions
+      end
+      define_method :upload_except do |*not_to_upload|
+        attrs = self.class.configuration_attributes - not_to_upload
+        attrs.each {|attr| send("upload_#{attr}")}
+      end
     end
     
     #
@@ -58,11 +76,16 @@ module GTRubyConfigurator
     #
     # effect: 
     #
+    # * for each attribute defines an #upload_<attr> method that
+    #   sets the value in the gt config object to the current 
+    #   value of the attribute
+    #
     # * for each attribute defines a setter method #<attr>=(value) 
-    #   that changes the value in the DB as well as the value 
-    #   in the config object
+    #   that changes the value in the DB and calls the #gt_set_<attr>
+    #
     # * defines also a default getter method #default_<attr> 
     #   that returns the value from the default config object
+    #
     # * populates the lists of attributes returned by .list_<config_type>
     #   and .configuration_attributes
     
@@ -87,8 +110,10 @@ module GTRubyConfigurator
           # keep a reference to the original set method
           alias_method :"__#{attr}=", :"#{attr}=" 
         end
+        # define the upload method
+        define_method "upload_#{attr}", send("#{config_type}_upload", attr)
         # (re-)define the attribute set method
-        define_method "#{attr}=", send("#{config_type}_setter", attr)
+        define_method "#{attr}=", send("instance_set", attr)    
         # define the method to get the attribute default
         define_method "default_#{attr}", send("#{config_type}_default", attr)
       end    
@@ -109,51 +134,58 @@ module GTRubyConfigurator
                     :class_name => "Style",
                     :mapping => [ ["#{sym}_key", "key"] ]
     end
-         
-    ### set method prototypes ###
-     
-    def floats_setter(attr)
-      lambda do |value|
-        value = Float(value)
-        configuration.gt.set_num(section, attr.to_s, value) if configuration
-        self[attr]=value
-      end    
-    end
     
-    def integers_setter(attr)
-      lambda do |value|
-        value = Integer(value)
-        configuration.gt.set_num(section, attr.to_s, value) if configuration
-        self[attr]=value
-      end    
-    end
+    ### upload method prototypes ###
     
-    def bools_setter(attr)
-      lambda do |value|
-        value = value ? true : false
-        configuration.gt.set_bool(section, attr.to_s, value) if configuration
-        self[attr]=value
+    def gt_config_set(set_method, attr, value_getter = lambda {send(attr)})
+      lambda do 
+        return false unless configuration
+        args = set_method, section, attr.to_s, value_getter.bind(self).call
+        configuration.gt(section, attr).send(*args)
+        return true
       end
     end
     
-    def colors_setter(attr)
-      lambda do |value|
-        raise ArgumentError, "color expected" unless value.kind_of?(Color)
-        configuration.gt.set_color(section, attr.to_s, value.to_gt) if configuration
-        # call the original method, defined by composed_of
-        send("__#{attr}=", value)
-      end
+    def floats_upload(attr)
+      gt_config_set(:set_num, attr, lambda {Float(send(attr))})
     end
     
-    def style_setter(attr)
-      lambda do |value|
-        configuration.gt.set_cstr(section, attr.to_s, value.to_s) if configuration
-        # call the original method, defined by composed_of
-        send("__#{attr}=", value)
-      end
+    def integers_upload(attr)
+      gt_config_set(:set_num, attr, lambda {Integer(send(attr))})
     end
     
-    ### default get method prototypes ###
+    def bools_upload(attr)
+      gt_config_set(:set_bool, attr)
+    end
+    
+    def colors_upload(attr)
+      gt_config_set(:set_color, attr, lambda {send(attr).to_gt})
+    end
+    
+    def style_upload(attr)
+      gt_config_set(:set_cstr, attr)
+    end
+    
+    ### set method prototype ###
+    
+    #
+    # set the attribute to value 
+    #
+    # returns true if the setting of the gt config 
+    # was successful, otherwise false
+    #
+    def instance_set(attr)
+      lambda do |value|
+        if respond_to?("__#{attr}=")
+          send("__#{attr}=", value)
+        else
+          self[attr] = value
+        end
+        send("upload_#{attr}")
+      end
+    end
+        
+    ### default-get method prototypes ###
     
     def colors_default(attr)
       lambda do
