@@ -141,9 +141,10 @@ class Annotation < ActiveRecord::Base
     user_types = user.configuration.feature_types.map(&:name)
     fts.each do |ft|
       unless user_types.include?(ft)
-        new_ft = FeatureType.default_new(ft)
-        user.configuration.feature_types << new_ft
+        new_ft = FeatureType.default_new(:name => ft, 
+                   :configuration_id => user.configuration.id)
         feature_types << new_ft
+        user.configuration.feature_types(true) # update cache
       end
     end
   end
