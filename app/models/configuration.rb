@@ -12,14 +12,14 @@ class Configuration < ActiveRecord::Base
     section_objects.map(&:section)
   end
 
-  after_save       :default_format
+  after_save       :make_sure_there_is_a_format
   after_create     :uncache
   
-  def default_format
-    unless Format.find_by_configuration_id(self[:id])
-     f = Format.default_new
-     f.configuration_id = self[:id]
+  def make_sure_there_is_a_format
+    unless format(true) 
+     f = Format.default_new(:configuration_id => self[:id])
      f.save
+     format(true) # update the cache
     end
   end
 
