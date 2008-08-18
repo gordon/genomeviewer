@@ -8,8 +8,7 @@ class FormatTest < ActiveSupport::TestCase
     user = users("a_test")
     user.reset_configuration
     @conf = user.configuration
-    @format = Format.new
-    @conf.format = @format
+    @format = @conf.format
     @a_color = Color.new(0.1,0.2,0.3)
     @a_float = 999.9
   end
@@ -33,23 +32,29 @@ class FormatTest < ActiveSupport::TestCase
     assert_equal @conf.gt.get_bool(*args), @format.default_show_grid
     assert_not_equal false, @format.show_grid
     assert_not_equal false, @conf.gt.get_bool(*args)
-    @format.show_grid = false
+    @format.sync_show_grid = false
     assert_equal false, @format.show_grid
     assert_equal false, @conf.gt.get_bool(*args)
+    @format.show_grid = true
+    assert_equal true, @format.show_grid
+    assert_equal false, @conf.gt.get_bool(*args)
+    @format.upload_show_grid
+    assert_equal true, @format.show_grid
+    assert_equal true, @conf.gt.get_bool(*args)
   end
 
   def test_tests_will_be_defined
-    assert Format.list_floats.size > 0
+    assert Format.list_decimals.size > 0
     assert Format.list_colors.size > 0
   end
 
-  Format.list_floats.each do |f|
+  Format.list_decimals.each do |f|
     define_method "test_#{f}" do
     args = ["format",f.to_s]
     assert_equal @conf.gt.get_num(*args), @format.send("default_#{f}")
     assert_not_equal @a_float, @format.send(f)
     assert_not_equal @a_float, @conf.gt.get_num(*args)
-    @format.send("#{f}=", @a_float)
+    @format.send("sync_#{f}=", @a_float)
     assert_equal @a_float, @format.send(f)
     assert_equal @a_float, @conf.gt.get_num(*args)     
     end
@@ -62,7 +67,7 @@ class FormatTest < ActiveSupport::TestCase
                  @format.send("default_#{col}")
     assert_not_equal @a_color, @format.send(col)
     assert_not_equal @a_color, Color(@conf.gt.get_color(*args))
-    @format.send("#{col}=", @a_color)
+    @format.send("sync_#{col}=", @a_color)
     assert_equal @a_color, @format.send(col)
     assert_equal @a_color, Color(@conf.gt.get_color(*args))   
     end

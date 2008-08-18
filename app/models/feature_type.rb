@@ -5,7 +5,7 @@ class FeatureType < ActiveRecord::Base
   set_colors :fill, :stroke, :stroke_marked
   set_bools :collapse_to_parent, :split_lines
   set_integers :max_capt_show_width, :max_num_lines
-  set_style :style
+  set_styles :style
 
   belongs_to :configuration
   has_many :feature_type_in_annotations

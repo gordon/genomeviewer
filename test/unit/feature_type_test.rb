@@ -8,7 +8,11 @@ class FeatureTypeTest < ActiveSupport::TestCase
     user = users("a_test")
     user.reset_configuration
     @conf = user.configuration
+    # reset gt config cache
+    @conf.uncache
+    @conf.gt
     @ft = FeatureType.create(:name => "a_test", :configuration_id => @conf.id)
+    @conf.feature_types(true)
     @a_color = Color.new(0.1,0.2,0.3)
     @an_integer = 999
   end
@@ -43,10 +47,10 @@ class FeatureTypeTest < ActiveSupport::TestCase
   FeatureType.list_integers.each do |f|
     define_method "test_#{f}" do
       args = [@ft.section,f.to_s]
-      assert_equal @conf.gt.get_num(*args).to_i, @ft.send("default_#{f}")
+      assert_nil @ft.send("default_#{f}")
       assert_not_equal @an_integer, @ft.send(f)
       assert_not_equal @an_integer, @conf.gt.get_num(*args)
-      @ft.send("#{f}=", @an_integer)
+      @ft.send("sync_#{f}=", @an_integer)
       assert_equal @an_integer, @ft.send(f)
       assert_equal @an_integer, @conf.gt.get_num(*args)     
     end
@@ -55,11 +59,10 @@ class FeatureTypeTest < ActiveSupport::TestCase
   FeatureType.list_colors.each do |col|
     define_method "test_#{col}" do
       args = [@ft.section,col.to_s]
-      assert_equal Color(@conf.gt.get_color(*args)), 
-                   @ft.send("default_#{col}")
+      assert_equal Color.undefined, @ft.send("default_#{col}")
       assert_not_equal @a_color, @ft.send(col)
       assert_not_equal @a_color, Color(@conf.gt.get_color(*args))
-      @ft.send("#{col}=", @a_color)
+      @ft.send("sync_#{col}=", @a_color)
       assert_equal @a_color, @ft.send(col)
       assert_equal @a_color, Color(@conf.gt.get_color(*args))
     end
@@ -69,7 +72,7 @@ class FeatureTypeTest < ActiveSupport::TestCase
     args = ["a_test","collapse_to_parent"]
     assert_equal @conf.gt.get_bool(*args), @ft.default_collapse_to_parent
     assert_not_equal true, @conf.gt.get_bool(*args)
-    @ft.collapse_to_parent = true
+    @ft.sync_collapse_to_parent = true
     assert_equal true, @ft.collapse_to_parent
     assert_equal true, @conf.gt.get_bool(*args)
   end
@@ -78,7 +81,7 @@ class FeatureTypeTest < ActiveSupport::TestCase
     args = ["a_test","split_lines"]
     assert_equal @conf.gt.get_bool(*args), @ft.default_split_lines
     assert_not_equal true, @conf.gt.get_bool(*args)
-    @ft.split_lines = true
+    @ft.sync_split_lines = true
     assert_equal true, @ft.split_lines
     assert_equal true, @conf.gt.get_bool(*args)
   end
@@ -87,7 +90,7 @@ class FeatureTypeTest < ActiveSupport::TestCase
     args = ["a_test","style"]
     assert_equal @conf.gt.get_cstr(*args).to_style, @ft.default_style
     assert_not_equal "caret", @conf.gt.get_cstr(*args)
-    @ft.style = "caret".to_style
+    @ft.sync_style = "caret".to_style 
     assert_equal "caret", @ft.style.string
     assert_equal "caret", @conf.gt.get_cstr(*args)
   end

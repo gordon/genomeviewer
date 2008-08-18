@@ -1,12 +1,46 @@
 #
-# creates a DSL to use in classes which configures a "section"
-# of the object returned by #configuration, i.e. its equivalent in 
-# the GT::Configs object returned by the #configuration.gt method chain
+# defines a DSL to use in classes which configure a "section" of the
+# GT::Configs object returned by the #configuration.gt method chain
 #
 module GTRubyConfigurator
-
-  ConfigTypes = [:colors, :floats, :integers, :bools, :style]
-    
+  
+  ConfigTypes = [:colors, :decimals, :integers, :bools, :styles]
+  
+  GTRubyType = 
+  {
+    :decimals => :num,
+    :integers => :num,
+    :colors   => :color,
+    :bools    => :bool,
+    :styles   => :cstr
+  }
+  
+  #
+  # these values are used to translate a "nil" 
+  # when setting the GT::Config (see remote_setter)
+  #
+  GTRubyNil = 
+  {
+    :num   => -9999.99,
+    :cstr  => "undefined",
+    :color => Color.new(0.5, 0.5, 0.5).to_gt,
+    :bool  => false
+  }
+  
+  #
+  # these procs are used to test if a value returned from
+  # the GT::Config means "nil" (see remote_getter)
+  #
+  GTRubyIsNil = 
+  {
+    :num   => lambda {|v| v == -9999.99},
+    :cstr  => lambda {|v| v == "undefined"},
+    :color => lambda {|v| [:red, :green, :blue].all? {|c| v.send(c) == 0.5}},
+    :bool  => lambda {|v| v.nil? } #(!)
+  }
+  # (!) in GTRuby bools nil == false, therefore
+  #     no value is treated as nil
+  
   def self.included(klass)
     
     klass.class_eval do 
@@ -14,13 +48,13 @@ module GTRubyConfigurator
       @list = {}
       ConfigTypes.each {|t| @list[t] = [] }
     end
-
+    
     klass.extend(Lists)
     
     klass.extend(Macros)
     
   end  
-
+  
   module Lists
     
     # define class methods to read lists of attributes
@@ -46,22 +80,41 @@ module GTRubyConfigurator
     # end
     #
     # effect: 
+    #
+    # the following instance methods are defined:
     # 
-    # * a #section instance method is defined, returning the name of the 
-    #   configuration section that belongs to the instances of this class
+    # * #section : name of the corresponding configuration section 
+    # 
+    # * #default : hash with all values of the configuration 
+    #              attributes for this section from config/value.lua 
+    # 
+    # * #local : hash with all values of the configuration
+    #            attributes for this section from the current instance
     #
-    # * a #upload instance method is defined which sets all attributes in 
-    #   the gt config object 
+    # * #remote : hash with all values of the configuration
+    #             attributes for this section from the gt config object
     #
-    # * an #upload_except(*attributes) is also defined, which excludes one 
-    #   or more attributes to avoid circular references by uploading
+    # * #sync? : is local == remote for all configuration attributes?
     #
-    # * an instance method #default, which provides the default values
-    #   read from gt server (i.e. considering config/value.lua settings)
-    #   for the section returned by the "section" method. 
+    # * #not_sync : an array of arrays in the form: 
+    #              [attribute, local value, remote value]
+    #              for each not synchronized attribute
+    #
+    # * #upload : set all configuration attributes for this section 
+    #             in the gt config to the current instance values
+    # 
+    # * #upload_except(*attrs) : uploads all attributes except attrs
+    # 
+    # * #download : set the current instance configuration attributes 
+    #               to the values from the corresponding gt config
+    # 
+    # * #download_except(*attrs) : download all attributes except attrs
     #
     def set_section(section_name = nil, &block)
       define_method :section, block ? block : lambda {section_name}
+      define_method :default, values_fetcher("default_")
+      define_method :local,   values_fetcher("")
+      define_method :remote,  values_fetcher("remote_")
       define_method :upload do
         upload_except # no exceptions
       end
@@ -69,173 +122,196 @@ module GTRubyConfigurator
         attrs = self.class.configuration_attributes - not_to_upload
         attrs.each {|attr| send("upload_#{attr}")}
       end
-      define_method :default do 
+      define_method :download do
+        download_except # no exceptions
+      end
+      define_method :download_except do |*not_to_upload|
+        attrs = self.class.configuration_attributes - not_to_upload
+        attrs.each {|attr| send("download_#{attr}")}
+      end
+      define_method :sync? do
+        self.class.configuration_attributes.all? {|a| send("#{a}_sync?")}
+      end
+      define_method :not_sync do 
+        self.class.configuration_attributes.map do |attr|
+          send("#{attr}_sync?") ? nil : 
+            [attr, send(attr), send("remote_#{attr}")]
+        end.compact
+      end
+    end
+    
+    def values_fetcher(prefix)
+      lambda do 
         hsh = {}
         self.class.configuration_attributes.each do |attr| 
-          hsh[attr] = send("default_#{attr}")
+          hsh[attr] = send("#{prefix}#{attr}")
         end
         hsh
       end
     end
+    private :values_fetcher
     
+    #
+    # returns an instance with values from config/view.lua
+    #
     def default_new(attrs = {})
-      begin
-        new(new(attrs).default) 
-      rescue
-        raise "section was not set, default method not defined"
+      base_instance = new(attrs)
+      if [:default, :section].any?{|x|!base_instance.respond_to?(x)}
+        raise "no place to get the default from; no set_section?"
       end
+      return new(base_instance.default.merge(attrs))
     end
     
     #
-    # usage: 
+    # usage examples: 
     #
     #  set_floats :margins, :width, ...
-    #  set_bools :show_grid, ...
+    #  set_bools  :show_grid, ...
     #  set_colors :fill, ...
     #
     # effect: 
     #
-    # * for each attribute defines an #upload_<attr> method that
-    #   sets the value in the gt config object to the current 
-    #   value of the attribute
-    #
-    # * for each attribute defines a setter method #<attr>=(value) 
-    #   that changes the value in the DB and calls the #gt_set_<attr>
-    #
-    # * defines also a default getter method #default_<attr> 
-    #   that returns the value from the default config object
-    #
     # * populates the lists of attributes returned by .list_<config_type>
     #   and .configuration_attributes
-    
+    #
+    # * the following instance methods are available for each attribute:
+    #
+    #     #<attr>            : works as usual (set instance value)
+    #     #<attr>=           : works as usual (get instance value)
+    #     #remote_<attr>     : get gt config value 
+    #     #remote_<attr>=(v) : set gt config value
+    #     #sync_<attr>=(v)   : set both local and remote
+    #     #default_<attr>    : get value from config/view.lua
+    #     #<attr>_sync?      : local == remote?
+    #     #upload_<attr>     : instance => gt config
+    #     #download_<attr>   : gt config => instance
+    #
     ConfigTypes.each do |config_type|
       define_method "set_#{config_type}" do |*syms|
         define_macro(config_type, *syms)
       end
     end
-        
+    
     private
-        
-    # defines setter and default getter methods for the 
-    # given attributes of config_type
+    
     def define_macro(config_type, *syms)
       # add symbols to lists
       class_eval {@list[config_type] += syms}
       syms.each do |attr|
         # map aggregations to attributes
         mapper = "#{config_type}_mapper"
-        if respond_to?(mapper, true)
-          send(mapper, attr)          
-          # keep a reference to the original set method
-          alias_method :"__#{attr}=", :"#{attr}=" 
-        end
-        # define the upload method
-        define_method "upload_#{attr}", send("#{config_type}_upload", attr)
-        # (re-)define the attribute set method
-        define_method "#{attr}=", send("instance_set", attr)    
-        # define the method to get the attribute default
-        define_method "default_#{attr}", send("#{config_type}_default", attr)
+        send(mapper, attr) if respond_to?(mapper, true)
+        # define the instance methods
+        define_method "remote_#{attr}", remote_getter(attr, config_type)
+        define_method "remote_#{attr}=", remote_setter(attr, config_type)
+        define_method "sync_#{attr}=", sync_setter(attr)
+        define_method "#{attr}_sync?", sync_tester(attr)
+        define_method "upload_#{attr}", uploader(attr)
+        define_method "download_#{attr}", downloader(attr)
+        define_method "default_#{attr}", default_reader(attr, config_type)
       end    
     end
     
     ### aggregation callbacks ###
     
     def colors_mapper(sym)
-        composed_of sym, 
-                    :class_name => "Color",
-                    :mapping => [ ["#{sym}_red", "red"],
-                                  ["#{sym}_green", "green"],
-                                  ["#{sym}_blue", "blue"] ]
+      composed_of sym, 
+                  :class_name => "Color",
+                  :mapping => [ ["#{sym}_red", "red"],
+                                ["#{sym}_green", "green"],
+                                ["#{sym}_blue", "blue"] ] do |v|
+                    v.nil? ? Color.undefined : v
+                  end
     end
     
-    def style_mapper(sym)
-        composed_of sym, 
-                    :class_name => "Style",
-                    :mapping => [ ["#{sym}_key", "key"] ]
+    def styles_mapper(sym)
+      composed_of sym, 
+                  :class_name => "Style",
+                  :mapping => [ ["#{sym}_key", "key"] ] do |v|
+                    v.nil? ? "undefined".to_style : v
+                  end
     end
     
-    ### upload method prototypes ###
+    ### get and set methods ###
     
-    def gt_config_set(set_method, attr, value_getter = lambda {send(attr)})
-      lambda do 
-        return false unless configuration
-        args = set_method, section, attr.to_s, value_getter.bind(self).call
-        configuration.gt(section, attr).send(*args)
-        return true
-      end
-    end
-    
-    def floats_upload(attr)
-      gt_config_set(:set_num, attr, lambda {Float(send(attr))})
-    end
-    
-    def integers_upload(attr)
-      gt_config_set(:set_num, attr, lambda {Integer(send(attr))})
-    end
-    
-    def bools_upload(attr)
-      gt_config_set(:set_bool, attr)
-    end
-    
-    def colors_upload(attr)
-      gt_config_set(:set_color, attr, lambda {send(attr).to_gt})
-    end
-    
-    def style_upload(attr)
-      gt_config_set(:set_cstr, attr)
-    end
-    
-    ### set method prototype ###
-    
-    #
-    # set the attribute to value 
-    #
-    # returns true if the setting of the gt config 
-    # was successful, otherwise false
-    #
-    def instance_set(attr)
+    def sync_setter(attr)
       lambda do |value|
-        if respond_to?("__#{attr}=")
-          send("__#{attr}=", value)
-        else
-          self[attr] = value
+        send("remote_#{attr}=", value) 
+        send("#{attr}=", value)
+      end
+    end    
+    
+    def remote_getter(attr, config_type, from = nil)
+      cast = 
+        case config_type
+          when :colors : lambda {|v| v.nil? ? Color.undefined : Color(v)}
+          when :styles : lambda {|v| (v.nil? ? "undefined" : v).to_style}
+          when :integers : lambda {|v| v.nil? ? nil : v.to_i}
+          when :decimals : lambda {|v| v.nil? ? nil : BigDecimal(v.to_s)}
+          else             lambda {|v| v}
         end
-        send("upload_#{attr}")
-      end
-    end
-        
-    ### default-get method prototypes ###
-    
-    def colors_default(attr)
-      lambda do
-        Color(Configuration.default.get_color(section, attr.to_s))
+      return lambda do 
+        raise "no place to get from" unless configuration
+        gtr_type = GTRubyType[config_type]
+        config_obj = from || configuration.gt(section, attr)
+        raw = config_obj.send("get_#{gtr_type}", section, attr.to_s)
+        value_or_nil = GTRubyIsNil[gtr_type].bind(self).call(raw) ? nil : raw
+        endvalue = cast.bind(self).call(value_or_nil)
       end
     end
     
-    def floats_default(attr)
-      lambda do
-        Configuration.default.get_num(section, attr.to_s)
+    def remote_setter(attr, config_type, to = nil)
+      cast = 
+        case config_type
+          when :colors : lambda {|v| v.undefined? ? GTRubyNil[:color] : v.to_gt}
+          when :styles : lambda {|v| v.to_s}
+          when :decimals : lambda {|v| v.to_f}
+          when :integers : lambda {|v| v.to_f}
+          else             lambda {|v| v}
+        end
+      return lambda do |value|
+        raise "no place to set into" unless configuration
+        gtr_type = GTRubyType[config_type]
+        casted = value.nil? ? GTRubyNil[gtr_type] : cast.bind(self).call(value)
+        config_obj = to || configuration.gt(section, attr)
+        config_obj.send("set_#{gtr_type}", section, attr.to_s, casted)
+        return casted
       end
     end
-
-    def integers_default(attr)
-      lambda do
-        Configuration.default.get_num(section, attr.to_s).to_i
+    
+    def sync_tester(attr)
+      lambda do 
+        local_value = send(attr)
+        remote_value = send("remote_#{attr}")
+        # in GTRuby bools: false == nil
+        if remote_value == false
+          (local_value == false) or (local_value.nil?)
+        else
+          local_value == remote_value
+        end
       end
     end
-
-    def bools_default(attr)
-      lambda do
-        Configuration.default.get_bool(section, attr.to_s)
+    
+    ### default reader ###
+    
+    def default_reader(attr, config_type)
+      remote_getter(attr, config_type, Configuration.default)
+    end
+    
+    ### synchronization methods ###
+    
+    def uploader(attr)
+      lambda do 
+        send("remote_#{attr}=", send(attr))
       end
     end
-
-    def style_default(attr)
-      lambda do
-        Configuration.default.get_cstr(section, attr.to_s).to_style
+    
+    def downloader(attr)
+      lambda do 
+        send("#{attr}=", send("remote_#{attr}"))
       end
     end
-  
+    
   end
-      
+  
 end
