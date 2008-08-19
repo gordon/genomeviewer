@@ -88,7 +88,9 @@ class FeatureTypeTest < ActiveSupport::TestCase
 
   def test_style
     args = ["a_test","style"]
-    assert_equal @conf.gt.get_cstr(*args).to_style, @ft.default_style
+    remote = @conf.gt.get_cstr(*args)
+    assert_equal remote.nil? ? Style.undefined : remote.to_style, 
+                 @ft.default_style
     assert_not_equal "caret", @conf.gt.get_cstr(*args)
     @ft.sync_style = "caret".to_style 
     assert_equal "caret", @ft.style.string
