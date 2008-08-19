@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 27) do
+ActiveRecord::Schema.define(:version => 28) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -27,7 +27,8 @@ ActiveRecord::Schema.define(:version => 27) do
   create_table "feature_type_in_annotations", :force => true do |t|
     t.integer "annotation_id"
     t.integer "feature_type_id"
-    t.boolean "show",            :default => true, :null => false
+    t.integer "max_show_width"
+    t.integer "max_capt_show_width"
   end
 
   create_table "feature_types", :force => true do |t|
