@@ -25,6 +25,14 @@ class Style
     @key == other.key
   end
   
+  def self.undefined
+    new(nil)
+  end
+  
+  def undefined?
+    @key.nil?
+  end
+  
   String.class_eval do
     
     def to_style

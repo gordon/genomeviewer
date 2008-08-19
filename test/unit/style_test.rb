@@ -44,6 +44,14 @@ class StyleTest < Test::Unit::TestCase
     assert_not_equal s1, "string"
   end
   
+  def test_undefined
+    assert_nil Style.undefined.key
+  end
+  
+  def test_undefined_test
+    assert Style.undefined.undefined?
+  end
+  
   def test_from_string
     assert_equal Style.new(1), "box".to_style
     assert_equal "undefined", "".to_style.to_s
