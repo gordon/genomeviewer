@@ -19,32 +19,6 @@ module GTRubyConfigurator
     :styles   => :cstr
   }
   
-  #
-  # these values are used to translate a "nil" 
-  # when setting the GT::Config (see remote_setter)
-  #
-  GTRubyNil = 
-  {
-    :num   => -9999.99,
-    :cstr  => "undefined",
-    :color => Color.new(0.5, 0.5, 0.5).to_gt,
-    :bool  => false
-  }
-  
-  #
-  # these procs are used to test if a value returned from
-  # the GT::Config means "nil" (see remote_getter)
-  #
-  GTRubyIsNil = 
-  {
-    :num   => lambda {|v| v == -9999.99},
-    :cstr  => lambda {|v| v == "undefined"},
-    :color => lambda {|v| [:red, :green, :blue].all? {|c| v.send(c) == 0.5}},
-    :bool  => lambda {|v| v.nil? } #(!)
-  }
-  # (!) in GTRuby bools nil == false, therefore
-  #     no value is treated as nil
-  
   def self.included(klass)
     
     klass.class_eval do 
@@ -257,7 +231,7 @@ module GTRubyConfigurator
       cast = 
         case config_type
           when :colors : lambda {|v| v.nil? ? Color.undefined : Color(v)}
-          when :styles : lambda {|v| (v.nil? ? "undefined" : v).to_style}
+          when :styles : lambda {|v| v.nil? ? Style.undefined : v.to_style}
           when :integers : lambda {|v| v.nil? ? nil : v.to_i}
           when :decimals : lambda {|v| v.nil? ? nil : BigDecimal(v.to_s)}
           else             lambda {|v| v}
@@ -267,40 +241,36 @@ module GTRubyConfigurator
         gtr_type = GTRubyType[config_type]
         config_obj = from || configuration.gt(section, attr)
         raw = config_obj.send("get_#{gtr_type}", section, attr.to_s)
-        value_or_nil = GTRubyIsNil[gtr_type].bind(self).call(raw) ? nil : raw
-        endvalue = cast.bind(self).call(value_or_nil)
+        value = cast.bind(self).call(raw)
       end
     end
     
     def remote_setter(attr, config_type, to = nil)
       cast = 
         case config_type
-          when :colors : lambda {|v| v.undefined? ? GTRubyNil[:color] : v.to_gt}
-          when :styles : lambda {|v| v.to_s}
-          when :decimals : lambda {|v| v.to_f}
-          when :integers : lambda {|v| v.to_f}
+          when :colors : lambda {|v| (v.nil? or v.undefined?) ? nil : v.to_gt}
+          when :styles : lambda {|v| (v.nil? or v.undefined?) ? nil : v.to_s}
+          when :decimals : lambda {|v| v.nil? ? nil : v.to_f}
+          when :integers : lambda {|v| v.nil? ? nil : v.to_f}
           else             lambda {|v| v}
         end
       return lambda do |value|
         raise "no place to set into" unless configuration
-        gtr_type = GTRubyType[config_type]
-        casted = value.nil? ? GTRubyNil[gtr_type] : cast.bind(self).call(value)
         config_obj = to || configuration.gt(section, attr)
-        config_obj.send("set_#{gtr_type}", section, attr.to_s, casted)
+        casted = cast.bind(self).call(value)
+        if casted.nil?
+          config_obj.send("unset", section, attr.to_s)
+        else
+          gtr_type = GTRubyType[config_type]
+          config_obj.send("set_#{gtr_type}", section, attr.to_s, casted)
+        end
         return casted
       end
     end
     
     def sync_tester(attr)
       lambda do 
-        local_value = send(attr)
-        remote_value = send("remote_#{attr}")
-        # in GTRuby bools: false == nil
-        if remote_value == false
-          (local_value == false) or (local_value.nil?)
-        else
-          local_value == remote_value
-        end
+        send(attr) == send("remote_#{attr}")
       end
     end
     

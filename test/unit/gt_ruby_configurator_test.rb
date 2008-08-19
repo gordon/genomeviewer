@@ -57,19 +57,22 @@ class GTRubyConfiguratorTest < ActiveSupport::TestCase
   
   test_fixtures = [
     {:type => "decimals", :section => "format", :gtrget => :get_num,
-     :attr => "margins", :value => 1000.0},
+     :attr => "margins", :value => 1000.0, :undefined => nil},
     {:type => "bools", :section => "format", :gtrget => :get_bool,
-     :attr => "show_grid", :value => false},
+     :attr => "show_grid", :value => false, :undefined => nil},
     {:type => "colors", :section => "format", :gtrget => :get_color,
-     :attr => "track_title_color", :value => Color.new(1.0, 1.0, 1.0)},
+     :attr => "track_title_color", :value => Color.new(1.0, 1.0, 1.0), 
+     :undefined => Color.undefined},
     {:type => "colors", :section => "exon", :gtrget => :get_color,
-     :attr => "fill", :value => Color.new(1.0, 1.0, 1.0)},
+     :attr => "fill", :value => Color.new(1.0, 1.0, 1.0), 
+     :undefined => Color.undefined},
     {:type => "bools", :section => "exon", :gtrget => :get_bool,
-     :attr => "split_lines", :value => false},
+     :attr => "split_lines", :value => false, :undefined => nil},
     {:type => "integers", :section => "exon", :gtrget => :get_num,
-     :attr => "max_num_lines", :value => 999},
+     :attr => "max_num_lines", :value => 999, :undefined => nil},
     {:type => "styles", :section => "exon", :gtrget => :get_cstr,
-     :attr => "style", :value => "caret".to_style}
+     :attr => "style", :value => "caret".to_style, 
+     :undefined => Style.undefined}
   ]
   
   test_fixtures.each do |x|
@@ -121,30 +124,21 @@ class GTRubyConfiguratorTest < ActiveSupport::TestCase
       assert_equal x[:value], @section[x[:section]].send("remote_#{x[:attr]}")
     end
     
-    define_method "test_sync_set_nil_#{x[:section]}_#{x[:type]}" do
+    define_method "test_sync_unset_#{x[:section]}_#{x[:type]}" do
       value = (x[:type] == "bools") ? true : x[:value]
       @section[x[:section]].send("sync_#{x[:attr]}=", value)
-      assert_not_nil @section[x[:section]].send(x[:attr])
-      assert_not_nil @section[x[:section]].send("remote_#{x[:attr]}")
-      @section[x[:section]].send("sync_#{x[:attr]}=", nil)
+      assert_not_equal x[:undefined], 
+                       @section[x[:section]].send(x[:attr])
+      assert_not_equal x[:undefined], 
+                       @section[x[:section]].send("remote_#{x[:attr]}")
+      # test return value:
+      assert_equal x[:undefined],
+                   @section[x[:section]].send("sync_#{x[:attr]}=", nil)
       # test side effect:
-      case x[:type] 
-      when "bools"
-        assert_nil @section[x[:section]].send(x[:attr])
-        assert !@section[x[:section]].send("remote_#{x[:attr]}")
-      when "colors"
-        assert_equal Color.undefined,
-                     @section[x[:section]].send(x[:attr])
-        assert_equal Color.undefined,
-                     @section[x[:section]].send("remote_#{x[:attr]}")
-      when "styles"
-        assert_equal "undefined".to_style,
-                     @section[x[:section]].send(x[:attr])
-        assert_equal "undefined".to_style,
-                     @section[x[:section]].send("remote_#{x[:attr]}")
-      else
-        assert_nil @section[x[:section]].send("remote_#{x[:attr]}")
-      end
+      assert_equal x[:undefined], 
+                   @section[x[:section]].send(x[:attr])
+      assert_equal x[:undefined], 
+                   @section[x[:section]].send("remote_#{x[:attr]}")
     end
     
     define_method "test_sync_test_#{x[:section]}_#{x[:type]}" do
@@ -175,14 +169,13 @@ class GTRubyConfiguratorTest < ActiveSupport::TestCase
     end
     
     define_method "test_download_#{x[:section]}_#{x[:type]}" do
-      value = (x[:type] == "bools") ? true : x[:value]
-      @section[x[:section]].send("remote_#{x[:attr]}=", value)
+      @section[x[:section]].send("remote_#{x[:attr]}=", x[:value])
       assert !@section[x[:section]].send("#{x[:attr]}_sync?")
       # test return value
-      return_value = @section[x[:section]].send("download_#{x[:attr]}")
-      assert_equal value, return_value                   
+      assert_equal x[:value], 
+                   @section[x[:section]].send("download_#{x[:attr]}")                   
       # test side effects
-      assert_equal value, @section[x[:section]].send(x[:attr])
+      assert_equal x[:value], @section[x[:section]].send(x[:attr])
       assert @section[x[:section]].send("#{x[:attr]}_sync?")
     end
     
