@@ -1,0 +1,17 @@
+<tr>
+  <td>
+    <strong><%= feature_type_in_annotation.feature_type.name %></strong>
+  </td>
+  <td>
+    - show? <%= check_box_tag "", "", {}, :class => "ft_table_cb" %> <%# feature_type_in_annotation.max_show_width -%>
+  </td>
+  <td>
+    (up to <%= text_field_tag "", "", :size => 10, :class => "nice ft_table_text" %> nt)<%# feature_type_in_annotation.max_capt_show_width %>
+  </td>
+  <td>
+    - with caption? <%= check_box_tag "", "", {}, :class => "ft_table_cb" %> <%#feature_type_in_annotation.max_show_width %>
+  </td>
+  <td>
+    (up to <%= text_field_tag "", "", :size => 10, :class => "nice ft_table_text" %> nt)<%#feature_type_in_annotation.max_capt_show_width %>
+  </td>
+</tr>

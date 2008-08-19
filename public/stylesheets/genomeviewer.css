@@ -107,6 +107,10 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
+#viewer input {
+  text-align: left;
+}
+
 /* seq_id buttons */
 
 #viewer .seq_id {
@@ -140,9 +144,12 @@ h1, h2, h3, h4, h5, h6 {
   min-height: 40px;
   max-height: 40px;
   overflow: hidden;
-  text-align: center;
   vertical-align: middle;
   border: 1px solid black;
+}
+
+#command_bar input {
+  text-align: left;
 }
 
 #position_form {
@@ -164,6 +171,24 @@ h1, h2, h3, h4, h5, h6 {
 
 #command_bar img {
   border: 0px;
+}
+
+/* feature types table */
+
+#feature_types_table {
+  background: rgb(70%, 70%, 100%);
+  border: 1px solid black;
+  font-size: 70%;
+}
+
+.ft_table_text {
+  font-size: 70%;
+  vertical-align: text-top;
+}
+
+.ft_table_cb {
+  font-size: 70%;
+  vertical-align: -25%;
 }
 
 /* orientation bar */
