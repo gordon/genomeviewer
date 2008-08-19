@@ -62,4 +62,18 @@ class ConfigurationTest < ActiveSupport::TestCase
     assert_gt_config Configuration.default
   end
   
+  def test_equal_img_config_new_and_default
+    filename = File.expand_path("../gff3/little1.gff3",File.dirname(__FILE__))
+    assert File.exist?(filename)
+    args = [filename, "test1", (1000..9000), nil, # <- args[3] is config_obj
+            800, true, true]
+    args_conf_gt = args.clone
+    args_conf_gt[3] = @conf.gt
+    args_conf_new = args.clone
+    args_conf_new[3] = GTServer.config_new
+    assert_equal GTServer.image(*args_conf_new), GTServer.image(*args_conf_gt)
+    @conf.gt.set_num("format", "margins", 200.0)
+    assert_not_equal GTServer.image(*args_conf_new), GTServer.image(*args_conf_gt)
+  end
+  
 end
