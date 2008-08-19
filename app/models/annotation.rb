@@ -133,19 +133,19 @@ class Annotation < ActiveRecord::Base
   end
   
   #
-  # if the feature types of the file are 
-  # not present in the user's list they are added
+  # feature types are added to the annotation list;
+  # if they are not present in the user's list they are added
   #
   def create_feature_types
-    fts = GTServer.gff3_feature_types(File.expand_path(gff3_data_storage))
-    user_types = user.configuration.feature_types.map(&:name)
-    fts.each do |ft|
-      unless user_types.include?(ft)
-        new_ft = FeatureType.default_new(:name => ft, 
+    ft_names = GTServer.gff3_feature_types(File.expand_path(gff3_data_storage))
+    ft_names.each do |ft_name|
+      ft = user.configuration.feature_types.find_by_name(ft_name)
+      unless ft
+        ft = FeatureType.default_new(:name => ft_name, 
                    :configuration_id => user.configuration.id)
-        feature_types << new_ft
         user.configuration.feature_types(true) # update cache
       end
+      feature_types << ft
     end
   end
 
