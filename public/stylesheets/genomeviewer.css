@@ -200,3 +200,13 @@ h1, h2, h3, h4, h5, h6 {
  background: darkblue;
  color: white;
 }
+
+/* configuration */
+
+div.square {
+  min-width: 24px;
+  min-height: 24px;
+  max-width: 24px;
+  max-height: 24px;
+  border-style: ridge;
+}
