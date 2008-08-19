@@ -9,6 +9,10 @@ class StyleTest < Test::Unit::TestCase
     [nil, "a", 0, 5].each {|x| assert_nil     Style.new(x).key}
   end
 
+  def test_defined_styles
+    assert_kind_of Hash, Style::DefinedStyles
+  end
+
   def test_string
     s = Style.new(1)
     assert_equal "box", s.string

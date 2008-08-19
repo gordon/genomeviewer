@@ -1,5 +1,13 @@
 class Style
 
+  DefinedStyles = 
+    {
+      1 => "box",
+      2 => "caret",
+      3 => "dashes",
+      4 => "line"
+    }
+
   def initialize(key)
     @key = ([1,2,3,4].include?(key.to_i) ? key.to_i : nil)
   end
@@ -7,14 +15,7 @@ class Style
   attr_reader :key
  
   def string
-    case key 
-      when 1 : "box"
-      when 2 : "caret"
-      when 3 : "dashes"
-      when 4 : "line"
-      else
-        "undefined"
-    end
+    DefinedStyles.fetch(key, "undefined")
   end
   
   alias_method :to_s, :string
@@ -27,16 +28,7 @@ class Style
   String.class_eval do
     
     def to_style
-      key = 
-        case self
-          when "box" : 1
-          when "caret" : 2
-          when "dashes" : 3
-          when "line" : 4
-        else
-          nil
-        end
-      Style.new(key)
+      Style.new(Style::DefinedStyles.index(self))
     end
     
   end
