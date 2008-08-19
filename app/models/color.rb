@@ -55,6 +55,7 @@ class Color
     # proper methods. 
     #
     def Color(x)
+      return Color.undefined if x.nil?
       begin
         Color.new(*(Color::Channels.map{|c| x.send(c)}))
       rescue
