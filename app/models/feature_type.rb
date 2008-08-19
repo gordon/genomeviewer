@@ -4,7 +4,7 @@ class FeatureType < ActiveRecord::Base
   set_section { self.name }
   set_colors :fill, :stroke, :stroke_marked
   set_bools :collapse_to_parent, :split_lines
-  set_integers :max_capt_show_width, :max_num_lines
+  set_integers :max_show_width, :max_capt_show_width, :max_num_lines
   set_styles :style
 
   belongs_to :configuration
