@@ -6,9 +6,10 @@ module GTObjectsAssertions
   def assert_gt_config(obj, message = nil)
     message ||= "It does not look like a GT::Config"
     assert_block(message) do 
-      types = ["bool", "color", "cstr", "cstr_list"]
+      types = ["bool", "color", "cstr", "num"]
       methods = (["get","set"].map {|a| types.map {|t| "#{a}_#{t}"}}).flatten
       methods << "load_file"
+      methods << "unset"
       methods.all?{|m| obj.respond_to?(m)}
     end
   end
