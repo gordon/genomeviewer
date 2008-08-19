@@ -7,6 +7,9 @@ class FeatureTypesController < ApplicationController
     FeatureType.list_colors.each do |c| 
       config.columns[c].sort_by :sql => "#{c}_red, #{c}_green, #{c}_blue"
     end
+    FeatureType.list_styles.each do |s|
+      config.columns[s].sort_by :sql => "#{s}_key"
+    end
   end
   
   def conditions_for_collection
