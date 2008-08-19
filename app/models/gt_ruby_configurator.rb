@@ -4,7 +4,11 @@
 #
 module GTRubyConfigurator
   
-  ConfigTypes = [:colors, :decimals, :integers, :bools, :styles]
+  #
+  # #configuration_attributes returns the attributes in the order 
+  # specified by this array (within each list in alphabetic order)
+  #
+  ConfigTypes = [:styles, :colors, :decimals, :integers, :bools]
   
   GTRubyType = 
   {
@@ -61,7 +65,7 @@ module GTRubyConfigurator
     ConfigTypes.each {|t| define_method "list_#{t}", lambda{@list[t]} }
     
     def configuration_attributes
-      @list.values.flatten
+      ConfigTypes.map{|t| @list[t].sort_by(&:to_s)}.flatten
     end
     
   end
