@@ -220,16 +220,24 @@ module GTRubyConfigurator
                   :mapping => [ ["#{sym}_red", "red"],
                                 ["#{sym}_green", "green"],
                                 ["#{sym}_blue", "blue"] ] do |v|
-                    v.nil? ? Color.undefined : v
-                  end
+                                  case v
+                                  when nil : Color.undefined
+                                  when String : v.to_color
+                                  else v
+                                  end
+                                end
     end
     
     def styles_mapper(sym)
       composed_of sym, 
                   :class_name => "Style",
                   :mapping => [ ["#{sym}_key", "key"] ] do |v|
-                    v.nil? ? "undefined".to_style : v
-                  end
+                                case v
+                                when nil : "undefined".to_style
+                                when String : v.to_style
+                                else v
+                                end
+                              end
     end
     
     ### get and set methods ###
