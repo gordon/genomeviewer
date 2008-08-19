@@ -16,4 +16,13 @@ class FeatureTypesController < ApplicationController
     ["configuration_id = ?", @current_user.configuration.id]
   end
   
+  def before_update_save(record)
+    record.upload
+  end
+  
+  def before_create_save(record)
+    # delegate to the other callback
+    before_update_save(record)
+  end
+  
 end
