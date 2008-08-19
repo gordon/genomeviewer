@@ -1,5 +1,19 @@
 module ViewerHelper
 
+  def seq_id_selector
+    seqids = @sequence_regions.map(&:seq_id)
+    opts = options_for_select(seqids, @sequence_region.seq_id)
+    ann_url = url_for(:action => :index, 
+                      :username => @annotation.user.username,
+                      :annotation => @annotation.name,
+                      :seq_region => nil, 
+                      :start_pos => nil,
+                      :end_pos => nil)
+    "Sequence "+
+    select_tag("sequence_region", opts, 
+              :onchange => "window.location.href=('#{ann_url}/'+this.value)")
+  end
+  
   ### ajax ###
   
   def ajax_replacer
