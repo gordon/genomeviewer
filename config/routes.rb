@@ -45,6 +45,7 @@ ActionController::Routing::Routes.draw do |map|
          configuration 
          default 
          feature_types
+         format
          own_annotations 
          public_annotations 
          public_users 
