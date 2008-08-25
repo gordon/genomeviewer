@@ -61,6 +61,8 @@ class ViewerController < ApplicationController
       end
       
       get_values_for_orientation_bar
+      @uuid = UUID.random_create.to_s
+      generate_img_and_map
 
     end
     
