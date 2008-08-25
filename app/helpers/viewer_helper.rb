@@ -4,7 +4,30 @@ module ViewerHelper
     seqids = @sequence_regions.map(&:seq_id)
     opts = options_for_select(seqids, @sequence_region.seq_id)
     "Sequence: "+
-    select_tag("sequence_region", opts)
+    select_tag("sequence_region", opts, :id => "seq_id_selector")
+  end
+  
+  #
+  # this allows to submit the form to an URL 
+  # that is still meaningful when used with 
+  # HTTP-GET method (i.e. saves some of the 
+  # information from the form in the URL)
+  #
+  # the remaining information, i.e. width and feature
+  # types table, is still available in requests 
+  # sent by the form (using the HTTP-POST method)
+  # but not e.g. saving the URL in the favourites
+  #
+  def settings_form_submit
+    <<-end_js
+      seq_id = $("seq_id_selector").value;
+      sp = $("start_pos").value;
+      ep = $("end_pos").value;
+      url_prefix = form.action;
+      url_suffix = seq_id + '/' + sp + '/' + ep;
+      form.action = url_prefix + url_suffix; 
+      form.submit();
+    end_js
   end
   
   ### ajax ###
