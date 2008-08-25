@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 28) do
+ActiveRecord::Schema.define(:version => 29) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -89,5 +89,14 @@ ActiveRecord::Schema.define(:version => 28) do
     t.integer "public_annotations_count",               :default => 0,  :null => false
     t.string  "username",                 :limit => 64, :default => "", :null => false
   end
+
+  create_table "uuid_logs", :force => true do |t|
+    t.string   "uuid",       :limit => 36
+    t.text     "args"
+    t.datetime "created_at"
+  end
+
+  add_index "uuid_logs", ["created_at"], :name => "index_uuid_logs_on_created_at"
+  add_index "uuid_logs", ["uuid"], :name => "index_uuid_logs_on_uuid"
 
 end
