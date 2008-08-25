@@ -157,10 +157,10 @@ class ViewerController < ApplicationController
     if params[:ft]
       params[:ft].each do |ft_name, setting|
         @ft_settings[ft_name] = {} 
+        ft_id = FeatureType.find_by_name(ft_name).id
         unless setting[:show]
           @ft_settings[ft_name][:show] = 0
           @ft_settings[ft_name][:capt] = 0
-          next
         else
           # nil means infinite, show at any width
           show = (Integer(setting[:max_show_width]) rescue nil)
@@ -172,6 +172,12 @@ class ViewerController < ApplicationController
             capt = (Integer(setting[:max_capt_show_width]) rescue nil)
             @ft_settings[ft_name][:capt] = capt
           end
+        end
+        if @current_user
+          # save settings in the DB
+          ft_in_a = @annotation_ft_settings.find_by_feature_type_id(ft_id)
+          ft_in_a.max_show_width      = @ft_settings[ft_name][:show]
+          ft_in_a.max_capt_show_width = @ft_settings[ft_name][:capt]
         end
       end
     else
