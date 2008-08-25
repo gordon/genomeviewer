@@ -9,6 +9,7 @@ class FormatController < ApplicationController
     config.columns[:width].label = "Default width"
     columns.each do |c|
       config.columns[c].sort = false
+      config.columns[c].description = Format.helptext(c)
     end
     [:create, :search, :new, :delete, :show].each do |act|
       config.actions.exclude act
