@@ -4,8 +4,10 @@ class FormatController < ApplicationController
 
   active_scaffold :format do |config|
     config.label = "General settings"
-    config.columns = Format.configuration_attributes
-    Format.configuration_attributes.each do |c|
+    columns = [:width] + Format.configuration_attributes
+    config.columns = columns
+    config.columns[:width].label = "Default width"
+    columns.each do |c|
       config.columns[c].sort = false
     end
     [:create, :search, :new, :delete, :show].each do |act|
@@ -20,6 +22,7 @@ class FormatController < ApplicationController
   
   def before_update_save(record)
     record.upload
+    record.configuration.save # to save the width
   end
   
 end
