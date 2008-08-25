@@ -12,8 +12,8 @@ class ViewerController < ApplicationController
     
   rescue => err
   
-      flash[:errors] = err.to_s
-      redirect_to(@current_user ? own_files_url : root_url)    
+    flash[:errors] = err.to_s
+    redirect_to(@current_user ? own_files_url : root_url)    
     
   end
   
@@ -28,7 +28,6 @@ class ViewerController < ApplicationController
     @seq_ids_per_line = 10
     @title = @annotation.name
     get_values_for_orientation_bar
-    @uuid = UUID.random_create.to_s
     generate_img_and_map
     
   end
@@ -61,7 +60,6 @@ class ViewerController < ApplicationController
       end
       
       get_values_for_orientation_bar
-      @uuid = UUID.random_create.to_s
       generate_img_and_map
 
     end
@@ -70,6 +68,7 @@ class ViewerController < ApplicationController
   
   def ajax_reloader
     get_values_for_orientation_bar
+    generate_img_and_map
     render :action => "ajax_movement.js.rjs"
   end
 
@@ -203,6 +202,7 @@ class ViewerController < ApplicationController
   end
     
   def generate_img_and_map
+    @uuid = UUID.random_create.to_s
     config_obj = @current_user ? 
                    # logged in: use the user config object
                    @current_user.configuration.gt : 
@@ -238,6 +238,7 @@ class ViewerController < ApplicationController
     args.unshift(@uuid)
     args[4] = config_obj
     GTServer.img_and_map_generate(*args)
+    @info = GTServer.map(@uuid)
   end
     
 end

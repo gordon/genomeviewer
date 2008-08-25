@@ -1,5 +1,6 @@
 <div id="image">
-  <img src="/image/<%=@uuid%>" alt=''/>
+  <img src="/image/<%=@uuid%>" usemap='#imap' alt=''/>
+  <%= map_tag @info %>
 </div>
 <%= draggable_element :image, 
                       :constraint => '"horizontal"',
