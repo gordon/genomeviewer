@@ -141,44 +141,10 @@ h1, h2, h3, h4, h5, h6 {
 
 #command_bar {
   background: rgb(60%, 60%, 90%);
-  min-height: 40px;
-  max-height: 40px;
-  overflow: hidden;
-  vertical-align: middle;
-  border: 1px solid black;
-}
-
-#command_bar input {
-  text-align: left;
-}
-
-#position_form {
-  display: inline;
-}
-
-#command_bar a {
-  border: 0px;
-}
-#command_bar a:link {
-  border: 0px;
-}
-#command_bar a:hover {
-  border: 0px;
-}
-#command_bar a:visited {
-  border: 0px;
-}
-
-#command_bar img {
-  border: 0px;
-}
-
-/* feature types table */
-
-#feature_types_table {
-  background: rgb(70%, 70%, 100%);
   border: 1px solid black;
   font-size: 70%;
+  padding: 5px;
+  text-align: left;
 }
 
 .ft_table_text {
@@ -189,6 +155,37 @@ h1, h2, h3, h4, h5, h6 {
 .ft_table_cb {
   font-size: 70%;
   vertical-align: -25%;
+}
+
+/* buttons bar */
+
+#buttons_bar {
+  background: rgb(70%, 70%, 100%);
+  border: 1px solid black;
+}
+
+#buttons_bar a {
+  border: 0px;
+}
+#buttons_bar a:link {
+  border: 0px;
+}
+#buttons_bar a:hover {
+  border: 0px;
+}
+#buttons_bar a:visited {
+  border: 0px;
+}
+#buttons_bar img {
+  border: 0px;
+}
+
+/* feature types table */
+
+#feature_types_table {
+  background: rgb(70%, 70%, 100%);
+  border: 1px solid black;
+  font-size: 70%;
 }
 
 /* orientation bar */

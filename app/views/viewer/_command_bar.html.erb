@@ -1,18 +1,22 @@
 <div id="command_bar">
-  <%= seq_id_selector %>
   <% form_tag({:action => :index, 
                     :username => @annotation.user.username,
                     :annotation => @annotation.name, 
                     :seq_region => @sequence_region.seq_id, 
                     :method => :get}, 
-                    {:id => "position_form"}) do -%>
-    Start:<%= text_field_tag 'start_pos', @start, :size => 10, :class => "nice" %>
-    End:<%= text_field_tag 'end_pos', @end, :size => 10, :class => "nice" %>
-    <%= submit_tag  "Go" %>
+                    {:id => "command_form"}) do -%>
+    <table>
+      <tr>
+        <td colspan=2>
+          <%= seq_id_selector %> - 
+          Start:<%= text_field_tag 'start_pos', @start, :size => 10, :class => "nice" %> - 
+          End:<%= text_field_tag 'end_pos', @end, :size => 10, :class => "nice" %> - 
+          Image width (px):<%= text_field_tag 'width', @width, :size => 10, :class => "nice" %>
+        </td>
+      </tr>
+      <%= render :partial => "feature_type_in_annotation", 
+                     :collection => @annotation.feature_type_in_annotations %>
+    </table>
+    <%= submit_tag  "Update Image" %>
   <% end -%>
-  <%= zoom_out_button -%>
-  <%= back_button -%>
-  <%= forward_button -%>
-  <%= zoom_in_button -%>
-  <%= show_all_button -%>
 </div>
