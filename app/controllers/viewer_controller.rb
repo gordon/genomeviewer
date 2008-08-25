@@ -111,10 +111,14 @@ class ViewerController < ApplicationController
           unless @sequence_region
   end    
   
-  def get_width
-    @width = @current_user ? 
-      @current_user.configuration.width : 
-      @annotation.user.configuration.width
+  def get_width(default_width = 900)
+    if params[:width] 
+      @width = params[:width].to_i
+    else
+      @width = @current_user ? 
+        @current_user.configuration.width : 
+        default_width
+    end
   end
   
   def get_range

@@ -4,7 +4,8 @@
            :annotation => @annotation.name,
            :seq_region => @sequence_region.seq_id,
            :start_pos => @start,
-           :end_pos => @end), :alt => '', :usemap => '#imap' %>
+           :end_pos => @end,
+           :width => @width), :alt => '', :usemap => '#imap' %>
   <%= map_tag(@sequence_region.image_map(@start, @end, @width))%>
 </div>
 <%= draggable_element :image, 
