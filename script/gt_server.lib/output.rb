@@ -6,6 +6,8 @@
 # bring the gtserver to crash
 module Output
   
+  require "benchmark"
+  
   #
   # this saves the resulting image and map under an unique
   # identifier which can be used subsequently to fetch them
@@ -41,7 +43,7 @@ module Output
                            add_introns, 
                            config_override = [])
     
-    log "rendering", 3
+    log "generating img/map #{uuid}"
     time = Benchmark.measure do 
       config_copy = config_obj.clone
       config_override.each do |option|
@@ -69,10 +71,10 @@ module Output
         @cache[:img][uuid] = canvas.to_stream
       end
     end
-    log "done (%.4fs)" % time.real, 3
+    log "done (%.4fs)" % time.real, 2
     return true
   rescue => err
-    log "ERROR: #{err}"
+    log "ERROR: #{err}", 2
     return false
   end  
   
@@ -85,10 +87,10 @@ module Output
     end
     d.compact!
     unless d.empty? 
-      log "#{filename}: img/map cache #{key} emptied"
+      log "#{uuid}: img/map deleted"
       return d
     else
-      log "#{filename}: no img/map cache #{key}"
+      log "#{uuid}: no img/map found"
       return nil
     end
   end
