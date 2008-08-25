@@ -104,63 +104,50 @@ class GtServerTest < ActiveSupport::TestCase
 
   ### module Output ###
 
+  def test_generate_and_destroy
+    uuid = UUID.random_create.to_s
+    args = uuid, "test/gff3/little1.gff3", "test1", (1000..9000), 
+           GTServer.config_default, 100, false
+    assert !GTServer.img_exists?(uuid)
+    assert !GTServer.map_exists?(uuid)
+    assert GTServer.img_and_map_generate(*args)
+    assert GTServer.img_exists?(uuid)
+    assert GTServer.map_exists?(uuid)
+    assert_not_nil GTServer.img_and_map_destroy(uuid)
+  end
+
   def test_image
-    file = "test/gff3/standard_gene_with_introns_as_tree.gff3"
+    filename = "test/gff3/standard_gene_with_introns_as_tree.gff3"
     config = GTServer.config_default
     [true, false].each do |add_introns|
-      png_data = GTServer.image(file, "ctg123", (1..1497228), 
-                                config, 100, add_introns)
+      uuid = UUID.random_create.to_s
+      GTServer.img_and_map_generate(uuid, 
+                                    filename, 
+                                    "ctg123", 
+                                    (1..1497228), 
+                                    config, 
+                                    100, 
+                                    add_introns)
+      png_data = GTServer.img(uuid)
       assert png_data.size > 1000
       assert_equal "PNG", png_data[1..3]
+      # teardown:
+      GTServer.img_and_map_destroy(uuid)
     end
   end
 
   def test_image_map
-    args = "test/gff3/little1.gff3", "test1", (1000..9000), 
+    uuid = UUID.random_create.to_s
+    args = uuid, "test/gff3/little1.gff3", "test1", (1000..9000), 
            GTServer.config_default, 100, false
-    info = GTServer.image_map(*(args+[false]))
+    GTServer.img_and_map_generate(*args)
+    info = GTServer.map(uuid)
     info.each_hotspot do |a,b,c,d,feat|
       assert_equal [30,100,70,115], [a, b, c, d]
       assert_equal "gene1", feat.get_attribute("ID")
     end
-  end
-
-  def test_map_caches_image
-    args = "test/gff3/little1.gff3", "test1", (1000..9000), 
-           GTServer.config_default, 100, false
-    GTServer.image_and_map_uncache(*args)
-    assert_nil GTServer.image_and_map_uncache(*args)
-    assert !GTServer.image_cached?(*args)
-    GTServer.image_map(*(args))
-    assert GTServer.image_cached?(*args)
-    assert_not_nil GTServer.image_and_map_uncache(*args)
-  end
-
-  def test_image_caches_map
-    args = "test/gff3/little1.gff3", "test1", (1000..9000), 
-           GTServer.config_default, 100, false
-    GTServer.image_and_map_uncache(*args)
-    assert_nil GTServer.image_and_map_uncache(*args)
-    assert !GTServer.image_map_cached?(*args)
-    GTServer.image(*(args))
-    assert GTServer.image_map_cached?(*args)
-    assert_not_nil GTServer.image_and_map_uncache(*args)
-  end
-
-  def test_image_then_map
-    args = "test/gff3/little1.gff3", "test1", (1000..9000), 
-           GTServer.config_default, 100, false
-    GTServer.image_and_map_uncache(*args)
-    assert_nil GTServer.image_and_map_uncache(*args)
-    assert !GTServer.image_cached?(*args)
-    assert !GTServer.image_map_cached?(*args)
-    GTServer.image(*args)
-    assert !GTServer.image_cached?(*args)
-    assert GTServer.image_map_cached?(*args)
-    GTServer.image_map(*args)
-    assert !GTServer.image_cached?(*args)
-    assert !GTServer.image_map_cached?(*args)
-    assert_nil GTServer.image_and_map_uncache(*args)
+    # teardown:
+    GTServer.img_and_map_destroy(uuid)
   end
 
 end
