@@ -30,6 +30,44 @@ module ViewerHelper
     end_js
   end
   
+  def ft_cb_show_clicked(ftn)
+    <<-end_js
+      if ($("ft[#{ftn}][show]").checked)
+      {
+        ($("ft[#{ftn}][max_show_width]").disabled = false);
+        ($("ft[#{ftn}][max_show_width]").value = '');
+        ($("ft[#{ftn}][capt]").checked = true);
+        ($("ft[#{ftn}][capt]").disabled = false);
+        ($("ft[#{ftn}][max_capt_show_width]").disabled = false);
+        ($("ft[#{ftn}][max_capt_show_width]").value = '');
+      }
+      else
+      { 
+        ($("ft[#{ftn}][max_show_width]").disabled = true);
+        ($("ft[#{ftn}][max_show_width]").value = '0');
+        ($("ft[#{ftn}][capt]").checked = false);
+        ($("ft[#{ftn}][capt]").disabled = true);
+        ($("ft[#{ftn}][max_capt_show_width]").disabled = true);
+        ($("ft[#{ftn}][max_capt_show_width]").value = '0');
+      }
+    end_js
+  end
+  
+  def ft_cb_capt_clicked(ftn)
+    <<-end_js
+      if ($("ft[#{ftn}][capt]").checked)
+      {
+        ($("ft[#{ftn}][max_capt_show_width]").disabled = false);
+        ($("ft[#{ftn}][max_capt_show_width]").value = '');
+      }
+      else
+      { 
+        ($("ft[#{ftn}][max_capt_show_width]").disabled = true);
+        ($("ft[#{ftn}][max_capt_show_width]").value = '0');
+      }
+    end_js
+  end
+  
   ### ajax ###
   
   def ajax_replacer

@@ -6,7 +6,8 @@
   <td>
     - show? <%= check_box_tag "ft[#{ftn}][show]", true, 
                   @ft_settings[ftn][:show]!=0, 
-                  :class => "ft_table_cb" %> 
+                  :class => "ft_table_cb",
+                  :onclick => ft_cb_show_clicked(ftn) %> 
                   
     (up to <%= text_field_tag "ft[#{ftn}][max_show_width]", 
                  @ft_settings[ftn][:show], :size => 10, 
@@ -14,7 +15,8 @@
                  
     - with caption? <%= check_box_tag "ft[#{ftn}][capt]", true, 
                           @ft_settings[ftn][:capt]!=0, 
-                          :class => "ft_table_cb" %> 
+                          :class => "ft_table_cb",
+                          :onclick => ft_cb_capt_clicked(ftn) %> 
                           
     (up to <%= text_field_tag "ft[#{ftn}][max_capt_show_width]", 
                  @ft_settings[ftn][:capt], :size => 10, 
