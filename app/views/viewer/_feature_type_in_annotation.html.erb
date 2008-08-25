@@ -4,11 +4,20 @@
     <strong><%= ftn %></strong>
   </td>
   <td>
-    - show? <%= check_box_tag "ft[#{ftn}][show]", "true", {}, :class => "ft_table_cb" %> 
-    <%= hidden_field_tag "ft[#{ftn}][show]", "false" %>
-    (up to <%= text_field_tag "ft[#{ftn}][max_show_width]", "", :size => 10, :class => "nice ft_table_text" %> nt)
-    - with caption? <%= check_box_tag "ft[#{ftn}][capt]", "true", {}, :class => "ft_table_cb" %> 
-    <%= hidden_field_tag "ft[#{ftn}][capt]", "false" %>
-    (up to <%= text_field_tag "ft[#{ftn}][max_capt_show_width]", "", :size => 10, :class => "nice ft_table_text" %> nt)
+    - show? <%= check_box_tag "ft[#{ftn}][show]", true, 
+                  @ft_settings[ftn][:show]!=0, 
+                  :class => "ft_table_cb" %> 
+                  
+    (up to <%= text_field_tag "ft[#{ftn}][max_show_width]", 
+                 @ft_settings[ftn][:show], :size => 10, 
+                 :class => "nice ft_table_text" %> nt)
+                 
+    - with caption? <%= check_box_tag "ft[#{ftn}][capt]", true, 
+                          @ft_settings[ftn][:capt]!=0, 
+                          :class => "ft_table_cb" %> 
+                          
+    (up to <%= text_field_tag "ft[#{ftn}][max_capt_show_width]", 
+                 @ft_settings[ftn][:capt], :size => 10, 
+                 :class => "nice ft_table_text" %> nt)
   </td>
 </tr>
