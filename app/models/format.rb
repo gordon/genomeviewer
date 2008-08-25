@@ -15,19 +15,20 @@ class Format < ActiveRecord::Base
   
   def self.helptext(attribute_name)
     case attribute_name.to_sym
-      when :margins : "space left and right of diagram"
-      when :bar_height : "height of a feature bar"
-      when :bar_vspace : "space between feature bars"
-      when :track_vspace : "space between tracks"
-      when :scale_arrow_width : "width of scale arrowheads"
-      when :scale_arrow_height : "height of scale arrowheads"
-      when :arrow_width : "width of feature arrowheads"
-      when :stroke_width : "width of outlines"
-      when :stroke_marked_width : "width of outlines for marked elements"
-      when :show_grid : "shows light vertical lines for orientation"
-      when :min_len_block : "minimum length of a block in which single elements are shown"
+      when :width : "default width of the image (px)"
+      when :margins : "space left and right of diagram (px)"
+      when :bar_height : "height of a feature bar (px)"
+      when :bar_vspace : "space between feature bars (px)"
+      when :track_vspace : "space between tracks (px)"
+      when :scale_arrow_width : "width of scale arrowheads (px)"
+      when :scale_arrow_height : "height of scale arrowheads (px)"
+      when :arrow_width : "width of feature arrowheads (px)"
+      when :stroke_width : "width of outlines (px)"
+      when :stroke_marked_width : "width of outlines for marked elements (px)"
+      when :show_grid : "show light vertical lines for orientation?"
+      when :min_len_block : "minimum length of a block in which single elements are shown (nt)"
       when :track_title_color : "color of the track title"
-      when :default_strock_color : "default stroke color"
+      when :default_stroke_color : "default stroke color"
       else
 	      ""
     end
