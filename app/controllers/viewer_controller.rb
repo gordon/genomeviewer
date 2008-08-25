@@ -10,6 +10,7 @@ class ViewerController < ApplicationController
       get_seq_region
       get_width
       get_range
+      get_ft_settings
           
     rescue => error
       flash[:errors] = error.to_s
@@ -148,6 +149,40 @@ class ViewerController < ApplicationController
     @current_lenght = (@end - @start + 1).to_f
     @current_width = (@current_lenght / @total_lenght * 100).round
     @current_left_margin = ((@start - @seq_begin + 1) / @total_lenght * 100).round
+  end
+  
+  def get_ft_settings
+    @annotation_ft_settings = @annotation.feature_type_in_annotations
+    @ft_settings = {}
+    if params[:ft]
+      params[:ft].each do |ft_name, setting|
+        @ft_settings[ft_name] = {} 
+        unless setting[:show]
+          @ft_settings[ft_name][:show] = 0
+          @ft_settings[ft_name][:capt] = 0
+          next
+        else
+          # nil means infinite, show at any width
+          show = (Integer(setting[:max_show_width]) rescue nil)
+          @ft_settings[ft_name][:show] = show
+          unless setting[:capt]
+            @ft_settings[ft_name][:capt] = 0
+          else
+            # again: nil means infinite, show at any width
+            capt = (Integer(setting[:max_capt_show_width]) rescue nil)
+            @ft_settings[ft_name][:capt] = capt
+          end
+        end
+      end
+    else
+      @annotation_ft_settings.each do |setting|
+        @ft_settings[setting.feature_type.name] = {}
+        @ft_settings[setting.feature_type.name][:show] = 
+                                                setting.max_show_width
+        @ft_settings[setting.feature_type.name][:capt] = 
+                                           setting.max_capt_show_width
+      end
+    end
   end
   
 end

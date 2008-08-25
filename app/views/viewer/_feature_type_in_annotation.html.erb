@@ -1,11 +1,14 @@
+<% ftn = feature_type_in_annotation.feature_type.name -%>
 <tr>
   <td>
-    <strong><%= feature_type_in_annotation.feature_type.name %></strong>
+    <strong><%= ftn %></strong>
   </td>
   <td>
-    - show? <%= check_box_tag "", "", {}, :class => "ft_table_cb" %> <%# feature_type_in_annotation.max_show_width -%>
-    (up to <%= text_field_tag "", "", :size => 10, :class => "nice ft_table_text" %> nt)<%# feature_type_in_annotation.max_capt_show_width %>
-    - with caption? <%= check_box_tag "", "", {}, :class => "ft_table_cb" %> <%#feature_type_in_annotation.max_show_width %>
-    (up to <%= text_field_tag "", "", :size => 10, :class => "nice ft_table_text" %> nt)<%#feature_type_in_annotation.max_capt_show_width %>
+    - show? <%= check_box_tag "ft[#{ftn}][show]", "true", {}, :class => "ft_table_cb" %> 
+    <%= hidden_field_tag "ft[#{ftn}][show]", "false" %>
+    (up to <%= text_field_tag "ft[#{ftn}][max_show_width]", "", :size => 10, :class => "nice ft_table_text" %> nt)
+    - with caption? <%= check_box_tag "ft[#{ftn}][capt]", "true", {}, :class => "ft_table_cb" %> 
+    <%= hidden_field_tag "ft[#{ftn}][capt]", "false" %>
+    (up to <%= text_field_tag "ft[#{ftn}][max_capt_show_width]", "", :size => 10, :class => "nice ft_table_text" %> nt)
   </td>
 </tr>
