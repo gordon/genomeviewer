@@ -10,6 +10,9 @@ class Format < ActiveRecord::Base
          :scale_arrow_width, :scale_arrow_height, :arrow_width,
          :stroke_width, :stroke_marked_width, :min_len_block
   
+  delegate :width, :to => :configuration
+  delegate :width=, :to => :configuration
+  
   def self.helptext(attribute_name)
     case attribute_name.to_sym
       when :margins : "space left and right of diagram"
