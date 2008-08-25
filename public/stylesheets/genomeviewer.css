@@ -137,9 +137,9 @@ h1, h2, h3, h4, h5, h6 {
   color: white;
 }
 
-/* command bar */
+/* settings bar */
 
-#command_bar {
+#settings_bar {
   background: rgb(60%, 60%, 90%);
   border: 1px solid black;
   font-size: 70%;
@@ -147,7 +147,7 @@ h1, h2, h3, h4, h5, h6 {
   text-align: left;
 }
 
-.cb_title {
+.settings_title {
   font-size: 120%; 
   font-weight: bold; 
   color: darkblue;

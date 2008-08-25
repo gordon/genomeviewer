@@ -1,13 +1,11 @@
-<div id="command_bar">
-  <span class="cb_title">Settings</span>
-  &nbsp;&nbsp;(<%= link_to_visibility_toggle :of => "$('command_form')", 
+<div id="settings_bar">
+  <span class="settings_title">Settings</span>
+  &nbsp;&nbsp;(<%= link_to_visibility_toggle :of => "$('settings_form')", 
                                              :default_visible => false %>)
   <% form_tag({:action => :index, 
                     :username => @annotation.user.username,
                     :annotation => @annotation.name, 
-                    :seq_region => @sequence_region.seq_id, 
-                    :method => :get}, 
-                    {:id => "command_form", 
+                    {:id => "settings_form", 
                      :style => "display: none;"}) do -%>
     <table>
       <tr>
@@ -27,6 +25,6 @@
       <%= render :partial => "feature_type_in_annotation", 
                      :collection => @annotation.feature_type_in_annotations %>
     </table>
-    <%= submit_tag  "Update Image" %>
+    <%= submit_tag  "Update Image", :onclick => settings_form_submit_js %>
   <% end -%>
 </div>
