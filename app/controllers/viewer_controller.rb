@@ -1,22 +1,19 @@
 class ViewerController < ApplicationController
   
-  before_filter :initialization
+  before_filter :initialization, :except => "image"
   def initialization
     
-    begin 
-      
-      get_annotation
-      check_permission
-      get_seq_region
-      get_width
-      get_range
-      get_ft_settings
-          
-    rescue => error
-      flash[:errors] = error.to_s
-      redirect_to(@current_user ? own_files_url : root_url)    
+    get_annotation
+    check_permission
+    get_seq_region
+    get_width
+    get_range
+    get_ft_settings
     
-    end
+  rescue => err
+  
+      flash[:errors] = err.to_s
+      redirect_to(@current_user ? own_files_url : root_url)    
     
   end
   
@@ -31,6 +28,8 @@ class ViewerController < ApplicationController
     @seq_ids_per_line = 10
     @title = @annotation.name
     get_values_for_orientation_bar
+    @uuid = UUID.random_create.to_s
+    generate_img_and_map
     
   end
   
@@ -75,10 +74,20 @@ class ViewerController < ApplicationController
   ### image ###
   
   def image
-    send_data @sequence_region.image(@start, @end, @width),
+    uuid = params[:uuid]
+    unless GTServer.img_exists?(uuid)
+      # this happens if the GTServer goes down between the page request
+      # and the image request; in this case reconstruct the request 
+      # using the temporary UUID logs table
+      args = UuidLog.find_by_uuid(uuid).args
+      args.unshift(uuid)
+      args[4] = Configuration.find(args[4]).gt
+      GTServer.img_and_map_generate(*args)
+    end
+    send_data GTServer.img(uuid),
               :type => "image/png",
               :disposition => "inline",
-              :filename => "#{@annotation.name}_#{@sequence_region.seq_id}.png"
+              :filename => "#{uuid}.png"
   end
   
   private
@@ -190,5 +199,43 @@ class ViewerController < ApplicationController
       end
     end
   end
-  
+    
+  def generate_img_and_map
+    config_obj = @current_user ? 
+                   # logged in: use the user config object
+                   @current_user.configuration.gt : 
+                   # not logged in: use the config object of 
+                   # the user to whom the annotation belongs
+                   # (other possibility would be the default 
+                   #  config object GTServer.config_default)
+                   @annotation.user.configuration.gt
+    @add_introns = true # TODO: this should be configured somewhere
+    config_override = []
+    @ft_settings.each do |section, setting|
+      config_override << ['num', section, 'max_show_width', setting[:show]]
+      config_override << ['num', section, 'max_capt_show_width', setting[:capt]]
+    end
+    #
+    # the request parameters are logged so that the request can 
+    # be reconstructed in case the GTServer goes down between this 
+    # code and the image request; see image() method
+    #
+    conf_id = 
+    args = [@annotation.gff3_data_storage,
+            @sequence_region.seq_id,
+            (@start..@end),
+            # as the config object is not serializable, use instead
+            # for the uuid_log the corresponding configuration id
+            @current_user ? 
+                @current_user.configuration.id :
+                @annotation.user.configuration.id,
+            @width,
+            @add_introns,
+            config_override]
+    UuidLog.create(:uuid => @uuid, :args => args)
+    args.unshift(@uuid)
+    args[4] = config_obj
+    GTServer.img_and_map_generate(*args)
+  end
+    
 end

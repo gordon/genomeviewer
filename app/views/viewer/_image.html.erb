@@ -1,12 +1,5 @@
 <div id="image">
-  <%= image_tag url_for(:action => :image,
-           :username => @annotation.user.username,
-           :annotation => @annotation.name,
-           :seq_region => @sequence_region.seq_id,
-           :start_pos => @start,
-           :end_pos => @end,
-           :width => @width), :alt => '', :usemap => '#imap' %>
-  <%= map_tag(@sequence_region.image_map(@start, @end, @width))%>
+  <img src="/image/<%=@uuid%>" alt=''/>
 </div>
 <%= draggable_element :image, 
                       :constraint => '"horizontal"',
