@@ -4,7 +4,7 @@ module ViewerHelper
     seqids = @sequence_regions.map(&:seq_id)
     opts = options_for_select(seqids, @sequence_region.seq_id)
     "Sequence: "+
-    select_tag("sequence_region", opts, :id => "seq_id_selector")
+    select_tag("seq_region", opts, :id => "seq_id_selector")
   end
   
   #
