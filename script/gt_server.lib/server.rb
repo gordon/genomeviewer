@@ -93,17 +93,14 @@ class GTServerClass
   
   # public methods: 
   
-  # image(...)        => String (png image binary)
-  # image_map(...)    => GT::ImageMap
-  # 
-  #  ... = filename, seqid, range, config, 
-  #        width, add_introns, uncache
+  # img_and_map_generate(uuid, filename, => true or false
+  #   seq_id, range, config_obj, width, 
+  #   add_introns, config_override)
   #
-  # image_and_map_uncache(...)  => nil or Array of deleted objects
-  # image_cached?(...)          => true or false
-  # image_map_cached?(...)      => true or false
-  #
-  #  ... = filename, seqid, range, config, 
-  #        width, add_introns
+  # img(uuid, delete=true)    => String (png image binary)
+  # map(uuid, delete=true)    => GT::ImageMap
+  # img_and_map_destroy(uuid) => nil or Array of deleted objects
+  # img_exists?(uuid)         => true or false
+  # map_exists?(uuid)         => true or false
   
 end
