@@ -18,7 +18,7 @@ if errormsg then
   raise "Error: #{errormsg}"
 end
 
-config = GTServer.config(1)
+config = GTServer.config_new
 
 seqids = GTServer.gff3_seqids(gff3_file)
 puts "types in #{gff3_file}:"
@@ -26,10 +26,19 @@ types = GTServer.gff3_feature_types(gff3_file)
 types.each do |type|
   puts type
 end
-seqids.each do |seq_id|
-  range = GTServer.gff3_range(gff3_file, seq_id)
-  png_stream = GTServer.image(gff3_file, seq_id, range, config, 800, false)
-  puts "png_stream.size=" + png_stream.size.to_s
-end
 
-puts GTServer.test_call()
+[40,4].each do |margins_value|
+
+  puts "**** Margins #{margins_value} ****"
+  config.set_num("format","margins", margins_value)
+
+  [0.0, 0.1].each do |zoom_factor|
+    seqids.each do |seq_id|
+      range = GTServer.gff3_range(gff3_file, seq_id)
+      range = (range.begin*(1+zoom_factor))..(range.end*(1-zoom_factor))
+      puts " ->Seq_id: #{seq_id} Range: #{range.begin}..#{range.end}"
+      png_stream = GTServer.image(gff3_file, seq_id, range, config, 800, false)
+      puts "png_stream.size=" + png_stream.size.to_s
+    end
+  end 
+end 
