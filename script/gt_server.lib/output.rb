@@ -44,6 +44,8 @@ module Output
                            config_override = [])
     
     log "generating img/map #{uuid}"
+    log filename, 2
+    log "#{seqid}, #{range.inspect}", 2
     time = Benchmark.measure do 
       config_copy = config_obj.clone
       config_override.each do |option|
@@ -71,10 +73,10 @@ module Output
         @cache[:img][uuid] = canvas.to_stream
       end
     end
-    log "done (%.4fs)" % time.real, 2
+    log "done (%.4fs)" % time.real, 3
     return true
   rescue => err
-    log "ERROR: #{err}", 2
+    log "ERROR: #{err}", 3
     return false
   end  
   
