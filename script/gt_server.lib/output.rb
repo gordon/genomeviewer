@@ -29,6 +29,9 @@ module Output
   # if value.nil? the attribute will be unset, otherwise set to 
   # the given value
   #
+  # returns true if the image and map could be successfully generated, 
+  # false if any exception was raised during the generation
+  #
   def img_and_map_generate(uuid, 
                            filename, 
                            seqid, 
@@ -67,6 +70,10 @@ module Output
       end
     end
     log "done (%.4fs)" % time.real, 3
+    return true
+  rescue => err
+    log "ERROR: #{err}"
+    return false
   end  
   
   def img_and_map_destroy(uuid)
