@@ -8,6 +8,7 @@
                   @ft_settings[ftn][:show]!=0, 
                   :class => "ft_table_cb",
                   :onclick => ft_cb_show_clicked(ftn) %> 
+            <%= hidden_field_tag "ft[#{ftn}][show]", nil -%>
                   
     (up to <%= text_field_tag "ft[#{ftn}][max_show_width]", 
                  @ft_settings[ftn][:show], :size => 10, 
@@ -19,6 +20,7 @@
                           :class => "ft_table_cb",
                           :onclick => ft_cb_capt_clicked(ftn),
                           :disabled => @ft_settings[ftn][:show]==0 %> 
+            <%= hidden_field_tag "ft[#{ftn}][capt]", nil -%>
                           
     (up to <%= text_field_tag "ft[#{ftn}][max_capt_show_width]", 
                  @ft_settings[ftn][:capt], :size => 10, 
