@@ -9,6 +9,7 @@ class ViewerController < ApplicationController
     get_width
     get_range
     get_ft_settings
+    get_add_introns
     
   rescue => err
   
@@ -164,6 +165,23 @@ class ViewerController < ApplicationController
     @current_left_margin = ((@start - @seq_begin + 1) / @total_lenght * 100).round
   end
   
+  def get_add_introns
+    if params[:add_introns] 
+      @add_introns = (params[:add_introns]=="1")
+    elsif session[:add_introns] and session[:add_introns][@annotation.name]
+      @add_introns = session[:add_introns][@annotation.name]
+    else
+      @add_introns = @annotation.add_introns
+    end
+    # save in the session
+    session[:add_introns] ||= {}
+    session[:add_introns][@annotation.name] = @add_introns
+    # save in the db if logged in
+    if @current_user
+      @annotation.update_attributes(:add_introns => @add_introns)
+    end
+  end
+  
   def get_ft_settings
     @annotation_ft_settings = @annotation.feature_type_in_annotations
     @ft_settings = {}
@@ -192,6 +210,7 @@ class ViewerController < ApplicationController
           ft_in_a = @annotation_ft_settings.find_by_feature_type_id(ft_id)
           ft_in_a.max_show_width      = @ft_settings[ft_name][:show]
           ft_in_a.max_capt_show_width = @ft_settings[ft_name][:capt]
+          ft_in_a.save
         end
       end
     elsif session[:ft_settings] and  ### session hash ###
@@ -226,7 +245,6 @@ class ViewerController < ApplicationController
                    # (other possibility would be the default 
                    #  config object GTServer.config_default)
                    @annotation.user.configuration.gt
-    @add_introns = true # TODO: this should be configured somewhere
     config_override = []
     @ft_settings.each do |section, setting|
       config_override << ['num', section, 'max_show_width', setting[:show]]

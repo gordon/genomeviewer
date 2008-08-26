@@ -16,9 +16,12 @@
           End:<%= text_field_tag 'end_pos', @end, 
                                  :size => 10, 
                                  :class => "nice" %> - 
+          Add Introns? <%= check_box_tag "add_introns", 1, @add_introns, 
+                            :class => "ft_table_cb" -%> 
+                       <%= hidden_field_tag "add_introns", 0 -%> - 
           Image width (px):<%= text_field_tag 'width', @width, 
                                               :size => 5, 
-                                              :class => "nice" %>
+                                              :class => "nice" %> 
         </td>
       </tr>
       <%= render :partial => "feature_type_in_annotation", 
