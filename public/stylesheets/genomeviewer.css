@@ -168,29 +168,29 @@ h1, h2, h3, h4, h5, h6 {
 #orientation_bar {
   position: absolute;
   border-bottom: 1px solid black;
-  height: 120px;
+  height: 100px;
 }
 
 #overview {
   position: relative;
   z-index: 1;
-  height: 120px;
+  height: 100px;
   left: 0px;
 }
 
 #slice {
   position: relative;
-  top: -120px;
+  top: -100px;
   border: 1px solid red;
   z-index: 2;
-  height: 118px; /* 2 less than overview due to border */
+  height: 98px; /* 2 less than overview due to border */
 }
 
 /* image */
 
 #image {
   position: relative;
-  top: 122px;
+  top: 102px;
   min-height: 400px;
   z-index: 3;
 }
