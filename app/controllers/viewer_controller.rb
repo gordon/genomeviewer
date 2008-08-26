@@ -164,7 +164,8 @@ class ViewerController < ApplicationController
   def get_ft_settings
     @annotation_ft_settings = @annotation.feature_type_in_annotations
     @ft_settings = {}
-    if params[:ft]
+    
+    if params[:commit] ### settings form ###
       params[:ft].each do |ft_name, setting|
         @ft_settings[ft_name] = {} 
         ft_id = FeatureType.find_by_name(ft_name).id
@@ -190,7 +191,13 @@ class ViewerController < ApplicationController
           ft_in_a.max_capt_show_width = @ft_settings[ft_name][:capt]
         end
       end
-    else
+    elsif session[:ft_settings] and  ### session hash ###
+            session[:ft_settings].
+              fetch(@annotation.name,{}).
+                fetch(@sequence_region.seq_id, false)  
+      @ft_settings = 
+        session[:ft_settings][@annotation.name][@sequence_region.seq_id]
+    else ### annotation default options ###
       @annotation_ft_settings.each do |setting|
         @ft_settings[setting.feature_type.name] = {}
         @ft_settings[setting.feature_type.name][:show] = 
@@ -199,6 +206,11 @@ class ViewerController < ApplicationController
                                            setting.max_capt_show_width
       end
     end
+    # save settings in the session hash
+    session[:ft_settings] ||= {}
+    session[:ft_settings][@annotation.name] ||= {}
+    session[:ft_settings][@annotation.name][@sequence_region.seq_id] = 
+                                                             @ft_settings
   end
     
   def generate_img_and_map
