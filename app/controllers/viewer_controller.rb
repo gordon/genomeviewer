@@ -125,11 +125,14 @@ class ViewerController < ApplicationController
   def get_width(default_width = 900)
     if params[:width] 
       @width = params[:width].to_i
+    elsif session[:width]
+      @width = session[:width]
     else
       @width = @current_user ? 
         @current_user.configuration.width : 
         default_width
     end
+    session[:width] = @width
   end
   
   def get_range
