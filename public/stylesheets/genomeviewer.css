@@ -101,42 +101,6 @@ h1, h2, h3, h4, h5, h6 {
  color: red;
 }
 
-/*** viewer ***/
-
-#viewer {
-  text-align: center;
-}
-
-#viewer input {
-  text-align: left;
-}
-
-/* seq_id buttons */
-
-#viewer .seq_id {
-  list-style-type: none;
-  border : 1px solid black;
-  display: block;
-  padding: 0px 7px 0px 7px;
-  text-decoration: none;
-  background: rgb(60%, 60%, 90%);
-  color: white;
-}
-
-#viewer .seq_id:link {
-  color: white;
-  background: rgb(60%, 60%, 90%);
-}
-
-#viewer .seq_id:hover {
-  color: gray;
-  background: rgb(90%, 90%, 20%);
-}
-
-#viewer .seq_id:visited {
-  color: white;
-}
-
 /* settings bar */
 
 #settings_bar {
@@ -147,6 +111,11 @@ h1, h2, h3, h4, h5, h6 {
   text-align: left;
 }
 
+#feature_types_table {
+  background: rgb(70%, 70%, 100%);
+  border: 1px solid black;
+  font-size: 70%;
+}
 .settings_title {
   font-size: 120%; 
   font-weight: bold; 
@@ -168,6 +137,7 @@ h1, h2, h3, h4, h5, h6 {
 #buttons_bar {
   background: rgb(70%, 70%, 100%);
   border: 1px solid black;
+  padding-left: 20px;
 }
 
 #buttons_bar a {
@@ -186,40 +156,34 @@ h1, h2, h3, h4, h5, h6 {
   border: 0px;
 }
 
-/* feature types table */
-
-#feature_types_table {
-  background: rgb(70%, 70%, 100%);
-  border: 1px solid black;
-  font-size: 70%;
-}
-
 /* orientation bar */
 
-#total {
-  background: rgb(60%, 60%, 90%);
-  display: block;
-  border: 1px black dashed;
-  max-height: 20px;
-  min-height: 20px;
+#orientation_bar {
+  position: absolute;
 }
 
-#current {
-  background: rgb(90%, 90%, 20%);
-  max-height: 20px;
-  min-height: 20px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 0%;
-  text-align: center;
-  color: gray;
-  overflow: hidden;
+#overview {
+  position: relative;
+  z-index: 1;
+  height: 120px;
+  left: 0px;
+}
+
+#slice {
+  position: relative;
+  top: -120px;
+  border: 1px solid red;
+  z-index: 2;
+  height: 118px; /* 2 less than overview due to border */
 }
 
 /* image */
 
 #image {
+  position: relative;
+  top: 120px;
   min-height: 400px;
+  z-index: 3;
 }
 
 #image img{
@@ -228,14 +192,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* tooltips */
 
+.tooltip_header {
+  background: darkblue;
+  color: white;
+}
+
 .tooltip_body {
   background: white;
   border: 1px solid darkblue;
-}
-
-.tooltip_header {
- background: darkblue;
- color: white;
 }
 
 /* configuration */

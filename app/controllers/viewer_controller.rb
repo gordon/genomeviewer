@@ -17,6 +17,14 @@ class ViewerController < ApplicationController
     redirect_to(@current_user ? own_files_url : root_url)    
     
   end
+  private :initialization
+  
+  def prepare_for_rendering
+    generate_overview
+    prepare_measures
+    generate_img_and_map
+  end
+  private :prepare_for_rendering
   
   ### actions with a template ###
   
@@ -26,11 +34,8 @@ class ViewerController < ApplicationController
   def index
     
     # visualization parameters
-    @seq_ids_per_line = 10
     @title = @annotation.name
-    get_values_for_orientation_bar
-    generate_overview
-    generate_img_and_map
+    prepare_for_rendering
     
   end
   
@@ -61,18 +66,14 @@ class ViewerController < ApplicationController
         @start = @end - old_window
       end
       
-      get_values_for_orientation_bar
-      generate_overview
-      generate_img_and_map
+      prepare_for_rendering
     
     end
     
   end
   
   def ajax_reloader
-    get_values_for_orientation_bar
-    generate_overview
-    generate_img_and_map
+    prepare_for_rendering
     render :action => "ajax_movement.js.rjs"
   end
 
@@ -97,7 +98,7 @@ class ViewerController < ApplicationController
   
   private
   
-  ### helper functions for the initialization filter ###
+  ### initialization ###
 
   def get_annotation
     raise "No annotation specified!" unless params[:annotation]
@@ -159,13 +160,6 @@ class ViewerController < ApplicationController
     else
       @end = @seq_end
     end
-  end
-  
-  def get_values_for_orientation_bar
-    @total_lenght = (@seq_end - @seq_begin + 1).to_f
-    @current_lenght = (@end - @start + 1).to_f
-    @current_width = (@current_lenght / @total_lenght * 100).round
-    @current_left_margin = ((@start - @seq_begin + 1) / @total_lenght * 100).round
   end
   
   def get_add_introns
@@ -238,16 +232,19 @@ class ViewerController < ApplicationController
                                                              @ft_settings
   end
     
+  ### prepare_for_rendering ###
+    
   def generate_overview
     generate_img_and_map(true)
   end
   
   def overview_settings
+    @overview_margins = 20
     [
       ['bool', 'format', 'show_track_captions', false],
       ['bool', 'format', 'show_block_captions', false],
       ['bool', 'format', 'split_lines',         false],
-      ['num',  'format', 'margins',             2    ],
+      ['num',  'format', 'margins', @overview_margins],
       ['num',  'format', 'bar_height',          2    ],
       ['num',  'format', 'bar_vspace',          2    ],
       ['num',  'format', 'track_vspace',        2    ],
@@ -255,6 +252,16 @@ class ViewerController < ApplicationController
       ['num',  'format', 'scale_arrow_height',  3    ],
       ['num',  'format', 'arrow_width',         3    ]
     ]
+  end
+  
+  def prepare_measures
+    @total_lenght   = (@seq_end - @seq_begin + 1).to_f
+    @current_lenght = (@end - @start + 1).to_f
+    overview_net_width = @width - (@overview_margins * 2)
+    @slice_width    = (@current_lenght / @total_lenght * overview_net_width).round
+    @slice_left     = ((@start - @seq_begin + 1) / @total_lenght * 
+                       overview_net_width).round + @overview_margins - 1 
+                       # -1 is to accomodate the slice div 1px border
   end
   
   def generate_img_and_map(overview = false)
