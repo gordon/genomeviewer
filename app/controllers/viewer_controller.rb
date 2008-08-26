@@ -29,6 +29,7 @@ class ViewerController < ApplicationController
     @seq_ids_per_line = 10
     @title = @annotation.name
     get_values_for_orientation_bar
+    generate_overview
     generate_img_and_map
     
   end
@@ -61,14 +62,16 @@ class ViewerController < ApplicationController
       end
       
       get_values_for_orientation_bar
+      generate_overview
       generate_img_and_map
-
+    
     end
     
   end
   
   def ajax_reloader
     get_values_for_orientation_bar
+    generate_overview
     generate_img_and_map
     render :action => "ajax_movement.js.rjs"
   end
@@ -235,8 +238,29 @@ class ViewerController < ApplicationController
                                                              @ft_settings
   end
     
-  def generate_img_and_map
-    @uuid = UUID.random_create.to_s
+  def generate_overview
+    generate_img_and_map(true)
+  end
+  
+  def overview_settings
+    [
+      ['bool', 'format', 'show_track_captions', false],
+      ['bool', 'format', 'show_block_captions', false],
+      ['bool', 'format', 'split_lines',         false],
+      ['num',  'format', 'margins',             2    ],
+      ['num',  'format', 'bar_height',          2    ],
+      ['num',  'format', 'bar_vspace',          2    ],
+      ['num',  'format', 'track_vspace',        2    ],
+      ['num',  'format', 'scale_arrow_width',   3    ],
+      ['num',  'format', 'scale_arrow_height',  3    ],
+      ['num',  'format', 'arrow_width',         3    ]
+    ]
+  end
+  
+  def generate_img_and_map(overview = false)
+    uuid = overview ? 
+      @overview_uuid = UUID.random_create.to_s : 
+      @uuid = UUID.random_create.to_s
     config_obj = @current_user ? 
                    # logged in: use the user config object
                    @current_user.configuration.gt : 
@@ -250,15 +274,16 @@ class ViewerController < ApplicationController
       config_override << ['num', section, 'max_show_width', setting[:show]]
       config_override << ['num', section, 'max_capt_show_width', setting[:capt]]
     end
+    config_override += overview_settings if overview
+    range = overview ? (@seq_begin..@seq_end) : (@start..@end)
     #
     # the request parameters are logged so that the request can 
     # be reconstructed in case the GTServer goes down between this 
     # code and the image request; see image() method
     #
-    conf_id = 
     args = [@annotation.gff3_data_storage,
             @sequence_region.seq_id,
-            (@start..@end),
+            range,
             # as the config object is not serializable, use instead
             # for the uuid_log the corresponding configuration id
             @current_user ? 
@@ -267,11 +292,10 @@ class ViewerController < ApplicationController
             @width,
             @add_introns,
             config_override]
-    UuidLog.create(:uuid => @uuid, :args => args)
-    args.unshift(@uuid)
+    UuidLog.create(:uuid => uuid, :args => args)
+    args.unshift(uuid)
     args[4] = config_obj
     GTServer.img_and_map_generate(*args)
-    @info = GTServer.map(@uuid)
+    @info = GTServer.map(uuid) unless overview
   end
-    
 end
