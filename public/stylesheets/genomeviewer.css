@@ -101,11 +101,17 @@ h1, h2, h3, h4, h5, h6 {
  color: red;
 }
 
+/* viewer box */
+
+#viewer_box {
+  border: 1px solid black;
+}
+
 /* settings bar */
 
 #settings_bar {
   background: rgb(60%, 60%, 90%);
-  border: 1px solid black;
+  border-bottom: 1px solid black;
   font-size: 70%;
   padding: 5px;
   text-align: left;
@@ -136,8 +142,9 @@ h1, h2, h3, h4, h5, h6 {
 
 #buttons_bar {
   background: rgb(70%, 70%, 100%);
-  border: 1px solid black;
+  border-bottom: 1px solid black;
   padding-left: 20px;
+  padding-top: 5px;
 }
 
 #buttons_bar a {
@@ -160,6 +167,8 @@ h1, h2, h3, h4, h5, h6 {
 
 #orientation_bar {
   position: absolute;
+  border-bottom: 1px solid black;
+  height: 120px;
 }
 
 #overview {
@@ -181,7 +190,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #image {
   position: relative;
-  top: 120px;
+  top: 122px;
   min-height: 400px;
   z-index: 3;
 }

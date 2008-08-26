@@ -1,9 +1,16 @@
 <div id="viewer">
   <%= render :partial => "meta_info" %>
-  <div style="width: <%=@width%>px;">
+  <div id="viewer_box" style="width: <%=@width%>px;">
     <%= render :partial => "settings_bar" %>
     <%= render :partial => "buttons_bar" %>
     <%= render :partial => "orientation_bar" %>
     <%= render :partial => "image" %>
   </div>
 </div>
+<%=javascript_tag <<-end_js
+  document.observe("dom:loaded", function() {
+    // let the boxover have an higher z-index than the image
+    oDv.style.zIndex = parseInt($('image').getStyle("z-index"))+1;
+  });
+end_js
+-%>
