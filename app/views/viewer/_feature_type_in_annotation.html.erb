@@ -11,15 +11,18 @@
                   
     (up to <%= text_field_tag "ft[#{ftn}][max_show_width]", 
                  @ft_settings[ftn][:show], :size => 10, 
-                 :class => "nice ft_table_text" %> nt)
+                 :class => "nice ft_table_text",
+                 :disabled => @ft_settings[ftn][:show]==0 %> nt)
                  
     - with caption? <%= check_box_tag "ft[#{ftn}][capt]", true, 
                           @ft_settings[ftn][:capt]!=0, 
                           :class => "ft_table_cb",
-                          :onclick => ft_cb_capt_clicked(ftn) %> 
+                          :onclick => ft_cb_capt_clicked(ftn),
+                          :disabled => @ft_settings[ftn][:show]==0 %> 
                           
     (up to <%= text_field_tag "ft[#{ftn}][max_capt_show_width]", 
                  @ft_settings[ftn][:capt], :size => 10, 
-                 :class => "nice ft_table_text" %> nt)
+                 :class => "nice ft_table_text",
+                 :disabled => @ft_settings[ftn][:capt]==0 %> nt)
   </td>
 </tr>
