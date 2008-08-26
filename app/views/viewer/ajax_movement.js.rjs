@@ -4,6 +4,7 @@ if @out_of_range
   page << "$('image').style.left = 0;"
 else
   page.replace 'image', :partial => 'image'
+  page.replace 'buttons_bar', :partial => 'buttons_bar'
   page.replace 'orientation_bar', :partial => 'orientation_bar'
   page << "$('start_pos').value = #{@start};"
   page << "$('end_pos').value = #{@end};"
