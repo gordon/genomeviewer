@@ -30,7 +30,8 @@ end
 seqids.each do |seq_id|
   range = GTServer.gff3_range(gff3_file, seq_id)
   puts " ->Seq_id: #{seq_id} Range: #{range.begin}..#{range.end}"
-  GTServer.img_and_map_generate("TEST", gff3_file, seq_id, range, config, 800, false)
+  GTServer.img_and_map_generate("TEST", gff3_file, seq_id, range, config, 800,
+                                false)
   png_stream = GTServer.img("TEST")
   puts "png_stream.size=" + png_stream.size.to_s
   image_info = GTServer.map("TEST")
