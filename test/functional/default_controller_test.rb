@@ -13,6 +13,22 @@ class DefaultControllerTest < ActionController::TestCase
     @out = {}
   end
   
+  ### tests of code in ApplicationController ###
+  
+  def test_get_current_user
+    get :index, {}, @out
+    assert_nil assigns(:current_user)
+    get :index, {}, @in
+    assert_equal @u, assigns(:current_user)
+  end
+  
+  def test_enforce_login
+    # this is simplier to be indirectly tested
+    # through its effects
+  end
+  
+  ### tests specific of DefaultController ###
+  
   def test_homepage
     get :index
     assert_response :success
