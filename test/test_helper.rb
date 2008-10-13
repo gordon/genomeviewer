@@ -25,4 +25,35 @@ class Test::Unit::TestCase
   self.use_instantiated_fixtures  = false
 
   # Add more helper methods to be used by all tests here...
+  
+  #
+  # As the storage is not only DB-based, i.e. annotations are saved as files,
+  # it is difficult to make use only of fixtures. This helper method uploads
+  # an annotation for an user, so that you have: 
+  #
+  # - @_u => an user, with one annotation
+  # - @_a => annotation
+  # - @_sr => sequence region
+  # - @_ft => feature type
+  # - @_c => configuration
+  # - @_f => format
+  #
+  def user_setup
+    @_u = User.create(:username => "_user", 
+                      :password => "_pass",
+                      :name => "_user",
+                      :email => "an_user@test.tst")
+    @_u.reset_configuration
+    @_c = @_u.configuration
+    @_f = @_c.format
+    @_a = Annotation.create(:gff3_data => IO.read("test/gff3/little1.gff3"),
+                            :name => "_little1.gff3",
+                            :user => @_u)
+    @_sr = @_a.sequence_regions[0]
+    @_ft = @_a.feature_types[0]
+    return true
+  rescue
+    return false
+  end
+
 end
