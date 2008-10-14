@@ -11,10 +11,10 @@ class ApplicationController < ActionController::Base
   # Pick a unique cookie name to distinguish our session data from others'
   session :session_key => '_genomeviewer_session_id'
   
-  prepend_before_filter :get_current_user
+  prepend_before_filter :current_user
   
-private
-  
+protected 
+
   #
   # +@current_user+ can be accessed from everywhere in the _controller_ 
   # and_view_ layers 
@@ -23,9 +23,11 @@ private
   # - +nil+ if no user is logged in 
   # - an instance of the class +User+ otherwise
   #
-  def get_current_user # :doc:
+  def current_user # ::doc::
     @current_user = session[:user] ? User.find(session[:user]) : nil
   end
+
+private
   
   #
   # +usage+::  +before_filter :enfore_login +
@@ -35,7 +37,7 @@ private
   #
   # if +@current_user+ is an +User+, keep going, otherwise redirect to the root
   #
-  def enforce_login # :doc:
+  def enforce_login # ::doc::
     redirect_to root_url unless @current_user
   end
 
