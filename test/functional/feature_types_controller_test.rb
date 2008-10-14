@@ -11,7 +11,7 @@ class FeatureTypesControllerTest < ActionController::TestCase
   end
   
   def test_unlogged_access_refused
-    %w[index list edit destroy show new show_search].each do |x|
+    %w[index list edit destroy show new show_search table row].each do |x|
       get x
       assert_redirected_to root_url
     end
@@ -87,6 +87,21 @@ class FeatureTypesControllerTest < ActionController::TestCase
   
   def test_show_not_logged_in
     get :show, {:id => @_ft.id}
+    assert_redirected_to root_url
+  end
+  
+  def test_row_of_own_feature_type
+    get :row, {:id => @_ft.id}, {:user => @_u.id}
+    assert_template "feature_types/_list_record"
+  end
+  
+  def test_row_of_not_own_feature_type
+    get :row, {:id => @_ft.id}, {:user => @_another_u.id}
+    assert_redirected_to logout_url
+  end
+  
+  def test_row_unlogged
+    get :row, {:id => @_ft.id}
     assert_redirected_to root_url
   end
   

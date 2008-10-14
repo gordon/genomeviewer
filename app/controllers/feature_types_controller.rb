@@ -48,11 +48,14 @@ private
   # records should be accessed only by their owner
   #
   def own_record?
-    record_owner = FeatureType.find(params["id"]).configuration.user
-    redirect_to logout_url unless record_owner == current_user
+    if params["id"] # == only for action working on a single record
+      record_owner = FeatureType.find(params["id"]).configuration.user
+      redirect_to logout_url unless record_owner == current_user
+    end
   end
   alias_method :delete_authorized?, :own_record?
   alias_method :update_authorized?, :own_record?
   alias_method :show_authorized?,   :own_record?
+  alias_method :list_authorized?,   :own_record?
   
 end
