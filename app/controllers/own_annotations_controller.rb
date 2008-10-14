@@ -1,42 +1,51 @@
+#
+# ActiveScaffold based controller responsible of 
+# the page which allows to upload (or delete) GFF3 files, to 
+# change the description and to set the "public" bit.
+#
 class OwnAnnotationsController < ApplicationController
   
   before_filter :enforce_login
   
+  #
+  # active_scaffold declaration and configuration
+  #
   active_scaffold :annotations do |config|
   
+    # the show action is not useful, as everything is already in the list
     config.actions.exclude :show
-    # create action will be used for uploads
+    
+    # the create action will be used for uploads
     config.create.link.label = "Upload&nbsp;GFF3"
     config.create.multipart = true
+    
     config.list.columns = [:name, :description, :sequence_regions, :public]
     config.columns[:public].label = "File&nbsp;Access"
+    
+    # link to "open" action (which redirects then to the Viewer)
     config.action_links.add :open,
                             :label => "Open",
                             :type => :record, 
                             :page => true
-                            
   end
   
-  def conditions_for_collection
-    ["user_id = ?", session[:user]]
-  end
-  
+  #
+  # a link to this action is displayed for all annotations in the list
+  # and redirects to the viewer, opening the corresponding annotation
+  #
   def open 
     annotation = Annotation.find(params["id"])
     redirect_to :controller => :viewer, 
-                    :annotation => annotation.name, 
-                    :username => annotation.user.username
-  end
-
-  # upload callback
-  def before_create_save(record)
-    record.name = params[:record][:gff3_file].original_filename
-    record.user_id = session[:user]
-    record.gff3_data = params[:record][:gff3_file].read
+                :annotation => annotation.name, 
+                :username => annotation.user.username
   end
   
   ### ajax actions ###
   
+  #
+  # turns on or off the "public" bit of an annotation
+  # it is called by the "public_column" helper 
+  #
   def file_access_control
     annotation = Annotation.find(params[:id])
     user = User.find(session[:user])
@@ -59,8 +68,27 @@ class OwnAnnotationsController < ApplicationController
     end
   end  
 
-  private
+private
   
+  #
+  # only current_user's records are listed
+  #
+  def conditions_for_collection #::doc::
+    ["user_id = ?", session[:user]]
+  end
+  
+  #
+  # this code is executed after the upload and works as an junction
+  # between the file upload and the Annotation file+DB based model
+  #
+  def after_upload(record) #::doc::
+    record.name = params[:record][:gff3_file].original_filename
+    record.user_id = session[:user]
+    record.gff3_data = params[:record][:gff3_file].read
+  end
+
+  alias_method :before_create_save, :after_upload
+
   def initialize
     @title = "My Annotations"
     super
