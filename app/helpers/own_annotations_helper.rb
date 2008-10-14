@@ -1,6 +1,15 @@
+#
+# helpers for private annotations only;
+# see also +AnnotationsHelper+ and +PublicAnnotationsHelper+
+#
 module OwnAnnotationsHelper
-  include PublicAnnotationsHelper
+  include AnnotationsHelper
   
+  #
+  # an active radio button group to turn on/off an 
+  # annotation's public bit using AJAX;
+  # this helper is used by active_scaffold for the "list" action's table
+  #
   def public_column(record)
     make_it_private = remote_function :url => {:action => :file_access_control,
                                                :id => record.id,
@@ -23,6 +32,10 @@ module OwnAnnotationsHelper
     return html
   end
   
+  #
+  # display the annotation's description and allow to edit it
+  # this helper is used by active_scaffold for the "list" action's table
+  #
   def description_column(record)
     simple_format(record.description) +
     '<p style="text-align: right; font-size: 80%;">['+
@@ -35,9 +48,8 @@ module OwnAnnotationsHelper
   end
   
   #
-  # similar to the action view implementation 
-  # of error_messages_for(*params), 
-  # but without options, which are hardcoded
+  # similar to the action view implementation of error_messages_for(*params),
+  # with some hardcoded customizations 
   #
   def upload_error_messages_for(record)
     object = instance_variable_get("@#{record}")
@@ -48,9 +60,12 @@ module OwnAnnotationsHelper
       contents = ''
       contents << content_tag(:h2, "This file could not be uploaded") 
       contents << content_tag(:p, 'for the following reason:')
-      error_messages = object.errors.full_messages.map {|msg| content_tag(:li, msg) }
+      error_messages = object.errors.
+        full_messages.map {|msg| content_tag(:li, msg) }
       contents << content_tag(:ul, error_messages)
-      return content_tag(:div, contents, :id => 'errorExplanation', :class => 'errorExplanation')
+      return content_tag(:div, contents, 
+                         :id => 'errorExplanation', 
+                         :class => 'errorExplanation')
     end
   end
 
