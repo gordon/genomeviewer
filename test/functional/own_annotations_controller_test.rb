@@ -32,6 +32,18 @@ class OwnAnnotationsControllerTest < ActionController::TestCase
     assert_equal "_test_2", Annotation.find(@_a.id).description
   end
   
+  def test_upload_on_own_account
+    flunk #TODO: write this test
+  end
+  
+  def test_upload_unlogged
+    flunk #TODO: write this test
+  end
+  
+  def test_upload_on_not_own_account
+    flunk #TODO: write this test
+  end
+  
   def test_edit_without_being_logged_in
     get :edit, :id => 1
     assert_redirected_to root_url
