@@ -48,24 +48,18 @@ class OwnAnnotationsController < ApplicationController
   #
   def file_access_control
     annotation = Annotation.find(params[:id])
-    user = User.find(session[:user])
-    # prevent others from modifying own data
-    if annotation.user == user
-      previously_public = annotation.public
-      annotation.public = (params[:checked]=="public")
-      if annotation.public
-        user.increment(:public_annotations_count) unless previously_public        
-      else # private
-        user.decrement(:public_annotations_count) if previously_public
-      end
-      ActiveRecord::Base.transaction do 
-        user.save
-        annotation.save
-      end
-      render :inline => '', :status => 200
-    else 
-      render :inline => "Authorization Error. Are you logged in?", :status => 500
+    previously_public = annotation.public
+    annotation.public = (params[:checked]=="public")
+    if annotation.public
+      user.increment(:public_annotations_count) unless previously_public        
+    else # private
+      user.decrement(:public_annotations_count) if previously_public
     end
+    ActiveRecord::Base.transaction do 
+      user.save
+      annotation.save
+    end
+    render :inline => '', :status => 200
   end  
 
 private
@@ -93,5 +87,19 @@ private
     @title = "My Annotations"
     super
   end
-    
+  
+  #
+  # records should be accessed only by their owner
+  #
+  def own_record?
+    if params["id"] # == only for actions working on a single record
+      record_owner = Annotation.find(params["id"]).user
+      redirect_to logout_url unless record_owner == current_user
+    end
+  end
+  alias_method :delete_authorized?, :own_record?
+  alias_method :update_authorized?, :own_record?
+  alias_method :list_authorized?,   :own_record?
+  before_filter :own_record?, :only => [:file_access_control, :open]
+
 end
