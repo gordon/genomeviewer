@@ -11,7 +11,7 @@ class FormatControllerTest < ActionController::TestCase
   end
   
   def test_unlogged_access_refused
-    %w[index list edit destroy show new show_search].each do |x|
+    %w[index list edit destroy show new show_search table row].each do |x|
       get x
       assert_redirected_to root_url
     end
@@ -53,7 +53,7 @@ class FormatControllerTest < ActionController::TestCase
   
   def test_delete_disabled
     assert_raises(ActionController::UnknownAction) do 
-      get :destroy, {:id => @_f.id}, {:user => @_u.id}
+      post :destroy, {:id => @_f.id}, {:user => @_u.id}
     end
     assert_raises(ActionController::UnknownAction) do 
       get :delete, {:id => @_f.id}, {:user => @_u.id}
@@ -65,5 +65,20 @@ class FormatControllerTest < ActionController::TestCase
       get :show, {:id => @_f.id}, {:user => @_u.id}
     end
   end
-    
+  
+  def test_row_of_own_format
+    get :row, {:id => @_f.id}, {:user => @_u.id}
+    assert_template "format/_list_record"
+  end
+  
+  def test_row_of_not_own_format
+    get :row, {:id => @_f.id}, {:user => @_another_u.id}
+    assert_redirected_to logout_url
+  end
+  
+  def test_row_unlogged
+    get :row, {:id => @_f.id}
+    assert_redirected_to root_url
+  end
+  
 end
