@@ -48,7 +48,7 @@ private
   # records should be accessed only by their owner
   #
   def own_record?
-    if params["id"] # == only for action working on a single record
+    if params["id"] # == only for actions working on a single record
       record_owner = FeatureType.find(params["id"]).configuration.user
       redirect_to logout_url unless record_owner == current_user
     end
