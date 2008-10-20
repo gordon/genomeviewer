@@ -39,11 +39,15 @@ div.nested-view div.actions {
   top: 0px;
 }
 
-
-
 /* customizes the active_scaffold forms light green background
   to the same color of the GenomeViewer buttons */
 .active-scaffold .view {
 	background-color: #9999E6;
 	border-color: darkblue;
+}
+
+/* description text should be black, otherwise is almost invisible
+   combined with the .active-scaffold .view background-color setting */
+.active-scaffold .description {
+	color: black;
 }
