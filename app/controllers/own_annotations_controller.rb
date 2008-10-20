@@ -48,6 +48,7 @@ class OwnAnnotationsController < ApplicationController
   #
   def file_access_control
     annotation = Annotation.find(params[:id])
+    user = annotation.user
     previously_public = annotation.public
     annotation.public = (params[:checked]=="public")
     if annotation.public
