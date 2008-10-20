@@ -2,10 +2,9 @@ class PublicAnnotationsController < ApplicationController
   
   append_before_filter :title
   
-  def title
-    @title = "Public Annotations"
-  end
-
+  #
+  # active scaffold declaration and configuration
+  #
   active_scaffold :annotations do |config|
     
     config.label = @title
@@ -21,22 +20,19 @@ class PublicAnnotationsController < ApplicationController
     
   end
   
-  def conditions_for_collection
-    "public != 'f' and public != 0"
-  end
- 
+  #
+  # open the current annotation in the viewer
+  #
   def open
     annotation = Annotation.find(params["id"])
     redirect_to :controller => :viewer, 
-                    :annotation => annotation.name, 
-                    :username => annotation.user.username
+                :annotation => annotation.name, 
+                :username   => annotation.user.username
   end
   
-  def self.active_scaffold_controller_for(klass)
-    return PublicUsersController if klass==User
-    super
-  end
- 
+  #
+  # an user's page
+  #
   def user
     @public_user = User.find_by_username(params[:username])
     if !@public_user
@@ -48,5 +44,32 @@ class PublicAnnotationsController < ApplicationController
     end
     @title = @public_user.name
   end
+  
+private
+
+  def self.active_scaffold_controller_for(klass)
+    return PublicUsersController if klass==User
+    super
+  end
+ 
+  def conditions_for_collection
+    "public != 'f' and public != 0"
+  end
+
+  def title
+    @title = "Public Annotations"
+  end
+  
+  #
+  # only public annotations may be accessed
+  #
+  def public_annotation?
+    if params["id"] # == only for actions working on a single record
+      annotation = Annotation.find(params["id"])
+      redirect_to root_url unless annotation.public
+    end
+  end
+  alias_method :list_authorized?, :public_annotation?
+  before_filter :public_annotation?, :only => [:open]
   
 end
