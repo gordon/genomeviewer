@@ -1,9 +1,9 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class FeatureTypeTest < ActiveSupport::TestCase
-  
+
   fixtures :users
-  
+
   def setup
     user = users("a_test")
     user.reset_configuration
@@ -16,12 +16,12 @@ class FeatureTypeTest < ActiveSupport::TestCase
     @a_color = Color.new(0.1,0.2,0.3)
     @an_integer = 999
   end
-  
+
   def test_uniqueness_validation
-    assert !FeatureType.new(:name => "a_test", 
+    assert !FeatureType.new(:name => "a_test",
                             :configuration_id => @conf.id).valid?
     # uniqueness is defined in configuration_id scope:
-    assert FeatureType.new(:name => "a_test", 
+    assert FeatureType.new(:name => "a_test",
                            :configuration_id => (@conf.id)+1).valid?
   end
 
@@ -38,12 +38,12 @@ class FeatureTypeTest < ActiveSupport::TestCase
     all = FeatureType::ConfigTypes.map{|t|FeatureType.send("list_#{t}")}.flatten
     assert_equal all.to_set, FeatureType.configuration_attributes.to_set
   end
-  
+
   def test_tests_will_be_defined
     assert FeatureType.list_integers.size > 0
-    assert FeatureType.list_colors.size > 0 
+    assert FeatureType.list_colors.size > 0
   end
-  
+
   FeatureType.list_integers.each do |f|
     define_method "test_#{f}" do
       args = [@ft.section,f.to_s]
@@ -52,7 +52,7 @@ class FeatureTypeTest < ActiveSupport::TestCase
       assert_not_equal @an_integer, @conf.gt.get_num(*args)
       @ft.send("sync_#{f}=", @an_integer)
       assert_equal @an_integer, @ft.send(f)
-      assert_equal @an_integer, @conf.gt.get_num(*args)     
+      assert_equal @an_integer, @conf.gt.get_num(*args)
     end
   end
 
@@ -67,7 +67,7 @@ class FeatureTypeTest < ActiveSupport::TestCase
       assert_equal @a_color, Color(@conf.gt.get_color(*args))
     end
   end
-    
+
   def test_collapse_to_parent
     args = ["a_test","collapse_to_parent"]
     assert_equal @conf.gt.get_bool(*args), @ft.default_collapse_to_parent
@@ -89,10 +89,10 @@ class FeatureTypeTest < ActiveSupport::TestCase
   def test_style
     args = ["a_test","style"]
     remote = @conf.gt.get_cstr(*args)
-    assert_equal remote.nil? ? Style.undefined : remote.to_style, 
+    assert_equal remote.nil? ? Style.undefined : remote.to_style,
                  @ft.default_style
     assert_not_equal "caret", @conf.gt.get_cstr(*args)
-    @ft.sync_style = "caret".to_style 
+    @ft.sync_style = "caret".to_style
     assert_equal "caret", @ft.style.string
     assert_equal "caret", @conf.gt.get_cstr(*args)
   end

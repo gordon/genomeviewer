@@ -5,47 +5,47 @@ class User < ActiveRecord::Base
   has_one :configuration, :dependent => :destroy
 
   ### callbacks ###
-  
+
   after_save :find_or_create_configuration
   after_create :create_storage
   after_destroy :destroy_storage
-  
+
   def create_storage
     Dir.mkdir "#{$GFF3_STORAGE_PATH}/#{self[:id]}" rescue nil
   end
-  
+
   def find_or_create_configuration
     Configuration.find_or_create_by_user_id(self[:id])
   end
-  
+
   def destroy_storage
     Dir.rmdir "#{$GFF3_STORAGE_PATH}/#{self[:id]}" rescue nil
   end
-  
+
   ### configuration methods ###
-  
+
   def reset_configuration
     configuration = Configuration.create(:user => self)
     configuration(true)
   end
-  
+
   ### validations ###
 
   # login name
   validates_presence_of :username,
                         :message => 'Please enter an username'
-  validates_format_of :username, 
+  validates_format_of :username,
                        :with => /^[A-Z0-9\._]+$/i,
                        :message => "Usernames can only contain letters, numbers, dots (.) and undescores (_)."
-  validates_uniqueness_of :username, 
+  validates_uniqueness_of :username,
                           :message => "This username is already in use."
-  
+
   # the following names are invalid and can't be used as username
   # see config/routes.rb and config/invalid_usernames.yml
   validates_exclusion_of :username,
                          :in => YAML.load(IO.read("config/invalid_usernames.yml")),
                          :message => "This username is reserved. Please choose a different one."
-  
+
   # email
   validates_presence_of :email, :message => "Please enter your email address"
   validates_uniqueness_of :email,

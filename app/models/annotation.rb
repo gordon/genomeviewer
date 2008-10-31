@@ -109,14 +109,14 @@ class Annotation < ActiveRecord::Base
   after_create     :create_sequence_regions
   after_create     :create_feature_types
   before_destroy   :delete_gff3_data
-  
+
   after_create     :increment_pa_count
   after_destroy    :decrement_pa_count
-  
+
   def increment_pa_count
     user.increment(:public_annotation_count) if public
   end
-  
+
   def decrement_pa_count
     user.decrement(:public_annotation_count) if public
   end
@@ -131,7 +131,7 @@ class Annotation < ActiveRecord::Base
       SequenceRegion.create(sequence_region_params)
     end
   end
-  
+
   #
   # feature types are added to the annotation list;
   # if they are not present in the user's list they are added
@@ -141,7 +141,7 @@ class Annotation < ActiveRecord::Base
     ft_names.each do |ft_name|
       ft = user.configuration.feature_types.find_by_name(ft_name)
       unless ft
-        ft = FeatureType.default_new(:name => ft_name, 
+        ft = FeatureType.default_new(:name => ft_name,
                    :configuration_id => user.configuration.id)
         user.configuration.feature_types(true) # update cache
       end

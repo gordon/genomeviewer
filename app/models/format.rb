@@ -1,18 +1,18 @@
 class Format < ActiveRecord::Base
   include GTRubyConfigurator
-  
+
   belongs_to :configuration
-  
+
   set_section "format"
   set_colors :track_title_color, :default_stroke_color
   set_bools :show_grid
-  set_decimals :margins, :bar_height, :bar_vspace, :track_vspace, 
+  set_decimals :margins, :bar_height, :bar_vspace, :track_vspace,
          :scale_arrow_width, :scale_arrow_height, :arrow_width,
          :stroke_width, :stroke_marked_width, :min_len_block
-  
+
   delegate :width, :to => :configuration
   delegate :width=, :to => :configuration
-  
+
   def self.helptext(attribute_name)
     case attribute_name.to_sym
       when :width : "default width of the image (px)"

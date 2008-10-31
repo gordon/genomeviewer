@@ -14,7 +14,7 @@ module Parsing
       return err.to_s
     end
   end
-  
+
   #
   # returns the (eventually cached) feature types list for a filename
   #
@@ -29,7 +29,7 @@ module Parsing
     else
       parse(filename)
       log "#{filename}: newly created feature types list"
-      lock(:ft) do 
+      lock(:ft) do
         return @cache[:ft][filename]
       end
     end
@@ -42,7 +42,7 @@ module Parsing
     log "#{filename}: sequence IDs list"
     feature_index(filename).get_seqids
   end
-  
+
   #
   # returns the range of a sequence in a file, given the seqid
   #
@@ -54,36 +54,36 @@ module Parsing
 
   #
   # deletes all cache entries for a filename
-  # 
+  #
   def gff3_uncache(filename)
     d = []
     [:on, :off].each do |mode|
-      lock(mode) do 
+      lock(mode) do
         d << @cache[mode].delete(filename)
       end
-    end    
-    lock(:ft) do 
+    end
+    lock(:ft) do
       d << @cache[:ft].delete(filename)
     end
     d.compact!
     unless d.empty?
-      log "#{filename}: cache deleted" 
+      log "#{filename}: cache deleted"
       return d
-    else 
+    else
       log "#{filename}: was not cached"
       return nil
     end
   end
-  
+
   #
   # returns the (eventually cached) feature index for a filename
   #
-  # the second parameter is one of the following: 
+  # the second parameter is one of the following:
   #
   #  :on   => f. index with add_introns
-  #  :off  => f. index without add_introns 
+  #  :off  => f. index without add_introns
   #  nil   => any cached f.index or new without add_introns
-  # 
+  #
   def feature_index(filename, mode = nil)
     raise "Mode unknown" unless [:on, :off, nil].include?(mode)
     fix = look_for_fix(mode, filename)
@@ -95,13 +95,13 @@ module Parsing
       mode = :off if mode.nil?
       parse(filename, mode == :on)
       return look_for_fix(mode, filename)
-      log "#{filename}: newly created feature index (add_introns #{mode})"        
+      log "#{filename}: newly created feature index (add_introns #{mode})"
     end
   end
-    
+
   def look_for_fix(mode, filename)
     if mode
-      lock(mode) do 
+      lock(mode) do
         return @cache[mode].fetch(filename, nil)
       end
     else
@@ -110,11 +110,11 @@ module Parsing
     end
   end
   private :look_for_fix
-  
-  # is there a feature index cache for this filename? 
+
+  # is there a feature index cache for this filename?
   def feature_index_cached?(filename, mode = nil)
     if mode
-      lock(mode) do 
+      lock(mode) do
         return @cache[mode].has_key?(filename)
       end
     else
@@ -122,15 +122,15 @@ module Parsing
     end
   end
 
-  # is there a feature types cache for this filename? 
+  # is there a feature types cache for this filename?
   def feature_types_cached?(filename)
-    lock(:ft) do 
+    lock(:ft) do
       return @cache[:ft].has_key?(filename)
     end
   end
 
   def parse(filename, add_introns = false)
-    
+
     log "#{filename}: parsing started"
     gff3_in_stream = GT::GFF3InStream.new(filename)
 
@@ -143,24 +143,24 @@ module Parsing
     end
 
     feature_index = GT::FeatureIndex.new
-    
+
     # populate feature stream:
     feature_stream = GT::FeatureStream.new(in_stream, feature_index)
-    loop {break unless feature_stream.next_tree}    
+    loop {break unless feature_stream.next_tree}
 
     # cache feature index
     mode = add_introns ? :on : :off
-    lock(mode) do 
+    lock(mode) do
       @cache[mode][filename] = feature_index
     end
-    
+
     # cache used types
-    lock(:ft) do 
+    lock(:ft) do
       @cache[:ft][filename] = gff3_in_stream.get_used_types
     end
-    
+
     log "#{filename}: parsing finished"
-    
+
   end
   private :parse
 

@@ -20,17 +20,17 @@ class StyleTest < Test::Unit::TestCase
     s = Style.new(nil)
     assert_equal "undefined", s.string
   end
-  
-  # according to 
+
+  # according to
   # http://api.rubyonrails.org/classes/ActiveRecord/Aggregations/ClassMethods.html
   # aggregations (such as colors) should be value objects:
-  #   => immutable 
+  #   => immutable
   #   => equality defined as equality of its fields
 
   def test_immutable
     assert_raises(NoMethodError) {Style.new(1).key=2}
   end
-  
+
   def test_equality
     s1 = Style.new(1)
     assert_equal s1, s1
@@ -43,18 +43,18 @@ class StyleTest < Test::Unit::TestCase
     assert_nil s1=="string"
     assert_not_equal s1, "string"
   end
-  
+
   def test_undefined
     assert_nil Style.undefined.key
   end
-  
+
   def test_undefined_test
     assert Style.undefined.undefined?
   end
-  
+
   def test_from_string
     assert_equal Style.new(1), "box".to_style
     assert_equal "undefined", "".to_style.to_s
   end
-  
+
 end

@@ -2,7 +2,7 @@ require "test/test_helper.rb"
 require File.dirname(__FILE__) + "/modules/gt_objects_assertions.rb"
 
 class ColorTest < Test::Unit::TestCase
-  
+
   include GTObjectsAssertions
 
   def test_constants
@@ -17,7 +17,7 @@ class ColorTest < Test::Unit::TestCase
       assert_raises(ArgumentError) {Color.new(*args)}
     end
   end
-  
+
   def test_argument_range
     assert_nothing_raised {Color.new(0.0, 0.0, 0.0)}
     assert_nothing_raised {Color.new(0.1, 0.2, 0.3)}
@@ -31,7 +31,7 @@ class ColorTest < Test::Unit::TestCase
     assert_raises(RangeError) {Color.new(1.0, 2.0, 1.0)}
     assert_raises(RangeError) {Color.new(1.0, 1.0, 2.0)}
   end
-  
+
   def test_argument_type
     # valid
     assert_nothing_raised {Color.new(1,1,1)}
@@ -41,11 +41,11 @@ class ColorTest < Test::Unit::TestCase
     # invalid => undefined
     assert_equal Color.new(nil, nil, nil), Color.new(1,1,"a")
   end
-  
-  # according to 
+
+  # according to
   # http://api.rubyonrails.org/classes/ActiveRecord/Aggregations/ClassMethods.html
   # aggregations (such as colors) should be value objects:
-  #   => immutable 
+  #   => immutable
   #   => equality defined as equality of its fields
 
   def test_immutable
@@ -53,7 +53,7 @@ class ColorTest < Test::Unit::TestCase
     assert_raises(NoMethodError) {Color.new(0,0,0).green=0.5}
     assert_raises(NoMethodError) {Color.new(0,0,0).blue=0.5}
   end
-  
+
   def test_equality
     c1 = Color.new(0.0, 0.0, 0.0)
     assert_equal c1, c1
@@ -80,7 +80,7 @@ class ColorTest < Test::Unit::TestCase
     # undefined gt color
     assert_gt_color Color.new(nil,nil,nil).to_gt
   end
-  
+
   def test_conversion_to_color
     [0,"a",{}].each {|x| assert_raises(ArgumentError) {Color(x)}}
     c1 = Color.new(0.1, 0.2, 0.3)
@@ -100,7 +100,7 @@ class ColorTest < Test::Unit::TestCase
     assert_equal gtc.green, gvc.green
     assert_equal gtc.blue, gvc.blue
   end
-  
+
   def test_undefined
     assert !Color.new(1, 1, 1).undefined?
     assert Color.new(1, 1, nil).undefined?
@@ -108,12 +108,12 @@ class ColorTest < Test::Unit::TestCase
     assert_equal Color.new(nil, nil, nil), Color.undefined
     assert Color.undefined.undefined?
   end
-  
+
   def test_to_hex
     assert_equal '#001ACC', Color.new(0, 0.1, 0.8).to_hex
     assert_equal 'undefined', Color.new(nil, nil, nil).to_hex
   end
-  
+
   def test_from_hex
     assert_equal Color.new(0, 0, 0), '#000000'.to_color
     assert_equal Color.new(0, 1, 1), '#00fFff'.to_color
@@ -121,5 +121,5 @@ class ColorTest < Test::Unit::TestCase
     assert_equal Color.new(nil, nil, nil), '#0000000'.to_color
     assert_equal Color.new(nil, nil, nil), 'anything else'.to_color
   end
-  
+
 end

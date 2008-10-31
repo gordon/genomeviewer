@@ -1,5 +1,5 @@
 class UserMailer < ActionMailer::Base
-  
+
   def password_recovery_email_to(user)
     recipients  user.email
     from        "password_recovery@genomeviewer.org"
@@ -13,7 +13,7 @@ class UserMailer < ActionMailer::Base
     subject     "GenomeViewer: Thank you for registering"
     body        :user => user
   end
-  
+
   def email_changed_message_to(user)
     recipients  user.email
     from        "accounts@genomeviewer.org"

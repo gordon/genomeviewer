@@ -1,19 +1,19 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class AnnotationTest < Test::Unit::TestCase
-    
-  def setup    
+
+  def setup
     # be sure the necessary storage and tmp directory exist
     Dir.mkdir($GFF3_STORAGE_PATH) rescue nil
     Dir.mkdir("tmp/gff3_data") rescue nil
     # delete all users and create some test ones
     User.destroy_all
-    u1 = User.create!(:username => "u1", :name => "Uu 1", 
-                      :password => "...",:email => "u1@x.xxx") 
-    u2 = User.create!(:username => "u2", :name => "Uu 2", 
-                      :password => "...",:email => "u2@x.xxx") 
+    u1 = User.create!(:username => "u1", :name => "Uu 1",
+                      :password => "...",:email => "u1@x.xxx")
+    u2 = User.create!(:username => "u2", :name => "Uu 2",
+                      :password => "...",:email => "u2@x.xxx")
   end
-    
+
   def test_new_method
     u1 = User.find_by_username("u1")
     a1 = Annotation.new do |a|
@@ -26,18 +26,18 @@ class AnnotationTest < Test::Unit::TestCase
       a.description = "A little annotation"
       a.name = "little1.gff3"
       a.save
-      # now an user and name were available, so after saving it should 
+      # now an user and name were available, so after saving it should
       # have been moved to the storage directory
       assert File.exist?(a.gff3_data_storage)
       assert_equal "#{$GFF3_STORAGE_PATH}/#{u1.id}", File.dirname(a.gff3_data_storage)
     end
   end
-  
-  def test_create_method 
+
+  def test_create_method
     u2 = User.find_by_username("u2")
     little2 = IO.read("test/gff3/little2.gff3")
-    a2 = Annotation.create( 
-          :user => u2, 
+    a2 = Annotation.create(
+          :user => u2,
           :gff3_data => little2,
           :name =>  "little2.gff3")
     assert File.exist?(a2.gff3_data_storage)
@@ -45,10 +45,10 @@ class AnnotationTest < Test::Unit::TestCase
     assert_equal little2, IO.read("#{$GFF3_STORAGE_PATH}/#{u2.id}/little2.gff3")
     assert_equal little2, a2.gff3_data
   end
-  
+
   def test_non_standard_type
     t = "test_type"
-    
+
     gff3_data = IO.read("test/gff3/little1.gff3")
     # change "gene" in the non standard type
     gff3_data = gff3_data.gsub("gene", t)
@@ -59,8 +59,8 @@ class AnnotationTest < Test::Unit::TestCase
                           :user => u,
                           :gff3_data => gff3_data)
     assert u.configuration.feature_types.map(&:name).include?(t)
-    # note: 
-    # in the current implementation, feature types are 
+    # note:
+    # in the current implementation, feature types are
     # *not* deleted when the annotation that caused their
     # creation is deleted
     a.destroy
@@ -69,7 +69,7 @@ class AnnotationTest < Test::Unit::TestCase
     u.destroy
     assert_nil FeatureType.find_by_configuration_id(u.configuration.id)
   end
-  
+
   def test_unique_name_validation
     u1 = User.find_by_username("u1")
     u2 = User.find_by_username("u2")
@@ -87,7 +87,7 @@ class AnnotationTest < Test::Unit::TestCase
     a1.destroy
     assert_not_nil Annotation.create(:name => "little1.gff3",
                       :user => u1, :gff3_data => gff3).id
-    
+
   end
-  
+
 end

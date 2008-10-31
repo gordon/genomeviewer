@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + "/../test_helper"
 require File.dirname(__FILE__) + "/modules/gt_objects_assertions.rb"
 
 class GtServerTest < ActiveSupport::TestCase
-  
+
   include GTObjectsAssertions
 
   def test_connection
@@ -14,10 +14,10 @@ class GtServerTest < ActiveSupport::TestCase
 
   [:on, :off, nil].each do |mode|
     string = mode.nil? ? "nil" : mode
-    define_method "test_feature_index_caching_mode_#{string}" do 
+    define_method "test_feature_index_caching_mode_#{string}" do
       filename = "test/gff3/little1.gff3"
       assert_nothing_raised { GTServer.gff3_uncache(filename) }
-      assert_nil GTServer.gff3_uncache(filename) 
+      assert_nil GTServer.gff3_uncache(filename)
       assert !GTServer.feature_index_cached?(filename, mode)
       assert !GTServer.feature_types_cached?(filename)
       fix = nil
@@ -27,7 +27,7 @@ class GtServerTest < ActiveSupport::TestCase
       assert GTServer.feature_types_cached?(filename)
       assert_not_nil GTServer.gff3_uncache(filename)
       assert_nil     GTServer.gff3_uncache(filename)
-      fix = nil  
+      fix = nil
     end
   end
 
@@ -42,10 +42,10 @@ class GtServerTest < ActiveSupport::TestCase
     assert_not_nil GTServer.gff3_errors(invalid_gff3)
     File.delete(invalid_gff3)
   end
-  
+
   def test_seqids
     seqids =
-     %w{X 1 2 5 6 7 8 9 10 11 12 13 
+     %w{X 1 2 5 6 7 8 9 10 11 12 13
         14 15 16 18 19 20 21 22}.map{|n| "chr#{n}"}
     filename = "test/gff3/encode_known_genes_Mar07.gff3"
     # use set as the order is not important
@@ -72,7 +72,7 @@ class GtServerTest < ActiveSupport::TestCase
   def test_config_new
     assert_gt_config GTServer.config_new
   end
-  
+
   def test_config_default
     assert_gt_config GTServer.config_default
   end
@@ -106,7 +106,7 @@ class GtServerTest < ActiveSupport::TestCase
 
   def test_generate_and_destroy
     uuid = UUID.random_create.to_s
-    args = uuid, "test/gff3/little1.gff3", "test1", (1000..9000), 
+    args = uuid, "test/gff3/little1.gff3", "test1", (1000..9000),
            GTServer.config_default, 100, false
     assert !GTServer.img_exists?(uuid)
     assert !GTServer.map_exists?(uuid)
@@ -121,12 +121,12 @@ class GtServerTest < ActiveSupport::TestCase
     config = GTServer.config_default
     [true, false].each do |add_introns|
       uuid = UUID.random_create.to_s
-      GTServer.img_and_map_generate(uuid, 
-                                    filename, 
-                                    "ctg123", 
-                                    (1..1497228), 
-                                    config, 
-                                    100, 
+      GTServer.img_and_map_generate(uuid,
+                                    filename,
+                                    "ctg123",
+                                    (1..1497228),
+                                    config,
+                                    100,
                                     add_introns)
       png_data = GTServer.img(uuid)
       assert png_data.size > 1000
@@ -138,7 +138,7 @@ class GtServerTest < ActiveSupport::TestCase
 
   def test_image_map
     uuid = UUID.random_create.to_s
-    args = uuid, "test/gff3/little1.gff3", "test1", (1000..9000), 
+    args = uuid, "test/gff3/little1.gff3", "test1", (1000..9000),
            GTServer.config_default, 100, false
     GTServer.img_and_map_generate(*args)
     info = GTServer.map(uuid)

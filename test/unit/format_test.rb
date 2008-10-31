@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../test_helper'
 class FormatTest < ActiveSupport::TestCase
 
   fixtures :users
-  
+
   def setup
     user = users("a_test")
     user.reset_configuration
@@ -12,21 +12,21 @@ class FormatTest < ActiveSupport::TestCase
     @a_color = Color.new(0.1,0.2,0.3)
     @a_float = 999.9
   end
-  
+
   def test_section
     assert "format", @format.section
   end
-  
+
   def test_attribute_lists
     # test one of the lists
     colors = [:track_title_color, :default_stroke_color]
-    assert_equal colors, Format.list_colors 
+    assert_equal colors, Format.list_colors
     # test global list
     require "set" # use Set as the sorting order is not important
     all = Format::ConfigTypes.map{|t| Format.send("list_#{t}")}.flatten
     assert_equal all.to_set, Format.configuration_attributes.to_set
   end
-  
+
   def test_show_grid
     args = ["format","show_grid"]
     assert_equal @conf.gt.get_bool(*args), @format.default_show_grid
@@ -56,21 +56,21 @@ class FormatTest < ActiveSupport::TestCase
     assert_not_equal @a_float, @conf.gt.get_num(*args)
     @format.send("sync_#{f}=", @a_float)
     assert_equal @a_float, @format.send(f)
-    assert_equal @a_float, @conf.gt.get_num(*args)     
+    assert_equal @a_float, @conf.gt.get_num(*args)
     end
   end
-  
+
   Format.list_colors.each do |col|
     define_method "test_#{col}" do
     args = ["format",col.to_s]
-    assert_equal Color(@conf.gt.get_color(*args)), 
+    assert_equal Color(@conf.gt.get_color(*args)),
                  @format.send("default_#{col}")
     assert_not_equal @a_color, @format.send(col)
     assert_not_equal @a_color, Color(@conf.gt.get_color(*args))
     @format.send("sync_#{col}=", @a_color)
     assert_equal @a_color, @format.send(col)
-    assert_equal @a_color, Color(@conf.gt.get_color(*args))   
+    assert_equal @a_color, Color(@conf.gt.get_color(*args))
     end
   end
-    
+
 end

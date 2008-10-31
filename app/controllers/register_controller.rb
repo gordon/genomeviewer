@@ -13,14 +13,14 @@ class RegisterController < ApplicationController
     @title = "Recover your password"
     @user = User.new(:email => flash[:email])
   end
-  
+
   def password_recovery_email_sent
     @title = "Password recovered"
     @user = User.find_by_email(flash[:email])
   end
-  
+
   ### actions redirecting to other actions ###
-  
+
   def do_register
     # create an user instance using the form parameters
     @user = User.new(params[:user])
@@ -38,8 +38,8 @@ class RegisterController < ApplicationController
       flash[:user] = @user
       redirect_to :action => :register
     end
-  end  
-  
+  end
+
   def send_password_recovery_email
     flash[:email]=params[:user][:email]
     @user = User.find_by_email(params[:user][:email])

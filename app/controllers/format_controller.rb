@@ -1,10 +1,10 @@
 #
 # This controller is responsible for an active_scaffold
-# (see vendor/plugins/active_scaffold) that is embedded 
+# (see vendor/plugins/active_scaffold) that is embedded
 # in the configuration page.
 #
 class FormatController < ApplicationController
-  
+
   before_filter :enforce_login
 
   #
@@ -12,14 +12,14 @@ class FormatController < ApplicationController
   #
   active_scaffold :format do |config|
     config.label = "General settings"
-    
+
     # the columns array is built dinamically, using the lists
     # provided by the FeatureType model
     columns = [:width] + Format.configuration_attributes
-    
+
     config.columns = columns
     config.columns[:width].label = "Default width"
-    
+
     columns.each do |c|
       # disable sorting, as there is only 1 record
       config.columns[c].sort = false
@@ -41,16 +41,16 @@ private
   def conditions_for_collection
     ["configuration_id = ?", @current_user.configuration.id]
   end
-  
+
   #
-  # upload configuration changes in the gtserver 
+  # upload configuration changes in the gtserver
   # and save width
   #
   def before_update_save(record)
     record.upload
     record.configuration.save # to save the width
   end
-  
+
   #
   # records should be accessed only by their owner
   #
@@ -62,5 +62,5 @@ private
   end
   alias_method :update_authorized?, :own_record?
   alias_method :list_authorized?,   :own_record?
-  
+
 end

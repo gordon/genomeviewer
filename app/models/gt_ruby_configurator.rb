@@ -3,14 +3,14 @@
 # GT::Configs object returned by the #configuration.gt method chain
 #
 module GTRubyConfigurator
-  
+
   #
-  # #configuration_attributes returns the attributes in the order 
+  # #configuration_attributes returns the attributes in the order
   # specified by this array (within each list in alphabetic order)
   #
   ConfigTypes = [:styles, :colors, :decimals, :integers, :bools]
-  
-  GTRubyType = 
+
+  GTRubyType =
   {
     :decimals => :num,
     :integers => :num,
@@ -18,54 +18,54 @@ module GTRubyConfigurator
     :bools    => :bool,
     :styles   => :cstr
   }
-  
+
   def self.included(klass)
-    
-    klass.class_eval do 
+
+    klass.class_eval do
       # initialize lists of configuration attributes
       @list = {}
       ConfigTypes.each {|t| @list[t] = [] }
     end
-    
+
     klass.extend(Lists)
-    
+
     klass.extend(Macros)
-    
-  end  
-  
+
+  end
+
   module Lists
-    
+
     # define class methods to read lists of attributes
     ConfigTypes.each {|t| define_method "list_#{t}", lambda{@list[t]} }
-    
+
     def configuration_attributes
       ConfigTypes.map{|t| @list[t].sort_by(&:to_s)}.flatten
     end
-    
+
   end
-  
+
   module Macros
-  
+
     #
     # usage: (similar to set_primary_key)
     #
-    # # a constant section name 
-    # set_section "format" 
+    # # a constant section name
+    # set_section "format"
     #
     # # a block that will be passed to instances to calculate the section name
-    # set_section do 
+    # set_section do
     #   self.name
     # end
     #
-    # effect: 
+    # effect:
     #
     # the following instance methods are defined:
-    # 
-    # * #section : name of the corresponding configuration section 
-    # 
-    # * #default : hash with all values of the configuration 
-    #              attributes for this section from config/value.lua 
-    # 
+    #
+    # * #section : name of the corresponding configuration section
+    #
+    # * #default : hash with all values of the configuration
+    #              attributes for this section from config/value.lua
+    #
     # * #local : hash with all values of the configuration
     #            attributes for this section from the current instance
     #
@@ -74,18 +74,18 @@ module GTRubyConfigurator
     #
     # * #sync? : is local == remote for all configuration attributes?
     #
-    # * #not_sync : an array of arrays in the form: 
+    # * #not_sync : an array of arrays in the form:
     #              [attribute, local value, remote value]
     #              for each not synchronized attribute
     #
-    # * #upload : set all configuration attributes for this section 
+    # * #upload : set all configuration attributes for this section
     #             in the gt config to the current instance values
-    # 
+    #
     # * #upload_except(*attrs) : uploads all attributes except attrs
-    # 
-    # * #download : set the current instance configuration attributes 
+    #
+    # * #download : set the current instance configuration attributes
     #               to the values from the corresponding gt config
-    # 
+    #
     # * #download_except(*attrs) : download all attributes except attrs
     #
     def set_section(section_name = nil, &block)
@@ -110,25 +110,25 @@ module GTRubyConfigurator
       define_method :sync? do
         self.class.configuration_attributes.all? {|a| send("#{a}_sync?")}
       end
-      define_method :not_sync do 
+      define_method :not_sync do
         self.class.configuration_attributes.map do |attr|
-          send("#{attr}_sync?") ? nil : 
+          send("#{attr}_sync?") ? nil :
             [attr, send(attr), send("remote_#{attr}")]
         end.compact
       end
     end
-    
+
     def values_fetcher(prefix)
-      lambda do 
+      lambda do
         hsh = {}
-        self.class.configuration_attributes.each do |attr| 
+        self.class.configuration_attributes.each do |attr|
           hsh[attr] = send("#{prefix}#{attr}")
         end
         hsh
       end
     end
     private :values_fetcher
-    
+
     #
     # returns an instance with values from config/view.lua
     #
@@ -139,15 +139,15 @@ module GTRubyConfigurator
       end
       return new(base_instance.default.merge(attrs))
     end
-    
+
     #
-    # usage examples: 
+    # usage examples:
     #
     #  set_floats :margins, :width, ...
     #  set_bools  :show_grid, ...
     #  set_colors :fill, ...
     #
-    # effect: 
+    # effect:
     #
     # * populates the lists of attributes returned by .list_<config_type>
     #   and .configuration_attributes
@@ -156,7 +156,7 @@ module GTRubyConfigurator
     #
     #     #<attr>            : works as usual (set instance value)
     #     #<attr>=           : works as usual (get instance value)
-    #     #remote_<attr>     : get gt config value 
+    #     #remote_<attr>     : get gt config value
     #     #remote_<attr>=(v) : set gt config value
     #     #sync_<attr>=(v)   : set both local and remote
     #     #default_<attr>    : get value from config/view.lua
@@ -169,9 +169,9 @@ module GTRubyConfigurator
         define_macro(config_type, *syms)
       end
     end
-    
+
     private
-    
+
     def define_macro(config_type, *syms)
       # add symbols to lists
       class_eval {@list[config_type] += syms}
@@ -187,13 +187,13 @@ module GTRubyConfigurator
         define_method "upload_#{attr}", uploader(attr)
         define_method "download_#{attr}", downloader(attr)
         define_method "default_#{attr}", default_reader(attr, config_type)
-      end    
+      end
     end
-    
+
     ### aggregation callbacks ###
-    
+
     def colors_mapper(sym)
-      composed_of sym, 
+      composed_of sym,
                   :class_name => "Color",
                   :mapping => [ ["#{sym}_red", "red"],
                                 ["#{sym}_green", "green"],
@@ -205,9 +205,9 @@ module GTRubyConfigurator
                                   end
                                 end
     end
-    
+
     def styles_mapper(sym)
-      composed_of sym, 
+      composed_of sym,
                   :class_name => "Style",
                   :mapping => [ ["#{sym}_key", "key"] ] do |v|
                                 case v
@@ -217,18 +217,18 @@ module GTRubyConfigurator
                                 end
                               end
     end
-    
+
     ### get and set methods ###
-    
+
     def sync_setter(attr)
       lambda do |value|
-        send("remote_#{attr}=", value) 
+        send("remote_#{attr}=", value)
         send("#{attr}=", value)
       end
-    end    
-    
+    end
+
     def remote_getter(attr, config_type, from = nil)
-      cast = 
+      cast =
         case config_type
           when :colors : lambda {|v| v.nil? ? Color.undefined : Color(v)}
           when :styles : lambda {|v| v.nil? ? Style.undefined : v.to_style}
@@ -236,7 +236,7 @@ module GTRubyConfigurator
           when :decimals : lambda {|v| v.nil? ? nil : BigDecimal(v.to_s)}
           else             lambda {|v| v}
         end
-      return lambda do 
+      return lambda do
         raise "no place to get from" unless configuration
         gtr_type = GTRubyType[config_type]
         config_obj = from || configuration.gt(section, attr)
@@ -244,9 +244,9 @@ module GTRubyConfigurator
         value = cast.bind(self).call(raw)
       end
     end
-    
+
     def remote_setter(attr, config_type, to = nil)
-      cast = 
+      cast =
         case config_type
           when :colors : lambda {|v| (v.nil? or v.undefined?) ? nil : v.to_gt}
           when :styles : lambda {|v| (v.nil? or v.undefined?) ? nil : v.to_s}
@@ -267,33 +267,33 @@ module GTRubyConfigurator
         return casted
       end
     end
-    
+
     def sync_tester(attr)
-      lambda do 
+      lambda do
         send(attr) == send("remote_#{attr}")
       end
     end
-    
+
     ### default reader ###
-    
+
     def default_reader(attr, config_type)
       remote_getter(attr, config_type, Configuration.default)
     end
-    
+
     ### synchronization methods ###
-    
+
     def uploader(attr)
-      lambda do 
+      lambda do
         send("remote_#{attr}=", send(attr))
       end
     end
-    
+
     def downloader(attr)
-      lambda do 
+      lambda do
         send("#{attr}=", send("remote_#{attr}"))
       end
     end
-    
+
   end
-  
+
 end

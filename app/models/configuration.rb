@@ -1,34 +1,34 @@
 class Configuration < ActiveRecord::Base
-  
-  belongs_to :user  
-  has_many :feature_types, :dependent => :destroy 
+
+  belongs_to :user
+  has_many :feature_types, :dependent => :destroy
   has_one  :format, :dependent => :destroy
-  
+
   def section_objects
     [format]+feature_types
-  end  
-  
+  end
+
   def sections
     section_objects.map(&:section)
   end
 
   after_save       :make_sure_there_is_a_format
   after_create     :uncache
-  
+
   def make_sure_there_is_a_format
-    unless format(true) 
+    unless format(true)
      f = Format.default_new(:configuration_id => self[:id])
      f.save
      format(true) # update the cache
     end
   end
 
-  # reference to the GT::Config object 
+  # reference to the GT::Config object
   # corresponding to this object
   #
   # if there is no cache, upload all setting
   # from the DB into the gt config object
-  # but allow an exception to avoid circular 
+  # but allow an exception to avoid circular
   # references
   #
   def gt(upload_exception_section = nil, upload_exception_attr = nil)
@@ -44,7 +44,7 @@ class Configuration < ActiveRecord::Base
     end
     GTServer.config(self[:id])
   end
-  
+
   def uncache
     GTServer.config_uncache(self[:id])
   end
