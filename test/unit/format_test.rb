@@ -55,7 +55,7 @@ class FormatTest < ActiveSupport::TestCase
     assert_not_equal @a_float, @format.send(f)
     assert_not_equal @a_float, @conf.gt.get_num(*args)
     @format.send("sync_#{f}=", @a_float)
-    assert_equal @a_float, @format.send(f)
+    assert_in_delta @a_float, @format.send(f), 0.000000000001
     assert_equal @a_float, @conf.gt.get_num(*args)
     end
   end
