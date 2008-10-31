@@ -130,7 +130,7 @@ module GTRubyConfigurator
     private :values_fetcher
 
     #
-    # returns an instance with values from config/view.lua
+    # returns an instance with values from config/default.style
     #
     def default_new(attrs = {})
       base_instance = new(attrs)
@@ -159,7 +159,7 @@ module GTRubyConfigurator
     #     #remote_<attr>     : get gt config value
     #     #remote_<attr>=(v) : set gt config value
     #     #sync_<attr>=(v)   : set both local and remote
-    #     #default_<attr>    : get value from config/view.lua
+    #     #default_<attr>    : get value from config/default.style
     #     #<attr>_sync?      : local == remote?
     #     #upload_<attr>     : instance => gt config
     #     #download_<attr>   : gt config => instance

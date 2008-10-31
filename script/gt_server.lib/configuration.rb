@@ -61,13 +61,13 @@ module Configuration
   end
 
   #
-  # a new config object with settings from config/view.lua
+  # a new config object with settings from config/default.style
   #
   def config_new
     cnf = GT::Style.new
-    cnf.load_file File.expand_path("config/view.lua",
+    cnf.load_file File.expand_path("config/default.style",
                                  "#{File.dirname(__FILE__)}/../..")
-    log "new config, view.lua loaded", 2
+    log "new config, default.style loaded", 2
     return cnf
   end
 
