@@ -142,7 +142,7 @@ module Parsing
       in_stream = gff3_in_stream
     end
 
-    feature_index = GT::FeatureIndex.new
+    feature_index = GT::FeatureIndexMemory.new
 
     # populate feature stream:
     feature_stream = GT::FeatureStream.new(in_stream, feature_index)
