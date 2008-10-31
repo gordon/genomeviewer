@@ -18,7 +18,7 @@ module Output
   # - filename:        string
   # - seq_id:          string
   # - range:           a ruby Range object
-  # - config_obj:      a GT::Config object
+  # - config_obj:      a GT::Style object
   # - width:           integer (width in pixel)
   # - add_introns:     boolean (activate add introns mode?)
   # - config_override: an array of options that will override

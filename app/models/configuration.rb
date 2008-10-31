@@ -23,7 +23,7 @@ class Configuration < ActiveRecord::Base
     end
   end
 
-  # reference to the GT::Config object
+  # reference to the GT::Style object
   # corresponding to this object
   #
   # if there is no cache, upload all setting

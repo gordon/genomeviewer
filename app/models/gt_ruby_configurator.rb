@@ -1,6 +1,6 @@
 #
 # defines a DSL to use in classes which configure a "section" of the
-# GT::Configs object returned by the #configuration.gt method chain
+# GT::Style object returned by the #configuration.gt method chain
 #
 module GTRubyConfigurator
 

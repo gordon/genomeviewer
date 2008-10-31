@@ -82,11 +82,11 @@ class GTServerClass
 
   # public methods:
 
-  # config(key)         => GT::Config
-  # config_default      => GT::Config
-  # config_new          => GT::Config
+  # config(key)         => GT::Style
+  # config_default      => GT::Style
+  # config_new          => GT::Style
   # color_new           => GT::Color
-  # config_uncache(key) => nil or GT::Config
+  # config_uncache(key) => nil or GT::Style
   # config_cached?(key) => true or false
 
   include Output

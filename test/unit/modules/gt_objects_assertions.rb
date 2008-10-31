@@ -1,10 +1,10 @@
 module GTObjectsAssertions
 
   #
-  # "duck type" check if an object could be a GT::Config
+  # "duck type" check if an object could be a GT::Style
   #
   def assert_gt_config(obj, message = nil)
-    message ||= "It does not look like a GT::Config"
+    message ||= "It does not look like a GT::Style"
     assert_block(message) do
       types = ["bool", "color", "cstr", "num"]
       methods = (["get","set"].map {|a| types.map {|t| "#{a}_#{t}"}}).flatten

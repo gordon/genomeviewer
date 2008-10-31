@@ -1,5 +1,5 @@
 #
-# DRb can't serialize GTRuby Objects like GT::Color and GT::Config
+# DRb can't serialize GTRuby Objects like GT::Color and GT::Style
 # therefore only references to them are used in Genomeviewer, while
 # the object instances themselves are created on the server.
 #
@@ -64,7 +64,7 @@ module Configuration
   # a new config object with settings from config/view.lua
   #
   def config_new
-    cnf = GT::Config.new
+    cnf = GT::Style.new
     cnf.load_file File.expand_path("config/view.lua",
                                  "#{File.dirname(__FILE__)}/../..")
     log "new config, view.lua loaded", 2
