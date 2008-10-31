@@ -1,22 +1,22 @@
 == Getting started
 
-1. Install the genometools libraries (libgtcore.so, libgtext.so, libgtview.so) on your system.
-   The libraries can be obtained via http://www.genometools.org
-   If you do not have root prvileges on your machine make sure that the genometools libraries
-   can be found by your os.
+1. Install the shared GenomeTools library (libgenometools.[so|dylib]) on your
+   system. The library can be obtained via http://genometools.org
+   If you do not have root prvileges on your machine make sure that the
+   GenomeTools library can be found by your OS.
 2. Put the path to the gtruby files in the environment variable GTRUBY
    If you are using a bash shell use export GTRUBY=/path/to/gtruby
-3. navigate to the genomeviewer directory
-   3.1 start the genometools server (script/gt_server)
-   3.2 setup the database used by genomeviewer
-        - usually this can be done with "rake db:load"
-        - if you want to preload an example user (login:foo/pass:foo)
+3. Navigate to the GenomeViewer directory
+   3.1 Start the GenomeTools server (script/gt_server)
+   3.2 Setup the database used by GenomeViewer
+        - Usually this can be done with "rake db:load"
+        - If you want to preload an example user (login:foo/pass:foo)
           use "rake db:load_with_foo" instead
-   3.3 start the web server (script/server)
-   3.4 optional: start the session deamon (script/session_deamon)
+   3.3 Start the web server (script/server)
+   3.4 Optional: start the session daemon (script/session_daemon)
 
 == Possible problems
 
-1. In case the rake process or the server processes produce an error message saying somthing
-   like "can't convert nil into String" you probabely did not set the GTRUBY variable in your
-   current environment)
+1. In case the rake process or the server processes produce an error message
+   saying somthing like "can't convert nil into String" you probabely did not
+   set the GTRUBY variable in your current environment.
