@@ -65,7 +65,7 @@ module Output
       diagram = GT::Diagram.new(fix, seqid, gtrange, config_copy)
       info = GT::ImageInfo.new
       canvas = GT::CanvasCairoFile.new(config_copy, width, info)
-      diagram.render(canvas)
+      diagram.sketch(canvas)
       lock(:map) do
         @cache[:map][uuid] = info
       end
