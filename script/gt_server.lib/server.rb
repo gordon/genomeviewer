@@ -3,6 +3,7 @@ require 'gtruby'
 require File.dirname(__FILE__)+"/parsing.rb"
 require File.dirname(__FILE__)+"/configuration.rb"
 require File.dirname(__FILE__)+"/output.rb"
+require File.dirname(__FILE__)+"/get_hotspots.rb"
 
 #
 # The GTServer forwards requests from the GenomeViewer to the

@@ -249,9 +249,10 @@ module ViewerHelper
   def map_tag(image_info)
     content_tag(:map, :name => "imap", :id => "imap") do
       content = ''
-      image_info.each_hotspot do |x1, y1, x2, y2, feature|
-        coords = [x1, y1, x2, y2].join(", ")
-        content << hotspot_area_tag(coords, feature)
+      hotspots = image_info.get_hotspots
+      hotspots.each do |hotspot|
+        coords = [hotspot[0], hotspot[1], hotspot[2], hotspot[3]].join(", ")
+        content << hotspot_area_tag(coords, hotspot[4])
       end
       content
     end
@@ -260,7 +261,7 @@ module ViewerHelper
   def hotspot_area_tag(coords, feature)
     tag :area,
         # use boxover to create a js tooltip:
-        :title => "header=[#{feature.get_attribute("ID")}] "+
+        :title => "header=[#{feature[:ID]}] "+
                   "body=[#{tooltip_table(feature)}]"+
                   "cssheader=[tooltip_header]"+
                   "cssbody=[tooltip_body]",
@@ -271,7 +272,7 @@ module ViewerHelper
   end
 
   def tooltip_zoomer(feature)
-    range = feature.get_range
+    range = feature[:range]
     remote_function(:url =>{:action => :ajax_reloader,
                             :username => @annotation.user.username,
                             :annotation => @annotation.name,
@@ -296,12 +297,12 @@ module ViewerHelper
 
   def info(feature)
     i = [] # no hash, so order remains constant
-    i << ["Type", feature.get_type]
-    range = feature.get_range
+    i << ["Type", feature[:type]]
+    range = feature[:range]
     i << ["Range", "#{range.begin} - #{range.end}"]
-    score = feature.get_score
+    score = feature[:score]
     (i << ["Score", score]) if score
-    feature.each_attribute {|k,v| (i << [k, v])}
+    feature[:attributes].each {|attribute| (i << attribute)}
     return i
   end
 
