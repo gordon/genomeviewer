@@ -143,7 +143,7 @@ class GtServerTest < ActiveSupport::TestCase
     GTServer.img_and_map_generate(*args)
     info = GTServer.map(uuid)
     info.each_hotspot do |a,b,c,d,feat|
-      assert_equal [30,100,70,115], [a, b, c, d]
+      assert_equal [30,100,70,116], [a, b, c, d]
       assert_equal "gene1", feat.get_attribute("ID")
     end
     # teardown:

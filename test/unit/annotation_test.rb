@@ -58,7 +58,7 @@ class AnnotationTest < Test::Unit::TestCase
     a = Annotation.create(:name => "~deleteme",
                           :user => u,
                           :gff3_data => gff3_data)
-    assert u.configuration.feature_types.map(&:name).include?(t)
+    assert u.configuration.feature_types(true).map(&:name).include?(t)
     # note:
     # in the current implementation, feature types are
     # *not* deleted when the annotation that caused their

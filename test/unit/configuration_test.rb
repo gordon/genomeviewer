@@ -66,14 +66,29 @@ class ConfigurationTest < ActiveSupport::TestCase
     filename = File.expand_path("../gff3/little1.gff3",File.dirname(__FILE__))
     assert File.exist?(filename)
     args = [filename, "test1", (1000..9000), nil, # <- args[3] is config_obj
-            800, true, true]
+            800, true]
     args_conf_gt = args.clone
     args_conf_gt[3] = @conf.gt
     args_conf_new = args.clone
     args_conf_new[3] = GTServer.config_new
-    assert_equal GTServer.image(*args_conf_new), GTServer.image(*args_conf_gt)
+    uuids = []
+    [args_conf_gt, args_conf_new].each do |x| 
+      uuids.push UUID.random_create.to_s
+      x.unshift uuids.last
+      assert GTServer.img_and_map_generate(*x)
+    end    
+    assert_not_nil GTServer.img(args_conf_new[0], false)
+    assert_not_nil GTServer.img(args_conf_gt[0], false)
+    assert_equal GTServer.img(args_conf_new[0], false), 
+                 GTServer.img(args_conf_gt[0], false)
     @conf.gt.set_num("format", "margins", 200.0)
-    assert_not_equal GTServer.image(*args_conf_new), GTServer.image(*args_conf_gt)
+    uuids.push UUID.random_create.to_s
+    args_conf_gt[0] = uuids.last
+    GTServer.img_and_map_generate(*args_conf_gt)
+    assert_not_equal GTServer.img(args_conf_new[0], false), 
+                     GTServer.img(args_conf_gt[0], false)
+  ensure
+    uuids.each {|x| GTServer.img_and_map_destroy(x)}
   end
 
 end
