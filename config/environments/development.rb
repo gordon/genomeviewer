@@ -17,4 +17,4 @@ config.action_controller.perform_caching             = false
 config.action_mailer.raise_delivery_errors = false
 
 # folder where to save gff3 files
-$GFF3_STORAGE_PATH = "uploads"
+$GFF3_STORAGE_PATH = File.dirname(__FILE__) + '/../../uploads'
