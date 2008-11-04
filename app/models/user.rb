@@ -43,7 +43,8 @@ class User < ActiveRecord::Base
   # the following names are invalid and can't be used as username
   # see config/routes.rb and config/invalid_usernames.yml
   validates_exclusion_of :username,
-                         :in => YAML.load(IO.read("config/invalid_usernames.yml")),
+                         :in => YAML.load(IO.read(File.dirname(__FILE__) +
+                                        '/../../config/invalid_usernames.yml')),
                          :message => "This username is reserved. Please choose a different one."
 
   # email
