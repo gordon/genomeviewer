@@ -4,5 +4,5 @@
 # (i.e. in String and Kernel), assure their code is loaded
 # by listing them here
 #
-require "app/models/color.rb"
-require "app/models/style.rb"
+require File.dirname(__FILE__) + '/../../app/models/color.rb'
+require File.dirname(__FILE__) + '/../../app/models/style.rb'
