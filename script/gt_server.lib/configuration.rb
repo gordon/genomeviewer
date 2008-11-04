@@ -65,8 +65,10 @@ module Configuration
   #
   def config_new
     cnf = GT::Style.new
-    cnf.load_file File.expand_path("config/default.style",
-                                 "#{File.dirname(__FILE__)}/../..")
+    style_file = File.expand_path("config/default.style",
+                                  "#{File.dirname(__FILE__)}/../..")
+    log "new config, trying to load #{style_file}", 2
+    cnf.load_file style_file
     log "new config, default.style loaded", 2
     return cnf
   end
