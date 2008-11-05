@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 29) do
+ActiveRecord::Schema.define(:version => 30) do
 
   create_table "annotations", :force => true do |t|
     t.string  "name",        :default => "",    :null => false
@@ -33,15 +33,15 @@ ActiveRecord::Schema.define(:version => 29) do
 
   create_table "feature_types", :force => true do |t|
     t.string  "name"
-    t.decimal "fill_red"
-    t.decimal "fill_green"
-    t.decimal "fill_blue"
-    t.decimal "stroke_red"
-    t.decimal "stroke_green"
-    t.decimal "stroke_blue"
-    t.decimal "stroke_marked_red"
-    t.decimal "stroke_marked_green"
-    t.decimal "stroke_marked_blue"
+    t.float   "fill_red"
+    t.float   "fill_green"
+    t.float   "fill_blue"
+    t.float   "stroke_red"
+    t.float   "stroke_green"
+    t.float   "stroke_blue"
+    t.float   "stroke_marked_red"
+    t.float   "stroke_marked_green"
+    t.float   "stroke_marked_blue"
     t.integer "style_key"
     t.boolean "collapse_to_parent"
     t.boolean "split_lines"
@@ -52,23 +52,23 @@ ActiveRecord::Schema.define(:version => 29) do
   end
 
   create_table "formats", :force => true do |t|
-    t.decimal "margins"
-    t.decimal "bar_height"
-    t.decimal "bar_vspace"
-    t.decimal "track_vspace"
-    t.decimal "scale_arrow_width"
-    t.decimal "scale_arrow_height"
-    t.decimal "arrow_width"
-    t.decimal "stroke_width"
-    t.decimal "stroke_marked_width"
+    t.float   "margins"
+    t.float   "bar_height"
+    t.float   "bar_vspace"
+    t.float   "track_vspace"
+    t.float   "scale_arrow_width"
+    t.float   "scale_arrow_height"
+    t.float   "arrow_width"
+    t.float   "stroke_width"
+    t.float   "stroke_marked_width"
     t.boolean "show_grid"
-    t.decimal "min_len_block"
-    t.decimal "track_title_color_red"
-    t.decimal "track_title_color_green"
-    t.decimal "track_title_color_blue"
-    t.decimal "default_stroke_color_red"
-    t.decimal "default_stroke_color_green"
-    t.decimal "default_stroke_color_blue"
+    t.float   "min_len_block"
+    t.float   "track_title_color_red"
+    t.float   "track_title_color_green"
+    t.float   "track_title_color_blue"
+    t.float   "default_stroke_color_red"
+    t.float   "default_stroke_color_green"
+    t.float   "default_stroke_color_blue"
     t.integer "configuration_id"
   end
 
@@ -96,7 +96,7 @@ ActiveRecord::Schema.define(:version => 29) do
     t.datetime "created_at"
   end
 
-  add_index "uuid_logs", ["created_at"], :name => "index_uuid_logs_on_created_at"
   add_index "uuid_logs", ["uuid"], :name => "index_uuid_logs_on_uuid"
+  add_index "uuid_logs", ["created_at"], :name => "index_uuid_logs_on_created_at"
 
 end
