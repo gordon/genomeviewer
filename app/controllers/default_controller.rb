@@ -11,7 +11,7 @@ class DefaultController < ApplicationController
   # the homepage
   #
   def index
-    @title = "Welcome to the GenomeViewer"
+    @title = "Welcome to GenomeViewer"
   end
 
   ### actions redirecting to other actions ###
