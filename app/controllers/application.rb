@@ -7,6 +7,7 @@
 #    * the method "enforce_login" to be used by child controllers as a filter
 #
 class ApplicationController < ActionController::Base
+  include ExceptionNotifiable
 
   # Pick a unique cookie name to distinguish our session data from others'
   session :session_key => '_genomeviewer_session_id'

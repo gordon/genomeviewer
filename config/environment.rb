@@ -71,3 +71,5 @@ Rails::Initializer.run do |config|
   # config.active_record.observers = :cacher, :garbage_collector
 
 end
+
+ExceptionNotifier.exception_recipients = %w(gremme@gmail.com)
