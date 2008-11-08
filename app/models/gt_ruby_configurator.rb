@@ -8,11 +8,11 @@ module GTRubyConfigurator
   # #configuration_attributes returns the attributes in the order
   # specified by this array (within each list in alphabetic order)
   #
-  ConfigTypes = [:styles, :colors, :decimals, :integers, :bools]
+  ConfigTypes = [:styles, :colors, :floats, :integers, :bools]
 
   GTRubyType =
   {
-    :decimals => :num,
+    :floats   => :num,
     :integers => :num,
     :colors   => :color,
     :bools    => :bool,
@@ -233,7 +233,7 @@ module GTRubyConfigurator
           when :colors : lambda {|v| v.nil? ? Color.undefined : Color(v)}
           when :styles : lambda {|v| v.nil? ? Style.undefined : v.to_style}
           when :integers : lambda {|v| v.nil? ? nil : v.to_i}
-          when :decimals : lambda {|v| v.nil? ? nil : BigDecimal(v.to_s)}
+          when :floats   : lambda {|v| v.nil? ? nil : v.to_f}
           else             lambda {|v| v}
         end
       return lambda do
@@ -250,7 +250,7 @@ module GTRubyConfigurator
         case config_type
           when :colors : lambda {|v| (v.nil? or v.undefined?) ? nil : v.to_gt}
           when :styles : lambda {|v| (v.nil? or v.undefined?) ? nil : v.to_s}
-          when :decimals : lambda {|v| v.nil? ? nil : v.to_f}
+          when :floats : lambda {|v| v.nil? ? nil : v.to_f}
           when :integers : lambda {|v| v.nil? ? nil : v.to_f}
           else             lambda {|v| v}
         end

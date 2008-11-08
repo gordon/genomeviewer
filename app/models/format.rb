@@ -6,7 +6,7 @@ class Format < ActiveRecord::Base
   set_section "format"
   set_colors :track_title_color, :default_stroke_color
   set_bools :show_grid
-  set_decimals :margins, :bar_height, :bar_vspace, :track_vspace,
+  set_floats :margins, :bar_height, :bar_vspace, :track_vspace,
          :scale_arrow_width, :scale_arrow_height, :arrow_width,
          :stroke_width, :stroke_marked_width, :min_len_block
 

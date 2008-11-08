@@ -3,15 +3,16 @@ require File.dirname(__FILE__) + '/../test_helper'
 class GTRubyConfiguratorTest < ActiveSupport::TestCase
 
   def setup
+    @conf = Configuration.new 
     @section = {}
     @section['format'] = Format.new
-    @section['exon']   = FeatureType.new(:name => "exon")
-    @conf = Configuration.new do |conf|
-              conf.format = @section['format']
-              conf.feature_types << @section['exon']
-            end
     @section['format'].configuration = @conf
+    @conf.format = @section['format']
     @section['format'].save
+    @section['format'] = Format.default_new
+    @section['exon']   = FeatureType.new(:name => "exon")
+    @conf.feature_types << @section['exon']
+    @section['exon']   = FeatureType.default_new(:name => "exon")
     @gt = GTServer.config(@conf.id)
   end
 
