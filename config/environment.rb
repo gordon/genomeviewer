@@ -72,4 +72,7 @@ Rails::Initializer.run do |config|
 
 end
 
-ExceptionNotifier.exception_recipients = %w(gremme@gmail.com)
+ExceptionNotifier.exception_recipients = %w(gremme@gmail.com gonnell@yahoo.it)
+ExceptionNotifier.sender_address =
+  %("GenomeViewer Error" <support@genomeviewer.org>)
+
