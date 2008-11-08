@@ -1,0 +1,20 @@
+<% form_tag({:action=>"destroy"}) do -%>
+
+  <h2><%= @subtitle %></h2>
+
+  <table>
+    <tr>
+      <td>If you want to delete your account click on the delete account button.</td>
+    </tr>
+    <tr>
+      <td>Please understand that this is an irreversible action.</td>
+    </tr>
+    <tr>
+      <td>All your personal information and all your files will be lost.</td>
+    </tr>
+    <tr>
+      <td><%= submit_tag "Delete Account" -%> <%= link_to "Cancel", account_url -%></td>
+    </tr>
+  </table>
+    
+<% end -%>

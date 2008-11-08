@@ -24,7 +24,7 @@ class AccountControllerTest < ActionController::TestCase
     end
   end
 
-  %w[index email password public_data].each do |a|
+  %w[index email password public_data delete].each do |a|
     define_method "test_#{a}_get" do
       get a, {}, @in
       assert_response :success
@@ -152,5 +152,17 @@ class AccountControllerTest < ActionController::TestCase
     assert_redirected_to account_url
     assert_equal 'abcd', User.find(session[:user]).password
   end
+  
+  def test_destroy_get 
+    get :destroy, {}, @in
+    assert_redirected_to :action => :delete
+  end
 
+  def test_destroy
+    assert_nothing_raised {User.find(@u.id)}
+    post :destroy, {}, @in
+    assert_redirected_to root_url
+    assert_raises(ActiveRecord::RecordNotFound) {User.find(@u.id)}
+  end
+  
 end
